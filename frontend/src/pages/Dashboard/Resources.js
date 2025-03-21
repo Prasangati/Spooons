@@ -19,10 +19,10 @@ function Resources() {
                     <input
                         type="date"
                     />
-          <label>End Date: </label>
-          <input
-            type="date"
-          />
+                  <label>End Date: </label>
+                  <input
+                    type="date"
+                  />
                 </div>
             </div>
         </div>
