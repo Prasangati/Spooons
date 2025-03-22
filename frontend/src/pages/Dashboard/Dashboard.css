@@ -1,5 +1,6 @@
 .dashboard {
     display: flex;
+    flex-direction: column;
     width: 100vw;
     height: 100vh;
     background-color: #EAF4F2;
@@ -10,82 +11,69 @@
     font-size: 18px;
     font-weight: bold;
     color: #066341;
-    text-align: center;
-    width: 100%; 
     
 }
-.sidebar {
-    width: 250px;
-    background-color: #edf5f3;
-    color: black;
-    padding: 20px;
+.navbar {
     display: flex;
-    flex-direction: column;
+    align-items: center;
     justify-content: space-between;
-    transition: all 0.3s ease;
-    position: relative;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2); 
-    border-right: 2px solid #b8ccc9; /* more depth */
+    background-color: white;
+    padding: 15px 30px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    gap: 30px; 
 }
-.sidebar.collapsed {
-    width: 0;
-    padding: 0;
-    overflow: hidden;
-    border-right: none; /* Remove border when closing collapsed */
+.navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 30px; /* Space between logo and nav tabs */
 }
-
-
-.sidebar ul {
+.nav-links {
     list-style: none;
-    padding: 0;
+    display: flex;
+    gap: 25px;
     margin: 0;
+    padding: 0;
+
+
 }
 
-.sidebar ul li {
-    padding: 12px;
-    border: 2px solid #066341;
-    border-radius: 10px;
+.nav-links li {
+    padding: 10px 15px;
     cursor: pointer;
-    text-align: center;
     font-weight: bold;
     transition: all 0.3s ease;
-    margin-bottom: 10px;
-
+    border-radius: 5px;
 }
-.sidebar ul li:hover,
-.sidebar ul li.active {
+
+.nav-links li:hover,
+.nav-links .active {
     background-color: #066341;
     color: white;
-    transform: scale(1.05); /* increase  on hover */
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
-
 }
-.sidebar-toggle {
-    position: absolute;
-    left: 250px;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: #066341;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
+.logout-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-    z-index: 10;
-}
-.sidebar-toggle.collapsed {
-    left: 0;
 }
 
-.sidebar-toggle:hover {
-    background-color: #04442d;
-    transform: translateY(-50%) scale(1.1);
+.logout-container button {
+    background: #066341; 
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.logout-container button:hover {
+    background-color: #04442d; 
+    transform: scale(1.1);
 }
 .main-content {
     flex: 1;
@@ -103,10 +91,8 @@
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
     text-align: center;
-
     font-size: 20px; 
     font-weight: bold;
-
 
 }
 .dashboard-content {
@@ -118,40 +104,39 @@
     margin-top: 20px;
 }
 
-.logout-container {
-    margin-top: auto;
-    display: flex;
-    justify-content: center; 
-    align-items: center;
-    width: 100%;
-}
+
 .custom-google-btn {
-    background: #066341; 
-    color: white;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
+    background: transparent; 
+    color: #066341; 
+    padding: 8px 14px; 
+    border: none; 
+    border-radius: 5px; 
     cursor: pointer;
-    font-size: 15px;
+    font-size: 15px; 
     font-weight: bold;
-    width: 90%;
-    max-width: 250px;
+    transition: all 0.3s ease;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px auto;
-    text-align: center
+    text-align: center;
+    min-width: auto; 
 }
 
+/* scale */
 .custom-google-btn:hover {
-    background-color: #04442d; 
-    transform: scale(1.05); 
+    background: transparent;
+    color: #04442d;
+    transform: scale(1.05);
+}
 
+/* when active */
+.custom-google-btn:active,
+.custom-google-btn.active {
+    background: #066341;
+    color: white;
 }
 
 .sp-logo {
     width: 210px;  
     height: auto; 
-    display: block; 
-    margin: 0 auto 20px auto;
 }

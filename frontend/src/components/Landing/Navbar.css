@@ -1,18 +1,17 @@
 /* General Navbar Styles */
+
+
+
+
 .navbar {
+    background-color: white;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    background-color: white;
     z-index: 1000;
     padding: 20px 0;
     height: 80px; /* ✅ Ensure a defined height */
-}
-
-/* Ensure navbar doesn't overlap content */
-body {
-    padding-top: 80px; /* ✅ Pushes all content down */
 }
 
 /* Navbar when scrolled */
@@ -33,7 +32,10 @@ body {
 
 /* Logo */
 .logo img {
-    height: 50px;
+    position:absolute;
+    left: 0px;
+    top: 0;
+    height: 80px;
     transition: height 0.3s ease-in-out;
 }
 
@@ -43,6 +45,9 @@ body {
 
 /* Sign In Button */
 .sign-in-btn {
+    position:absolute;
+    right: 20px;
+    top: auto;
     background-color: white;  /* ✅ White background */
     color: #4f7c7d;  /* ✅ Darker muted teal */
     padding: 10px 20px;
@@ -60,4 +65,5 @@ body {
     border-color: #3c6465;  /* ✅ Even darker teal border */
     color: white;  /* ✅ Even darker teal text */
 }
+
 
