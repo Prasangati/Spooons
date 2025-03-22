@@ -21,10 +21,11 @@
 
 /* Left Side - Image */
 .hero-image {
+    position: relative;
+    width: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50%;
 }
 
 .hero-image img {

@@ -18,7 +18,7 @@ export default function Home() {
   }
 
   // Only show content if NOT authenticated
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !loading) {
     return (
       <LandingPage />
     );
