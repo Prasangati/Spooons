@@ -82,6 +82,7 @@ function JournalEntries() {
         <div className="quote-container  floating-quote">
         <p className="quote-text">{quotes[currentQuoteIndex]}</p>
       </div>
+      {!showNewEntryForm && ( <>
 
       <h3 className="entries-title">Journal Entries</h3>
       <div className="entries-list">
@@ -99,6 +100,8 @@ function JournalEntries() {
           <p className="no-entries">No past entries yet.</p>
         )}
       </div>
+      </>
+      )}
       {!showNewEntryForm ? (
         <button
           className="add-entry-btn"
