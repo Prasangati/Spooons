@@ -5,7 +5,7 @@ function JournalEntries() {
   const [title, setTitle] = useState(""); // state for entry title
   const [entries, setEntries] = useState([]); // storing journal entries
   const [newEntry, setNewEntry] = useState(""); // current input 
-  const [showEntries, setShowEntries] = useState(false); //  past entries
+  const [showNewEntryForm, setShowNewEntryForm] = useState(false); //  past entries
  
   const quotes = [
       "Be not afraid of growing slowly, be afraid only of standing still. — Chinese Proverb",
@@ -82,23 +82,32 @@ function JournalEntries() {
         <div className="quote-container">
         <p className="quote-text">{quotes[currentQuoteIndex]}</p>
       </div>
-      <nav className="journal-nav">
-        <button
-          className={!showEntries ? "active" : ""}
-          onClick={() => setShowEntries(false)}
-        >
-          New Entry
-        </button>
-        <button
-          className={showEntries ? "active" : ""}
-          onClick={() => setShowEntries(true)}
-        >
-          Past Entries
-        </button>
-      </nav>
 
-      {!showEntries ? (
-        <>
+      <h3 className="entries-title">Past Journal Entries</h3>
+      <div className="entries-list">
+      {entries.length > 0 ? (
+          entries.map((entry) => (
+            <div key={entry.id} className="entry-card">
+              <h4>{entry.title}</h4>
+              <span className="entry-date">
+                {entry.date} - <strong>{entry.status}</strong>
+              </span>
+              <p className="entry-text">{entry.text}</p>
+            </div>
+          ))
+        ) : (
+          <p className="no-entries">No past entries yet.</p>
+        )}
+      </div>
+      {!showNewEntryForm ? (
+        <button
+          className="add-entry-btn"
+          onClick={() => setShowNewEntryForm(true)}
+        >
+          + Add New Entry
+        </button>
+      ) : (
+        <div className="new-entry-form">
           <input
             type="text"
             className="title-input"
@@ -107,45 +116,47 @@ function JournalEntries() {
             onChange={(e) => setTitle(e.target.value)}
             required
           />
-          <div className="journal-input-box">
-            <textarea
-              className="journal-input"
-              placeholder="Write your thoughts ..."
-              value={newEntry}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="button-group">
+          <textarea
+            className="journal-input"
+            placeholder="Write your thoughts ..."
+            value={newEntry}
+            onChange={(e) => setNewEntry(e.target.value)}
+          />
+<div className="button-group">
             <button className="save-draft-btn" onClick={handleSaveDraft}>
               Save as Draft
             </button>
             <button className="send-btn" onClick={handleSendEntry}>
               Send
             </button>
+            <button
+              className="cancel-btn"
+              onClick={() => setShowNewEntryForm(false)}
+            >
+              Cancel
+            </button>
           </div>
-        </>
-      ) : (
-        <>
-          <h3 className="entries-title">Past Journal Entries</h3>
-          <div className="entries-list">
-            {entries.length > 0 ? (
-              entries.map((entry) => (
-                <div key={entry.id} className="entry-card">
-                  <h4>{entry.title}</h4>
-                  <span className="entry-date">
-                    {entry.date} - <strong>{entry.status}</strong>
-                  </span>
-                  <p className="entry-text">{entry.text}</p>
-                </div>
-              ))
-            ) : (
-              <p className="no-entries">No past entries yet.</p>
-            )}
-          </div>
-        </>
+        </div>
       )}
     </div>
   );
 }
 
 export default JournalEntries;
+
+
+
+      // <nav className="journal-nav">
+      //   <button
+      //     className={!showEntries ? "active" : ""}
+      //     onClick={() => setShowEntries(false)}
+      //   >
+      //     New Entry
+      //   </button>
+      //   <button
+      //     className={showEntries ? "active" : ""}
+      //     onClick={() => setShowEntries(true)}
+      //   >
+      //     Past Entries
+      //   </button>
+      // </nav>
