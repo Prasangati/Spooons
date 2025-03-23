@@ -25,7 +25,37 @@ function JournalEntries() {
     }, 6000); 
     return () => clearInterval(quoteInterval); // cleanupon unmount
   }, []);
-
+  useEffect(() => {
+    localStorage.setItem("journalEntries", JSON.stringify(entries));
+  }, [entries]);
+  const prompts = [
+    "What are you grateful for today?",
+    "What’s something that challenged you recently, and how did you handle it?",
+    "What does your ideal day look like?",
+    "Write a letter to your future self.",
+    "Describe a recent moment that brought you joy.",
+    "What’s something you’re currently learning about yourself?",
+    "What emotions have you been feeling the most lately?",
+    "If today was your last day, what would you want to remember?",
+  ];
+  const [currentPrompt, setCurrentPrompt] = useState("");
+  useEffect(() => {
+    const stored = localStorage.getItem("journalPrompt");
+    const lastUpdate = localStorage.getItem("promptTimestamp");
+    const now = Date.now();
+  
+    // 12 hours = 43,200,000 milliseconds
+    if (!stored || !lastUpdate || now - lastUpdate > 43200000) {
+      const newPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+      setCurrentPrompt(newPrompt);
+      localStorage.setItem("journalPrompt", newPrompt);
+      localStorage.setItem("promptTimestamp", now.toString());
+    } else {
+      setCurrentPrompt(stored);
+    }
+  }, []);
+  
+  
   //draft
   const handleSaveDraft = () => {
     if (title.trim() === "") {
@@ -79,9 +109,16 @@ function JournalEntries() {
   };
   return (
     <div className="journal-container">
-        <div className="quote-container  floating-quote">
-        <p className="quote-text">{quotes[currentQuoteIndex]}</p>
-      </div>
+      {!showNewEntryForm ? (
+  <div className="quote-container floating-quote">
+    <p className="quote-text">{quotes[currentQuoteIndex]}</p>
+  </div>
+) : (
+  <div className="prompt-container floating-quote">
+    <p className="quote-text">{currentPrompt}</p>
+  </div>
+)}
+
       {!showNewEntryForm && ( <>
 
       <h3 className="entries-title">Journal Entries</h3>

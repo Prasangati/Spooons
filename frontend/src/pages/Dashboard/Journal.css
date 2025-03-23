@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Kalam&display=swap');
 
 .floating-quote {
     background-color: #EAF4F2;
@@ -81,18 +80,11 @@
 }
 
 .journal-input {
-    background-image: repeating-linear-gradient(
-        to bottom,
-        #ffffff,
-        #ffffff 32px,
-        #eaf4f2 33px
-      );
       height: 200px;
       width: 100%;
       font-size: 16px;
       line-height: 32px;
       color: #333;
-      font-family: 'Kalam', cursive;
       padding: 16px;
       resize: vertical;
       border: 1px solid #b8ccc9;
