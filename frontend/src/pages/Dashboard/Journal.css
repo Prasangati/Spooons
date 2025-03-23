@@ -79,15 +79,16 @@
 .button-group {
     display: flex;
     gap: 10px;
-    justify-content: flex-end;
     margin-top: 10px;
+
 }
 
 .save-draft-btn,
-.send-btn {
-    padding: 12px 20px;
+.send-btn,
+.cancel-btn  {
+    padding: 0.6rem 1.2rem;
     border: none;
-    border-radius: 6px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 14px;
     font-weight: bold;
@@ -95,8 +96,8 @@
 }
 
 .save-draft-btn {
-    background-color: gray;
-    color: white;
+    background-color: #b8ccc9;
+    color:  #04442d;
 }
 
 .send-btn {
@@ -105,12 +106,23 @@
 }
 
 .save-draft-btn:hover {
-    background-color: #555;
+    background-color:  #a0bdb8;
 }
 
 .send-btn:hover {
     background-color: #04442d;
 }
+
+.cancel-btn {
+    background-color: #ccc;
+    color: #333;
+    margin-left: auto;
+
+  }
+  
+  .cancel-btn:hover {
+    background-color: #999;
+  }
 
 .entries-title {
     font-size: 1.5rem;
