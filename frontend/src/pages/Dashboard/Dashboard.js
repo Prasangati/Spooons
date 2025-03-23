@@ -14,15 +14,18 @@ function Dashboard() {
       <div className="dashboard">
          {/* navbar */}
          <nav className="navbar">
-            <img src="/logo.png" alt="spooons Logo" className="sp-logo" />
-              {/* <span className="greeting">Hello, {user?.name || "Guest"}!</span> */}
-            <ul className="nav-links">
-               <li className={activeTab === "Journal" ? "active" : ""} onClick={() => setActiveTab("Journal")}>Journal</li>
-               <li className={activeTab === "Progress" ? "active" : ""} onClick={() => setActiveTab("Progress")}>Progress</li>
-               <li className={activeTab === "Resources" ? "active" : ""} onClick={() => setActiveTab("Resources")}>Resources</li>
-            </ul>
-               <LogOut />
-               </nav>
+  <div className="navbar-left">
+    <img src="/logo.png" alt="spooons Logo" className="sp-logo" />
+    <ul className="nav-links">
+      <li className={activeTab === "Journal" ? "active" : ""} onClick={() => setActiveTab("Journal")}>Journal</li>
+      <li className={activeTab === "Progress" ? "active" : ""} onClick={() => setActiveTab("Progress")}>Progress</li>
+      <li className={activeTab === "Resources" ? "active" : ""} onClick={() => setActiveTab("Resources")}>Resources</li>
+    </ul>
+  </div>
+  
+  <LogOut />
+</nav>
+
 
 
          {/* Main Content */}

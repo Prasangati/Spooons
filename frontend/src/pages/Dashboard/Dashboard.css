@@ -24,6 +24,11 @@
     top: 0;
     z-index: 1000;
 }
+.navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 30px; }
+
 .nav-links {
     list-style: none;
     display: flex;
