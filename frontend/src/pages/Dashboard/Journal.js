@@ -6,10 +6,7 @@ function JournalEntries() {
   const [entries, setEntries] = useState([]); // storing journal entries
   const [newEntry, setNewEntry] = useState(""); // current input 
   const [showEntries, setShowEntries] = useState(false); //  past entries
-  
-  
-  
-  
+ 
   const quotes = [
       "Be not afraid of growing slowly, be afraid only of standing still. — Chinese Proverb",
       "The only person you are destined to become is the person you decide to be. — Ralph Waldo Emerson",
@@ -19,15 +16,15 @@ function JournalEntries() {
       "The difference between who you are and who you want to be is what you do.",
       "We are what we repeatedly do. Excellence, then, is not an act, but a habit. — Will Durant"
    ];
+
    const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
+
    useEffect(() => {
    const quoteInterval = setInterval(() => {
       setCurrentQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
-    }, 6000); // 
+    }, 6000); 
     return () => clearInterval(quoteInterval); // cleanupon unmount
   }, []);
-
-
 
   //draft
   const handleSaveDraft = () => {
@@ -43,8 +40,7 @@ function JournalEntries() {
       status: "Draft",
     };
     setEntries([draftEntry, ...entries]);
-    setTitle("");
-    setNewEntry("");
+    resetForm();
   };
 //submit entry with confirmation
 
@@ -70,14 +66,17 @@ function JournalEntries() {
       status: "Sent",
     };
     setEntries([finalEntry, ...entries]);
-    setTitle("");
-    setNewEntry("");
+    resetForm();
   };
 
   const handleInputChange = (e) => {
     setNewEntry(e.target.value);
   };
-
+  const resetForm = () => {
+    setTitle("");
+    setNewEntry("");
+    setShowNewEntryForm(false);
+  };
   return (
     <div className="journal-container">
         <div className="quote-container">
