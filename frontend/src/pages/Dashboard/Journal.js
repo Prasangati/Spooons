@@ -83,7 +83,7 @@ function JournalEntries() {
         <p className="quote-text">{quotes[currentQuoteIndex]}</p>
       </div>
 
-      <h3 className="entries-title">Past Journal Entries</h3>
+      <h3 className="entries-title">Journal Entries</h3>
       <div className="entries-list">
       {entries.length > 0 ? (
           entries.map((entry) => (
