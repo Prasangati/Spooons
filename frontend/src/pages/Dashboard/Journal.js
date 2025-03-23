@@ -79,7 +79,7 @@ function JournalEntries() {
   };
   return (
     <div className="journal-container">
-        <div className="quote-container">
+        <div className="quote-container  floating-quote">
         <p className="quote-text">{quotes[currentQuoteIndex]}</p>
       </div>
 

@@ -1,3 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Kalam&display=swap');
+
+.floating-quote {
+    background-color: #EAF4F2;
+    border: 2px double #066341;
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(6, 99, 65, 0.1);
+  }
+  
+  
 .journal-container {
     max-width: 900px;
     margin: auto;
@@ -86,9 +100,9 @@
 .save-draft-btn,
 .send-btn,
 .cancel-btn  {
-    padding: 0.6rem 1.2rem;
+    padding: 10px 24px;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 14px;
     font-weight: bold;
