@@ -38,13 +38,14 @@
 
 .title-input {
     width: 100%;
-    font-size: 18px;
-    padding: 12px;
-    border: 2px solid #b8ccc9;
-    border-radius: 6px;
-    margin-bottom: 10px;
+    margin-bottom: 1.2rem;
+    padding: 1rem;
+    border: 1px solid #b8ccc9;
+    border-radius: 10px;
+    font-family: 'Georgia', serif;
+    font-size: 1.05rem;
     background: white;
-    transition: border 0.3s ease;
+    color: #04442d;
 }
 
 .title-input:focus {
@@ -176,7 +177,31 @@
     font-weight: bold;
     transition: 0.3s;
 }
-
+.add-entry-btn {
+    display: block;
+    margin: 2rem auto;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    background-color: #066341;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s ease;
+  }
+  .add-entry-btn:hover {
+    background-color: #04442d;
+    transform: scale(1.05);
+  }
+  .new-entry-form {
+    background-color: #ffffff;
+    border: 2px solid #EAF4F2;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.03);
+    margin-top: 20px;
+  }
 .back-btn:hover {
     background: #04442d;
 }
