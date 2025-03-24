@@ -50,16 +50,12 @@ function Resources() {
         // Fetch resources from API or data source
         const fetchResources = async () => {
             // Replace with real API call if needed
-            const data = [
-                { id: 1, title: "Mental Health Guide", date: "2025-03-20" },
-                { id: 2, title: "Stress Management", date: "2025-03-18" },
-                { id: 3, title: "Anxiety Coping Tips", date: "2025-03-22" }
-            ];
+            // How to connect to backend?
             setResources(data);
             setFilteredResources(data);
         };
 
-        fetchResources();
+        fetchResources().then(() => {});
     }, []);
 
     const handleFilter = ({ keyword, startDate, endDate }) => {
