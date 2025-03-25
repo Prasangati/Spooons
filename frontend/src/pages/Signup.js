@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import "../App.css";
 import "./Signup.css";
 import useGoogleSuccess from "../hooks/useGoogleSuccess";
@@ -82,7 +82,13 @@ const Signup = () => {
   return (
     <div id="home-container">
       <div className="signup-box">
-        <img src="/logo.png" alt="Welcome Logo" className="welcome-image" />
+        <Link to="/">
+          <img
+            src="/logo.png"
+            alt="Welcome Logo"
+            className="welcome-image"
+          />
+        </Link>
 
         <form className="signup-form" onSubmit={handleSignupSubmit}>
           {error && <p className="error-message">{error}</p>}
