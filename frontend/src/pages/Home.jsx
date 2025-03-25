@@ -1,30 +1,17 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import { useAuthContext } from "../context/AuthContext";
-import LandingPage from "./LandingPage"
+import LandingPage from "./LandingPage";
+import Loading from "./Loading";
+import Dashboard from "./Dashboard/Dashboard";
 
 export default function Home() {
-  const { isAuthenticated, loading, user } = useAuthContext();
-  const navigate = useNavigate();
+  const { isAuthenticated, loading } = useAuthContext();
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/dashboard");
-    }
-  }, [isAuthenticated, navigate]);
-
+  // Show loading state while checking authentication
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
-  // Only show content if NOT authenticated
-  if (!isAuthenticated && !loading) {
-    return (
-      <LandingPage />
-    );
-  }
-
-  // Return null while redirecting
-  return null;
+  // Render Dashboard if authenticated, LandingPage otherwise
+  return isAuthenticated ? <Dashboard /> : <LandingPage />;
 }
-

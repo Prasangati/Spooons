@@ -14,13 +14,17 @@
 }
 
 .feature-heading {
-    font-size: 3.5rem;
+    font-size: 4.5rem;
+    font-family: Tahoma, sans-serif;
+    color: #333;
+    font-weight: 500;
     margin-bottom: 3rem;
     line-height: 1.2;
 }
 
 .green-text {
-    color: #2ecc71;
+    color: #076040;
+
     display: inline-block;
     position: relative;
 }
