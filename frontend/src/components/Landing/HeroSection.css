@@ -1,11 +1,12 @@
 .hero {
-    min-height: 100vh;
+    min-height: 90vh;
+    max-height: 1000px;
+    height: 90%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     width: 100vw;
-    padding: 50px;
-    margin-top: 80px; /* ✅ Pushes the Hero Section below the navbar */
+    margin-top: 90vh; /* ✅ Pushes the Hero Section below the navbar */
 }
 
 
@@ -14,8 +15,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between; /* ✅ Ensures proper layout */
-    max-width: 1200px;
-    width: 90%;
+    width: 100%;
     height: 100%; /* ✅ Ensures full height */
 }
 
@@ -24,7 +24,7 @@
     position: relative;
     width: 50%;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
 }
 
@@ -37,21 +37,26 @@
 }
 
 
-
+.hero-text{
+    position: relative;
+    width: 50%;
+    margin: 0 auto;
+}
 
 
 
 /* Prevent image from shrinking too much */
-@media (max-width: 900px) {
+@media (max-width: 1026px) {
     .hero-image img {
         width: 400px; /* ✅ Image size doesn't shrink too much */
     }
 }
 
+
+
 /* Right Side - Text Content */
 .hero-text {
     max-width: 500px;
-    text-align: center;  /* ✅ Center aligns all text */
     flex: 1;
 }
 
@@ -61,7 +66,6 @@
     font-weight: bold;
     color: #333;
     margin-bottom: 20px;
-    text-align: center; /* ✅ Centers text */
 }
 
 .hero-text p {
@@ -69,12 +73,12 @@
     color: #555;
     margin-bottom: 25px;
     line-height: 1.8;
-    text-align: center; /* ✅ Centers text */
 }
 
 /* CTA Button */
 .cta-button {
     background-color: white;
+    position: relative;
     color: #0077b6;
     padding: 14px 28px;
     border: 2px solid #0077b6;
@@ -93,7 +97,11 @@
 }
 
 /* ✅ Responsive: Move text below the image when screen is small */
-@media (max-width: 768px) {
+@media (max-width: 821px) {
+    .hero{
+        margin-top: 800px;
+        padding-bottom: 3vh;
+    }
     .hero-container {
         flex-direction: column;
         text-align: center;
@@ -101,6 +109,7 @@
     }
 
     .hero-image {
+        padding-top: 140px;
         width: 100%;
     }
 
@@ -110,11 +119,11 @@
     }
 
     .hero-text h1 {
-        font-size: 40px;
+        font-size: 30px;
     }
 
     .hero-text p {
-        font-size: 20px;
+        font-size: 15px;
     }
 
     .cta-button {
@@ -122,4 +131,14 @@
         padding: 12px 24px;
     }
 }
+
+
+
+
+
+
+
+
+
+
 

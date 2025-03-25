@@ -6,6 +6,7 @@ import "../App.css";
 import "./Signup.css";
 import useGoogleSuccess from "../hooks/useGoogleSuccess";
 import { useAuthContext } from "../context/AuthContext";
+import Loading from "./Loading";
 
 const Signup = () => {
   const handleGoogleSuccess = useGoogleSuccess();
@@ -75,7 +76,7 @@ const Signup = () => {
 
   // Optionally, show a loading indicator if auth check is in progress
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />
   }
 
   return (

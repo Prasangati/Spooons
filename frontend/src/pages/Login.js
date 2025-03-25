@@ -6,6 +6,8 @@ import useGoogleSuccess from "../hooks/useGoogleSuccess";
 import { useAuthContext } from "../context/AuthContext";
 import "./Login.css";
 import "../App.css";
+import Loading from "./Loading";
+
 
 function Login() {
   const handleGoogleSuccess = useGoogleSuccess();
@@ -30,7 +32,7 @@ function Login() {
 
   // Optional: Show a loading indicator while checking auth state
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   const handleForgotPassword = () => {
@@ -201,7 +203,7 @@ function Login() {
         >
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
-            onError={() => console.log("❌ Google Signup Failed")}
+            onError={() => console.log("Google Signup Failed")}
           />
         </div>
 

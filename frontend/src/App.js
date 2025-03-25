@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
-import LandingPage from "./pages/LandingPage";
 import SignupSuccess from "./pages/SignupSucess"
 import Home from "./pages/Home"
 import Dashboard from "./pages/Dashboard/Dashboard"; // dashboard component
@@ -19,7 +18,6 @@ function App() {
             <Router>
                 <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup-success" element={<SignupSuccess />} />
