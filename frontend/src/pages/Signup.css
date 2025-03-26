@@ -5,11 +5,12 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
+    background-color: #e3f1ef;
 }
 
 /* Styling the signup box */
 .signup-box {
-    background: #bee7e9;
+    background: #f8f9fa;
     padding: 50px;
     border-radius: 12px;
     box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
@@ -42,33 +43,45 @@
     width: 100%;
     gap: 15px;
 }
-
-/* Styling labels */
-.signup-form label {
+.input-container {
+    position: relative;
     width: 100%;
     max-width: 400px;
-    text-align: left;
-    font-size: 16px;
-    margin-bottom: 5px;
-    color: #555;
-}
-
-/* Styling input fields */
-.input-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .input-container input {
     width: 100%;
-    max-width: 400px;
-    padding: 15px;
+    padding: 18px 12px 6px;
     font-size: 16px;
     border-radius: 8px;
-    border: 1px solid #ccc;
-    text-align: left;
-    display: block;
-    margin: 0px auto;
-}
-
-.input-field:focus {
-    border-color: #4A90E2;
+    border: 2px solid #066341;
+    background: transparent;
     outline: none;
+    transition: border-color 0.3s ease-in-out;
+  }
+  
+  .input-container label {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    background: transparent;
+    padding: 0 5px;
+    color: #066341;
+    font-size: 16px;
+    transition: 0.3s ease-in-out;
+  }
+.input-container input:focus + label,
+.input-container input:not(:placeholder-shown) + label {
+  top: 0;
+  font-size: 14px;
+  background-color: #f8f9fa;
+  padding: 0 5px;
+  display: inline-block;
+  width: auto;
 }
 
 /* Signup button */
@@ -181,7 +194,6 @@
     color: #666;
     margin-top: 15px;
 }
-
 
 
 .login-link {

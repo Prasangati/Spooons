@@ -103,7 +103,7 @@ const Signup = () => {
               onChange={handleChange}
               required
             />
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name"> Username </label>
           </div>
 
           {/* email input box */}
