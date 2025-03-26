@@ -35,7 +35,7 @@ body {
 /* Logo */
 .logo img {
     position:absolute;
-    left: 0px;
+    left: 0;
     top: 0;
     height: 80px;
     transition: height 0.3s ease-in-out;

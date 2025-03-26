@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import useGoogleSuccess from "../hooks/useGoogleSuccess";
@@ -144,7 +144,14 @@ function Login() {
   return (
     <div id="home-container">
       <div className="login-box">
-        <img src="/logo.png" alt="Welcome Logo" className="welcome-image" />
+
+        <Link to="/">
+          <img
+            src="/logo.png"
+            alt="Welcome Logo"
+            className="welcome-image"
+          />
+        </Link>
 
         {/* Error Message */}
         {error && <p className="error-message">{error}</p>}
