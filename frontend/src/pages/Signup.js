@@ -81,6 +81,11 @@ const Signup = () => {
 
   return (
     <div id="home-container">
+        <nav className="navbar">
+  <div className="navbar-left">
+    <img src="/logo.png" alt="spooons Logo" className="sp-logo" />
+  </div>
+</nav>
       <div className="signup-box">
         <img src="/logo.png" alt="Welcome Logo" className="welcome-image" />
 
