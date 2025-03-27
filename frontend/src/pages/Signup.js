@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import "../App.css";
 import "./Signup.css";
 import useGoogleSuccess from "../hooks/useGoogleSuccess";
 import { useAuthContext } from "../context/AuthContext";
+import Loading from "./Loading";
 
 const Signup = () => {
   const handleGoogleSuccess = useGoogleSuccess();
@@ -75,13 +76,19 @@ const Signup = () => {
 
   // Optionally, show a loading indicator if auth check is in progress
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />
   }
 
   return (
     <div id="home-container">
       <div className="signup-box">
-        <img src="/logo.png" alt="Welcome Logo" className="welcome-image" />
+        <Link to="/">
+          <img
+            src="/logo.png"
+            alt="Welcome Logo"
+            className="welcome-image"
+          />
+        </Link>
 
         <form className="signup-form" onSubmit={handleSignupSubmit}>
           {error && <p className="error-message">{error}</p>}
@@ -96,7 +103,7 @@ const Signup = () => {
               onChange={handleChange}
               required
             />
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name"> Username </label>
           </div>
 
           {/* email input box */}

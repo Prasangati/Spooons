@@ -7,6 +7,7 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.mail import send_mail
 from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
 
 
 User = get_user_model()
@@ -108,14 +109,13 @@ class PasswordResetSerializer(serializers.Serializer):
 
         # Email content
         subject = "Password Reset Request"
-        text_message = f"Please use the link below to reset your password:\n\n{reset_url}"
-        html_message = f'Click <a href="{reset_url}">here</a> to reset your password.'
+        message = f"Click the link to reset your password:\n\n{reset_url}"
 
+        # Send email
         send_mail(
             subject,
-            text_message,
+            message,
             settings.DEFAULT_FROM_EMAIL,
             [user.email],
-            html_message=html_message,
             fail_silently=False,
         )

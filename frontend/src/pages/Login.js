@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import useGoogleSuccess from "../hooks/useGoogleSuccess";
 import { useAuthContext } from "../context/AuthContext";
 import "./Login.css";
 import "../App.css";
+import Loading from "./Loading";
+
 
 function Login() {
   const handleGoogleSuccess = useGoogleSuccess();
@@ -30,7 +32,7 @@ function Login() {
 
   // Optional: Show a loading indicator while checking auth state
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   const handleForgotPassword = () => {
@@ -142,7 +144,14 @@ function Login() {
   return (
     <div id="home-container">
       <div className="login-box">
-        <img src="/logo.png" alt="Welcome Logo" className="welcome-image" />
+
+        <Link to="/">
+          <img
+            src="/logo.png"
+            alt="Welcome Logo"
+            className="welcome-image"
+          />
+        </Link>
 
         {/* Error Message */}
         {error && <p className="error-message">{error}</p>}
@@ -201,7 +210,7 @@ function Login() {
         >
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
-            onError={() => console.log("❌ Google Signup Failed")}
+            onError={() => console.log("Google Signup Failed")}
           />
         </div>
 

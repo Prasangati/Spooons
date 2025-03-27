@@ -1,45 +1,17 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import LogOut from "../components/Auth/LogOut";
+import React from "react";
 import { useAuthContext } from "../context/AuthContext";
+import LandingPage from "./LandingPage";
+import Loading from "./Loading";
+import Dashboard from "./Dashboard/Dashboard";
 
 export default function Home() {
-  const { isAuthenticated, loading, user } = useAuthContext();
-  const navigate = useNavigate();
+  const { isAuthenticated, loading } = useAuthContext();
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/dashboard");
-    }
-  }, [isAuthenticated, navigate]); // redirect logged-in users to dashboard
-
+  // Show loading state while checking authentication
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
-  if (isAuthenticated) {
-    return (
-      <div>
-        <h1>Welcome, {user?.first_name || "User"} {user?.last_name || ""}!</h1>
-          { /* Profile Information */ }
-        <div className="profile-info">
-            <div className="profile-pic">
-                {/* Profile Pic: How to get it from the google account? */}
-                {/*/* How to change these components? */}
-                <img src={user?.profile_picture || '/default-avatar.png'} alt="Profile picture"/>
-            </div>
-        </div>
-          <LogOut/>
-          {/* Additional authenticated content */}
-      </div>
-    );
-  } else {
-    return (
-      <div>
-        <h2>You are not logged in.</h2>
-        <button onClick={() => navigate("/login")}>Go to Login</button>
-      </div>
-    );
-  }
+  // Render Dashboard if authenticated, LandingPage otherwise
+  return isAuthenticated ? <Dashboard /> : <LandingPage />;
 }
-

@@ -1,0 +1,71 @@
+/* General Navbar Styles */
+body {
+  font-family: Tahoma, sans-serif;
+}
+
+
+.navbar {
+    background-color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 20px 0;
+    height: 80px; /* ✅ Ensure a defined height */
+}
+
+/* Navbar when scrolled */
+.navbar.scrolled {
+    padding: 10px 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Navbar Container */
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+
+/* Logo */
+.logo img {
+    position:absolute;
+    left: 0;
+    top: 0;
+    height: 80px;
+    transition: height 0.3s ease-in-out;
+}
+
+.navbar.scrolled .logo img {
+    height: 40px;
+}
+
+/* Sign In Button */
+.sign-in-btn {
+    position:absolute;
+    right: 20px;
+    top: auto;
+    background-color: white;  /* ✅ White background */
+    color: #4f7c7d;  /* ✅ Darker muted teal */
+    padding: 10px 20px;
+    border: 2px solid #4f7c7d;  /* ✅ Darker border */
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Hover effect */
+.sign-in-btn:hover {
+    background-color: green;  /* Lightened teal background */
+    border-color: #3c6465;  /* ✅ Even darker teal border */
+    color: white;  /* ✅ Even darker teal text */
+}
+
+
