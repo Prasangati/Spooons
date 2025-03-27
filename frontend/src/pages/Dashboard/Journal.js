@@ -160,7 +160,7 @@ function JournalEntries() {
           />
           <textarea
             className="journal-input"
-            placeholder="Write your thoughts ..."
+            placeholder="A space for reflection . . ."
             value={newEntry}
             onChange={(e) => setNewEntry(e.target.value)}
           />
