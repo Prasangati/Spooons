@@ -6,27 +6,25 @@ import Journal from "./Journal"; // journal component
 function Dashboard() {
    const [activeTab, setActiveTab] = useState("Journal");
 
-
-
    return (
       <div className="dashboard">
          {/* navbar */}
          <nav className="navbar">
-    <div className="navbar-left">
-        <img src="/logo.png" alt="spooons Logo" className="sp-logo" />
-        <ul className="nav-links">
-            <li className={activeTab === "Journal" ? "active" : ""} onClick={() => setActiveTab("Journal")}>Journal</li>
-            <li className={activeTab === "Progress" ? "active" : ""} onClick={() => setActiveTab("Progress")}>Progress</li>
-            <li className={activeTab === "Resources" ? "active" : ""} onClick={() => setActiveTab("Resources")}>Resources</li>
-        </ul>
-    </div>
-    <LogOut />
+  <div className="navbar-left">
+    <img src="/logo.png" alt="spooons Logo" className="sp-logo" />
+    <ul className="nav-links">
+      <li className={activeTab === "Journal" ? "active" : ""} onClick={() => setActiveTab("Journal")}>Journal</li>
+      <li className={activeTab === "Progress" ? "active" : ""} onClick={() => setActiveTab("Progress")}>Progress</li>
+      <li className={activeTab === "Resources" ? "active" : ""} onClick={() => setActiveTab("Resources")}>Resources</li>
+    </ul>
+  </div>
+  
+  <LogOut />
 </nav>
 
          {/* Main Content */}
          <main className="main-content">
             <section className="dashboard-content">
-            {/* <h1 className="greeting">{quotes[currentQuoteIndex]}</h1> */}
                {activeTab === "Journal" && <Journal />}
                {activeTab === "Progress" && <p>Track your progress here</p>}
                {activeTab === "Resources" && <p>Personalized mental health resources</p>}

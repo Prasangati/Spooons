@@ -30,6 +30,11 @@
     align-items: center;
     gap: 30px; /* Space between logo and nav tabs */
 }
+.navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 30px; }
+
 .nav-links {
     list-style: none;
     display: flex;

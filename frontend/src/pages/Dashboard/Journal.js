@@ -28,6 +28,8 @@ function JournalEntries() {
   useEffect(() => {
     localStorage.setItem("journalEntries", JSON.stringify(entries));
   }, [entries]);
+
+  //temp - will update this functionality  
   const prompts = [
     "What are you grateful for today?",
     "What’s something that challenged you recently, and how did you handle it?",
@@ -72,7 +74,7 @@ function JournalEntries() {
     setEntries([draftEntry, ...entries]);
     resetForm();
   };
-//submit entry with confirmation
+//submit - confirmation
 
   const handleSendEntry = () => {
     if (title.trim() === "") {
