@@ -4,6 +4,7 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
+    background: transparent;
 }
 
 .login-box {
@@ -109,6 +110,14 @@
 .login-btn:hover, .reset-btn:hover {
     background: #06432c;
 }
+.error-message {
+    color: #c0392b;
+    font-size: 14px;
+    margin-top: -10px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+ 
 
 .google-btn {
     display: flex;
@@ -135,9 +144,6 @@
     height: 30px;
     margin-right: 10px;
 }
-
-
-
  .forgot-password {
     color: #06432c;
     font-size: 14px;
@@ -166,7 +172,7 @@
 
 .modal-content {
     position: relative;
-    background: #bee7e9;
+    background: #f8f9fa;
     padding: 30px;
     border-radius: 12px;
     text-align: center;

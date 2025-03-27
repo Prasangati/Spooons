@@ -159,7 +159,14 @@
     font-family: Arial;
 }
 
-
+.error-message {
+    color: #c0392b;
+    font-size: 14px;
+    margin-top: -10px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+ 
 /* Google signup button */
 .google-btn {
     display: flex;
