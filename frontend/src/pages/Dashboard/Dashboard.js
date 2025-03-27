@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import "./Dashboard.css";
 import LogOut from "../../components/Auth/LogOut"; //logout Button
 import Journal from "./Journal"; // journal component
@@ -7,7 +7,17 @@ function Dashboard() {
    const [activeTab, setActiveTab] = useState("Journal");
    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-   
+   useEffect(() => {
+      const handleResize = () => {
+        if (window.innerWidth > 768) {
+          setIsSidebarOpen(false);
+        }
+      };
+  
+      window.addEventListener("resize", handleResize);
+  
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
    const handleTabClick = (tab) => {
       setActiveTab(tab);
       setIsSidebarOpen(false); // sidebar on mobile view only

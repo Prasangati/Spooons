@@ -6,6 +6,7 @@ height: 100vh;
 background-color: #EAF4F2;
 position: relative;
 }
+
 .navbar {
 display: flex;
 align-items: center;
@@ -18,6 +19,7 @@ top: 0;
 z-index: 1000;
 gap: 30px; 
 }
+
 .navbar-left {
 display: flex;
 align-items: center;
@@ -114,7 +116,7 @@ transform: scale(1.05);
 background: #066341;
 color: white;
 }
-/* BUTTON GROUP */
+
 .button-group {
 display: flex;
 gap: 12px;
