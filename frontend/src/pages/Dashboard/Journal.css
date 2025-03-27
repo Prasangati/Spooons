@@ -80,16 +80,24 @@
 }
 
 .journal-input {
+    background-image: repeating-linear-gradient(
+        to bottom,
+        #ffffff,
+        #ffffff 31px,
+        #eaf4f2 32px
+      ); 
       height: 200px;
       width: 100%;
       font-size: 16px;
       line-height: 32px;
       color: #333;
-      padding: 16px;
+      font-family: 'Short Stack', sans-serif;      padding: 8px 16px;
       resize: vertical;
       border: 1px solid #b8ccc9;
       border-radius: 10px;
       background-color: #ffffff;
+      color: rgba(50, 50, 50, 0.9);
+
 }
 
 .journal-input:focus {
