@@ -26,7 +26,7 @@ function Login() {
   // If authentication status is determined and the user is authenticated, redirect to the dashboard
   useEffect(() => {
     if (!loading && isAuthenticated) {
-      navigate("/");
+        navigate("/");
     }
   }, [loading, isAuthenticated, navigate]);
 
@@ -59,9 +59,8 @@ function Login() {
         { email, password },
         { withCredentials: true, headers: { "Content-Type": "application/json" } }
       );
-       refreshAuth();
-      // Only navigate on successful login
-      navigate("/");
+       await refreshAuth();
+       navigate("/");
     } catch (error) {
     if (error.response) {
       // Handle HTTP error status codes

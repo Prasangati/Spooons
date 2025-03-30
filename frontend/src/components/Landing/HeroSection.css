@@ -6,7 +6,7 @@
     align-items: center;
     justify-content: space-between;
     width: 100vw;
-    margin-top: 90vh; /* ✅ Pushes the Hero Section below the navbar */
+    margin-top: 115vh; /* ✅ Pushes the Hero Section below the navbar */
 }
 
 
@@ -99,7 +99,7 @@
 /* ✅ Responsive: Move text below the image when screen is small */
 @media (max-width: 821px) {
     .hero{
-        margin-top: 800px;
+        margin-top: 1200px;
         padding-bottom: 3vh;
     }
     .hero-container {

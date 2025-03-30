@@ -18,9 +18,10 @@ function FeatureSection() {
                     delay: 0.2
                 }}
             >
-                <h2 className="feature-heading">
-                    <span className="green-text">Spoons</span> allows you to
-                </h2>
+                <div className="heading-container">
+                    <h2 className="feature-heading">With <span className="green-text"> Spoons</span> you can:
+                    </h2>
+                </div>
 
                 {/* Add your feature items here */}
             </motion.div>

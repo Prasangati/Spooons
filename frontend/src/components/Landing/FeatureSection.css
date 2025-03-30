@@ -1,3 +1,21 @@
+.features-grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    margin-top: 4rem;
+    position: relative;
+    z-index: 1;
+}
+
+.feature-box {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    border: 1px solid #e9ecef;
+}
+
 .feature-section {
     position: relative;
     background: white;
@@ -7,6 +25,22 @@
     align-items: center;
     justify-content: center;
 }
+.feature-box:hover {
+    transform: translateY(-5px);
+}
+
+.feature-emoji {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+}
+
+.feature-description {
+    color: #6c757d;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
 
 .feature-content {
     max-width: 1200px;
@@ -15,12 +49,19 @@
     position:absolute;
     top: 30px;
 }
+.feature-title {
+    font-size: 1.8rem;
+    color: #076040;
+    margin-bottom: 1rem;
+    font-family: Tahoma, sans-serif;
+}
+
 
 .feature-heading {
     font-size: 4.5rem;
+    font-weight: bold;
     font-family: Tahoma, sans-serif;
     color: #333;
-    font-weight: 500;
     margin-bottom: 3rem;
     line-height: 1.2;
 }
@@ -31,6 +72,9 @@
     display: inline-block;
     position: relative;
 }
+
+
+
 
 /* Cool underline animation for the green text */
 .green-text::after {
@@ -60,46 +104,3 @@
         padding: 4rem 1.5rem;
     }
 }
-
-/* Add to your existing CSS */
-.features-grid {
-    display: grid;
-    gap: 2rem;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    margin-top: 4rem;
-    position: relative;
-    z-index: 1;
-}
-
-.feature-box {
-    background: #f8f9fa;
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
-    border: 1px solid #e9ecef;
-}
-
-.feature-box:hover {
-    transform: translateY(-5px);
-}
-
-.feature-emoji {
-    font-size: 3rem;
-    margin-bottom: 1.5rem;
-    display: inline-block;
-}
-
-.feature-title {
-    font-size: 1.8rem;
-    color: #076040;
-    margin-bottom: 1rem;
-    font-family: Tahoma, sans-serif;
-}
-
-.feature-description {
-    color: #6c757d;
-    font-size: 1.1rem;
-    line-height: 1.6;
-}
-
