@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'django.contrib.admin',
     'django.contrib.sites',
+    'journal_entries',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -78,6 +79,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_HTTPONLY = False
 CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
 CORS_EXPOSE_HEADERS = ['Set-Cookie']  # If using cookies
 

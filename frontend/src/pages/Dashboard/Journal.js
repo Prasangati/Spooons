@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "./Journal.css";
+import Loading from "../Loading.js";
+import axios from "axios";
+import {getCookie} from "../../utils/utils";
 
 function JournalEntries() {
+  const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState(""); // state for entry title
   const [entries, setEntries] = useState([]); // storing journal entries
   const [newEntry, setNewEntry] = useState(""); // current input 
   const [showNewEntryForm, setShowNewEntryForm] = useState(false); //  past entries
- 
+  const csrfToken = getCookie('csrftoken');
+
   const quotes = [
       "Be not afraid of growing slowly, be afraid only of standing still. — Chinese Proverb",
       "The only person you are destined to become is the person you decide to be. — Ralph Waldo Emerson",
@@ -76,30 +81,54 @@ function JournalEntries() {
   };
 //submit - confirmation
 
-  const handleSendEntry = () => {
-    if (title.trim() === "") {
-      alert("Title is required to send.");
-      return;
-    }
-    if (newEntry.trim() === "") {
-      alert("Entry cannot be empty.");
-      return;
-    }
-     
-     if (!window.confirm("Are you sure you're ready to send this journal entry?")) {
-      return; 
-    }
+  const handleSendEntry = async () => {
+  if (title.trim() === "") {
+    alert("Title is required to send.");
+    return;
+  }
+  if (newEntry.trim() === "") {
+    alert("Entry cannot be empty.");
+    return;
+  }
 
-    const finalEntry = {
-      id: entries.length + 1,
-      title,
-      text: newEntry,
-      date: new Date().toLocaleString(),
-      status: "Sent",
-    };
-    setEntries([finalEntry, ...entries]);
+  if (!window.confirm("Are you sure you're ready to send this journal entry?")) {
+    return;
+  }
+
+  setLoading(true); // show Loading component
+
+  try {
+    console.log("Sending journal entry...");
+    console.log("CSRF token:", getCookie('csrftoken'));
+    const response = await axios.post(
+      'http://localhost:8000/journal/entries/',
+      {
+        title: title,
+        entry: newEntry,
+      },
+      {
+        withCredentials: true,
+       headers: {
+      'X-CSRFToken': csrfToken,
+      }
+      }
+    );
+
+    const createdEntry = response.data;
+
+    setEntries([createdEntry, ...entries]);
     resetForm();
+    alert("Entry successfully submitted!");
+  } catch (error) {
+    console.error("Error sending entry:", error);
+    alert("Something went wrong. Please try again.");
+  } finally {
+    setLoading(false); // hide Loading component
+  }
   };
+
+
+
 
   const handleInputChange = (e) => {
     setNewEntry(e.target.value);

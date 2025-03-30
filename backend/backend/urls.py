@@ -24,6 +24,7 @@ def react_frontend(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),  # Include API URLs
+    path('journal/', include('journal_entries.urls')),
     path("", react_frontend),  # Let React handle other routes
 
 ]
