@@ -8,8 +8,9 @@ function JournalEntries() {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState(""); // state for entry title
   const [entries, setEntries] = useState([]); // storing journal entries
-  const [newEntry, setNewEntry] = useState(""); // current input 
+  const [newEntry, setNewEntry] = useState(""); // current input
   const [showNewEntryForm, setShowNewEntryForm] = useState(false); //  past entries
+  const [oldEntries, setOldEntries] = useState([]);
   const csrfToken = getCookie('csrftoken');
 
   const quotes = [
@@ -33,6 +34,24 @@ function JournalEntries() {
   useEffect(() => {
     localStorage.setItem("journalEntries", JSON.stringify(entries));
   }, [entries]);
+
+  useEffect(() => {
+    const fetchRecentEntries = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/journal/entries/recent/', {
+          withCredentials: true,
+        });
+        setOldEntries(response.data);
+      } catch (error) {
+        console.error("Error fetching recent entries:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecentEntries();
+  }, []);
+
 
   //temp - will update this functionality  
   const prompts = [
@@ -145,32 +164,21 @@ function JournalEntries() {
   <div className="quote-container floating-quote">
     <p className="quote-text">{quotes[currentQuoteIndex]}</p>
   </div>
-) : (
-  <div className="prompt-container floating-quote">
-    <p className="quote-text">{currentPrompt}</p>
-  </div>
-)}
+  ) : (
+    <div className="prompt-container floating-quote">
+      <p className="quote-text">{currentPrompt}</p>
+    </div>
+  )}
 
-      {!showNewEntryForm && ( <>
 
-      <h3 className="entries-title">Journal Entries</h3>
-      <div className="entries-list">
-      {entries.length > 0 ? (
-          entries.map((entry) => (
-            <div key={entry.id} className="entry-card">
-              <h4>{entry.title}</h4>
-              <span className="entry-date">
-                {entry.date} - <strong>{entry.status}</strong>
-              </span>
-              <p className="entry-text">{entry.text}</p>
-            </div>
-          ))
-        ) : (
-          <p className="no-entries">No past entries yet.</p>
-        )}
+      <div>
+      <h3 className="entries-title">Recent Journal Entries</h3>
       </div>
-      </>
-      )}
+
+
+
+
+
       {!showNewEntryForm ? (
         <button
           className="add-entry-btn"
