@@ -2,6 +2,7 @@ from rest_framework import viewsets, permissions
 from .models import JournalEntry
 from .serializers import JournalEntrySerializer
 from rest_framework.decorators import action
+from rest_framework.response import Response
 
 
 class JournalEntryViewSet(viewsets.ModelViewSet):

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./Journal.css";
-import Loading from "../Loading.js";
 import axios from "axios";
 import {getCookie} from "../../utils/utils";
+import RecentEntries from "../../components/journals/RecentEntries";
+
 
 function JournalEntries() {
   const [loading, setLoading] = useState(false);
@@ -10,7 +11,6 @@ function JournalEntries() {
   const [entries, setEntries] = useState([]); // storing journal entries
   const [newEntry, setNewEntry] = useState(""); // current input
   const [showNewEntryForm, setShowNewEntryForm] = useState(false); //  past entries
-  const [oldEntries, setOldEntries] = useState([]);
   const csrfToken = getCookie('csrftoken');
 
   const quotes = [
@@ -35,22 +35,6 @@ function JournalEntries() {
     localStorage.setItem("journalEntries", JSON.stringify(entries));
   }, [entries]);
 
-  useEffect(() => {
-    const fetchRecentEntries = async () => {
-      try {
-        const response = await axios.get('http://localhost:8000/journal/entries/recent/', {
-          withCredentials: true,
-        });
-        setOldEntries(response.data);
-      } catch (error) {
-        console.error("Error fetching recent entries:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRecentEntries();
-  }, []);
 
 
   //temp - will update this functionality  
@@ -161,37 +145,35 @@ function JournalEntries() {
   return (
     <div className="journal-container">
       {!showNewEntryForm ? (
-  <div className="quote-container floating-quote">
-    <p className="quote-text">{quotes[currentQuoteIndex]}</p>
-  </div>
-  ) : (
-    <div className="prompt-container floating-quote">
-      <p className="quote-text">{currentPrompt}</p>
-    </div>
-  )}
-
-
-      <div>
-      <h3 className="entries-title">Recent Journal Entries</h3>
+        <div className="quote-container floating-quote">
+          <p className="quote-text">{quotes[currentQuoteIndex]}</p>
+        </div>
+      ) : (
+      <div className="prompt-container floating-quote">
+        <p className="quote-text">{currentPrompt}</p>
       </div>
-
-
+       )}
 
 
 
       {!showNewEntryForm ? (
-        <button
-          className="add-entry-btn"
-          onClick={() => setShowNewEntryForm(true)}
-        >
-          + Add New Entry
-        </button>
+
+          <div>
+            <RecentEntries />
+            <button
+                className="add-entry-btn"
+                onClick={() => setShowNewEntryForm(true)}
+            >
+              + Add New Entry
+            </button>
+          </div>
+
       ) : (
-        <div className="new-entry-form">
-          <input
-            type="text"
-            className="title-input"
-            placeholder="Title *"
+          <div className="new-entry-form">
+            <input
+                type="text"
+                className="title-input"
+                placeholder="Title *"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
@@ -202,7 +184,7 @@ function JournalEntries() {
             value={newEntry}
             onChange={(e) => setNewEntry(e.target.value)}
           />
-<div className="button-group">
+    <div className="button-group">
             <button className="save-draft-btn" onClick={handleSaveDraft}>
               Save as Draft
             </button>
