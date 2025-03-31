@@ -22,10 +22,10 @@ function JournalEntries() {
       "We are what we repeatedly do. Excellence, then, is not an act, but a habit. — Will Durant"
    ];
 
-   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
+  const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
 
-   useEffect(() => {
-   const quoteInterval = setInterval(() => {
+  useEffect(() => {
+    const quoteInterval = setInterval(() => {
       setCurrentQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
     }, 6000); 
     return () => clearInterval(quoteInterval); // cleanupon unmount
@@ -115,6 +115,7 @@ function JournalEntries() {
     );
 
     const createdEntry = response.data;
+
 
     setEntries([createdEntry, ...entries]);
     resetForm();
