@@ -5,11 +5,11 @@ import FeatureSection from "../components/Landing/FeatureSection";
 
 function LandingPage() {
 
+
     return (
         <div>
             <Navbar />
             <HeroSection />
-            <FeatureSection />
         </div>
     );
 }
