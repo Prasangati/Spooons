@@ -55,6 +55,7 @@ function Login() {
     setLoadingLocal(true);
 
     try {
+      await api.get(`${BASE_URL}/api/auth/csrf/`);
       await api.post(
         `${BASE_URL}/api/auth/login/`,
         { email, password },

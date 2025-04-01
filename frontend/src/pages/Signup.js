@@ -54,6 +54,7 @@ const Signup = () => {
       return;
     }
     try {
+      await api.get(`${BASE_URL}/api/auth/csrf/`);
       const response = await api.post(
         `${BASE_URL}/api/auth/signup/`,
         { name, email, password },

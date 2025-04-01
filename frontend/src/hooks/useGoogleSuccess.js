@@ -3,7 +3,6 @@ import {useNavigate} from "react-router-dom";
 import {useAuthContext} from "../context/AuthContext";
 import BASE_URL from "../utils/config";
 import api from "../utils/axiosConfig";
-import {getCookie} from "../utils/utils";
 
 const useGoogleSuccess = () => {
   const navigate = useNavigate();
@@ -17,6 +16,7 @@ const useGoogleSuccess = () => {
         console.error("No ID token received from Google");
         return;
       }
+      await api.get(`${BASE_URL}/api/auth/csrf/`);
       const res = await api.post(
           `${BASE_URL}/api/auth/google-signup/`,
           {token: response.credential},
