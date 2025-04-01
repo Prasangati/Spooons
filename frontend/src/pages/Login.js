@@ -7,7 +7,7 @@ import { useAuthContext } from "../context/AuthContext";
 import "./Login.css";
 import "../App.css";
 import Loading from "./Loading";
-
+import BASE_URL from "../utils/config";
 
 function Login() {
   const handleGoogleSuccess = useGoogleSuccess();
@@ -55,7 +55,7 @@ function Login() {
 
     try {
       await axios.post(
-        "http://localhost:8000/api/auth/login/",
+        `${BASE_URL}/api/auth/login/`,
         { email, password },
         { withCredentials: true, headers: { "Content-Type": "application/json" } }
       );
@@ -124,7 +124,7 @@ function Login() {
          //clear previous request before making new request
         setResetMessage("Processing reset password request...");
         try {
-            const response = await axios.post("http://localhost:8000/api/auth/reset/", { email: resetEmail.trim() });
+            const response = await axios.post(`${BASE_URL}/api/auth/reset/`, { email: resetEmail.trim() });
             if (response.status === 200) {
                 setResetMessage("If your account exists, a reset link has been sent to your email.");
                 setTimeout(() => setIsModalOpen(false), 2000); // after the reset is successful modal closes 

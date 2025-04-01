@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import BASE_URL from "../utils/config";
 
 // useAuth.js (or within your AuthContext provider)
 const useAuth = () => {
@@ -10,7 +11,7 @@ const useAuth = () => {
 
   const checkAuth = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/auth/me/", { withCredentials: true });
+      const res = await axios.get(`${BASE_URL}/api/auth/me/`, { withCredentials: true });
       if (res.data.isAuthenticated) {
         setIsAuthenticated(true);
         setUser(res.data.user);

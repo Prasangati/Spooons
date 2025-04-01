@@ -2,6 +2,7 @@
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import {useAuthContext} from "../context/AuthContext";
+import BASE_URL from "../utils/config";
 
 const useGoogleSuccess = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const useGoogleSuccess = () => {
         return;
       }
       const res = await axios.post(
-          "http://localhost:8000/api/auth/google-signup/",
+          `${BASE_URL}/api/auth/google-signup/`,
           {token: response.credential},
           {
             withCredentials: true,

@@ -5,6 +5,7 @@ import FeatureSection from "../components/Landing/FeatureSection";
 
 function LandingPage() {
 
+
     return (
         <div>
             <Navbar />

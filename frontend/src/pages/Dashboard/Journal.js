@@ -3,7 +3,7 @@ import "./Journal.css";
 import axios from "axios";
 import {getCookie} from "../../utils/utils";
 import RecentEntries from "../../components/journals/RecentEntries";
-
+import BASE_URL from "../../utils/config";
 
 function JournalEntries() {
   const [loading, setLoading] = useState(false);
@@ -104,7 +104,7 @@ function JournalEntries() {
     console.log("Sending journal entry...");
     console.log("CSRF token:", getCookie('csrftoken'));
     const response = await axios.post(
-      'http://localhost:8000/journal/entries/',
+      `${BASE_URL}/journal/entries/`,
       {
         title: title,
         entry: newEntry,
