@@ -3,6 +3,7 @@ import {useNavigate} from "react-router-dom";
 import {useAuthContext} from "../context/AuthContext";
 import BASE_URL from "../utils/config";
 import api from "../utils/axiosConfig";
+import {getCookie} from "../utils/utils";
 
 const useGoogleSuccess = () => {
   const navigate = useNavigate();

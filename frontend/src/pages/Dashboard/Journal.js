@@ -100,7 +100,6 @@ function JournalEntries() {
 
   try {
     console.log("Sending journal entry...");
-    console.log("CSRF token:", getCookie('csrftoken'));
     const response = await api.post(
       `${BASE_URL}/journal/entries/`,
       {

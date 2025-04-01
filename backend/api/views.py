@@ -1,4 +1,5 @@
 import json
+from django.http import JsonResponse
 from django.contrib.auth import get_user_model, login, logout, authenticate
 from django.views.decorators.http import require_GET, require_POST
 from django.conf import settings
