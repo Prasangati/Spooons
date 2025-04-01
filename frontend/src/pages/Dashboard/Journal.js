@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./Journal.css";
-import axios from "axios";
-import {getCookie} from "../../utils/utils";
 import RecentEntries from "../../components/journals/RecentEntries";
 import BASE_URL from "../../utils/config";
+import api from "../../utils/axiosConfig";
 
 function JournalEntries() {
   const [loading, setLoading] = useState(false);
@@ -11,7 +10,6 @@ function JournalEntries() {
   const [entries, setEntries] = useState([]); // storing journal entries
   const [newEntry, setNewEntry] = useState(""); // current input
   const [showNewEntryForm, setShowNewEntryForm] = useState(false); //  past entries
-  const csrfToken = getCookie('csrftoken');
 
   const quotes = [
       "Be not afraid of growing slowly, be afraid only of standing still. — Chinese Proverb",
@@ -103,7 +101,7 @@ function JournalEntries() {
   try {
     console.log("Sending journal entry...");
     console.log("CSRF token:", getCookie('csrftoken'));
-    const response = await axios.post(
+    const response = await api.post(
       `${BASE_URL}/journal/entries/`,
       {
         title: title,
@@ -112,7 +110,6 @@ function JournalEntries() {
       {
         withCredentials: true,
        headers: {
-      'X-CSRFToken': csrfToken,
       }
       }
     );

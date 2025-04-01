@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
 from dotenv import load_dotenv
+load_dotenv()
 from urllib.parse import urlparse
 from pathlib import Path
 import psycopg2
@@ -27,8 +28,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost').split(',')
-
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 
 # Application definition
 
@@ -78,7 +78,11 @@ CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
 
 
 CORS_ALLOW_CREDENTIALS = True
-CSRF_COOKIE_HTTPONLY = False
+
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+
+CSRF_COOKIE_HTTPONLY = not DEBUG
 CORS_EXPOSE_HEADERS = ['Set-Cookie']  # If using cookies
 
 MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
@@ -103,7 +107,7 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')  # From Step 2
 DEFAULT_FROM_EMAIL = 'prasangahere@gmail.com'  # Use your domain or app name
 
 # Frontend URL for password reset links
-FRONTEND_URL = 'http://localhost:3000'  # Your React app's URL
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
 
 
@@ -131,7 +135,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-load_dotenv()
+
 #tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
 
 tmpPostgres = urlparse(os.getenv('DATABASE_URL'))
@@ -147,10 +151,10 @@ DATABASES = {
         'PORT': 5432,
         'OPTIONS': {
             'sslmode': 'require',
-            'options': 'endpoint=ep-lingering-hill-a8wkvoca-pooler',
         },
     }
 }
+
 
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -170,9 +174,9 @@ GOOGLE_OAUTH_CLIENT_ID = os.getenv("CLIENT_ID")
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv("CLIENT_ID")
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv("CLIENT_SECRET")
 
+LOGIN_REDIRECT_URL = f"{FRONTEND_URL}/signup-success"
+LOGOUT_REDIRECT_URL = f"{FRONTEND_URL}/signup"
 
-LOGIN_REDIRECT_URL = "http://localhost:3000/signup-success"
-LOGOUT_REDIRECT_URL = "http://localhost:3000/signup"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

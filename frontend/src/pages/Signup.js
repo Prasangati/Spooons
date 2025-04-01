@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { GoogleLogin } from "@react-oauth/google";
-import axios from "axios";
 import {Link, useNavigate} from "react-router-dom";
 import "../App.css";
 import "./Signup.css";

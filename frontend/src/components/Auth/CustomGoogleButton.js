@@ -2,23 +2,22 @@ import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import BASE_URL from '../../utils/config';
-import {getCookie} from "../../utils/utils";
+import api from "../../utils/axiosConfig";
 
 const CustomGoogleButton = () => {
   const navigate = useNavigate();
-  const csrfToken = getCookie('csrftoken');
 
   // In your React component
 const handleGoogleSuccess = async (tokenResponse) => {
   try {
-    const res = await axios.post(
+    const res = await api.post(
         `${BASE_URL}/api/auth/google-signup/`,
       {
         id_token: tokenResponse.id_token  // Send ID token instead of access_token
       },
       {
         withCredentials: true,
-        headers: { 'X-CSRFToken': csrfToken,
+        headers: {
           "Content-Type": "application/json" },
       }
     );
