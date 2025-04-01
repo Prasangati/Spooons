@@ -10,6 +10,7 @@ function LandingPage() {
         <div>
             <Navbar />
             <HeroSection />
+            <FeatureSection />
         </div>
     );
 }

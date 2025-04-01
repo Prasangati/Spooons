@@ -9,7 +9,7 @@ import ResetPassword from "./pages/ResetPassword/ResetPassword";
 
 
 
-const clientId = "974911060543-6gsff2mmv7jfakgap4i71rpip850mso7.apps.googleusercontent.com"; // Replace with actual Client ID
+const clientId = process.env.REACT_APP_CLIENT_ID;// Replace with actual Client ID
 
 function App() {
     return (

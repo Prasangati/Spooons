@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { useNavigate, useLocation } from "react-router-dom";
+import BASE_URL from '../../utils/config';
+
 
 const LogOut = () => {
   const navigate = useNavigate();
@@ -9,7 +11,7 @@ const LogOut = () => {
     try {
       // Call the logout endpoint on your backend.
       await axios.post(
-        "http://localhost:8000/api/auth/logout/",
+        `${BASE_URL}/api/auth/logout/`,
         {},
         { withCredentials: true }
       );
