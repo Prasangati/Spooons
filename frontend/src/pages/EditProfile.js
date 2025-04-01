@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../App.css";
 import "../EditProfile.css";
 import BASE_URL from "../utils/config";
+import api from "../utils/axiosConfig";
 
 const EditProfile = ({ userId }) => {
   const [profile, setProfile] = useState({ username: "", email: "", password: "", bio: "" });
@@ -16,7 +17,7 @@ const EditProfile = ({ userId }) => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/api/users/${userId}`);
+        const response = await api.get(`${BASE_URL}/api/users/${userId}`);
         setProfile({
           username: response.data.username || "",
           email: response.data.email || "",
@@ -42,7 +43,7 @@ const EditProfile = ({ userId }) => {
     setMessage("");
 
     try {
-      const response = await axios.patch(`${BASE_URL}/api/users/${userId}`, profile);
+      const response = await api.patch(`${BASE_URL}/api/users/${userId}`, profile);
       if (response.status === 200) {
         setMessage("Profile updated successfully!");
         setTimeout(() => navigate(`/profile/${userId}`), 1000);

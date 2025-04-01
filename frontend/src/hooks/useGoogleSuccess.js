@@ -3,10 +3,13 @@ import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import {useAuthContext} from "../context/AuthContext";
 import BASE_URL from "../utils/config";
+import {getCookie} from "../utils/utils";
+
 
 const useGoogleSuccess = () => {
   const navigate = useNavigate();
   const { refreshAuth } = useAuthContext();
+  const csrfToken = getCookie('csrftoken');
 
   return async (response) => {
     console.log("Google OAuth Response:", response);
@@ -20,7 +23,9 @@ const useGoogleSuccess = () => {
           {token: response.credential},
           {
             withCredentials: true,
-            headers: {"Content-Type": "application/json"},
+            headers: {
+              'X-CSRFToken': csrfToken,
+              "Content-Type": "application/json"},
           }
       );
 

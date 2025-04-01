@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./ResetPassword.css";
-
+import {getCookie} from "../../utils/utils";
 
 const ResetPassword = () => {
   const { uid, token } = useParams(); // Extract user ID and token from URL
   const navigate = useNavigate();
+  const csrfToken = getCookie('csrftoken');
   const [formData, setFormData] = useState({
     password: "",
     confirmPassword: "",
@@ -35,7 +36,9 @@ const ResetPassword = () => {
         const response = await axios.post(
             "http://localhost:8000/api/auth/reset-password-confirm/", 
             { uid, token, new_password: password }, 
-            { headers: { "Content-Type": "application/json" } }
+            { headers: {
+                'X-CSRFToken': csrfToken,
+                "Content-Type": "application/json" } }
         );
 
         console.log("Password reset successful:", response.data);

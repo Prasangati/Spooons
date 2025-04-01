@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { useNavigate, useLocation } from "react-router-dom";
 import BASE_URL from '../../utils/config';
-
+import {getCookie} from "../../utils/utils";
 
 const LogOut = () => {
   const navigate = useNavigate();
-  //const location = useLocation();
+  const csrfToken = getCookie('csrftoken');
 
   const handleLogout = async () => {
     try {
@@ -13,7 +13,10 @@ const LogOut = () => {
       await axios.post(
         `${BASE_URL}/api/auth/logout/`,
         {},
-        { withCredentials: true }
+        { withCredentials: true, headers: {
+        'X-CSRFToken': csrfToken, // Must match the cookie name set by Django
+        'Content-Type': 'application/json', // Optional but good practice
+      },}
       );
       // After a successful logout, redirect to login for now
       navigate("/login");

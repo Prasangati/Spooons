@@ -2,9 +2,11 @@ import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import BASE_URL from '../../utils/config';
+import {getCookie} from "../../utils/utils";
 
 const CustomGoogleButton = () => {
   const navigate = useNavigate();
+  const csrfToken = getCookie('csrftoken');
 
   // In your React component
 const handleGoogleSuccess = async (tokenResponse) => {
@@ -16,7 +18,8 @@ const handleGoogleSuccess = async (tokenResponse) => {
       },
       {
         withCredentials: true,
-        headers: { "Content-Type": "application/json" },
+        headers: { 'X-CSRFToken': csrfToken,
+          "Content-Type": "application/json" },
       }
     );
     navigate("/signup-success");

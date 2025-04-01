@@ -8,6 +8,8 @@ import useGoogleSuccess from "../hooks/useGoogleSuccess";
 import { useAuthContext } from "../context/AuthContext";
 import Loading from "./Loading";
 import BASE_URL from "../utils/config";
+import api from "../utils/axiosConfig";
+
 
 const Signup = () => {
   const handleGoogleSuccess = useGoogleSuccess();
@@ -53,7 +55,7 @@ const Signup = () => {
       return;
     }
     try {
-      const response = await axios.post(
+      const response = await api.post(
         `${BASE_URL}/api/auth/signup/`,
         { name, email, password },
         { withCredentials: true, headers: { "Content-Type": "application/json" } }
