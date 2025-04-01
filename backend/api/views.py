@@ -22,7 +22,6 @@ def google_signup(request):
     try:
         # Debug raw request body (consider using proper logging)
         raw_body = request.body
-        print(f"Raw request body: {raw_body}")
 
         # Parse JSON with error handling
         data = json.loads(raw_body.decode('utf-8'))
@@ -40,7 +39,7 @@ def google_signup(request):
                 settings.GOOGLE_OAUTH_CLIENT_ID
             )
         except ValueError as e:
-            print(f"Token Verification Error: {str(e)}")
+
             return JsonResponse({"error": "Invalid token"}, status=400)
 
         # Check token expiration
@@ -245,32 +244,31 @@ def reset_password_confirm(request):
             token = data.get("token")
             new_password = data.get("new_password")
 
-            print(f"✅ Received: UID={uid}, Token={token}, New Password={new_password}")  
 
             if not uid or not token or not new_password:
-                print("❌ Missing data in request")
+                print("Missing data in request")
                 return JsonResponse({"message": "Missing data."}, status=400)
 
             try:
                 user_id = urlsafe_base64_decode(uid).decode()
                 user = User.objects.get(pk=user_id)  
-                print(f"✅ Found user: {user.email}")
+                print(f" Found user: {user.email}")
             except (User.DoesNotExist, ValueError, TypeError) as e:
-                print(f"❌ User lookup error: {e}")
+                print(f" User lookup error: {e}")
                 return JsonResponse({"message": "Invalid user."}, status=400)
 
             if not default_token_generator.check_token(user, token):
-                print("❌ Invalid or expired token")
+                print(" Invalid or expired token")
                 return JsonResponse({"message": "Invalid or expired token."}, status=400)
 
             # Update the password
             user.set_password(new_password)
             user.save()
-            print("✅ Password reset successful")
+            print(" Password reset successful")
 
             return JsonResponse({"message": "Password reset successful."})
 
         except Exception as e:
-            print(f"❌ Server error: {e}")  
+            print(f"Server error: {e}")
             traceback.print_exc()  
             return JsonResponse({"message": "An error occurred."}, status=500)
