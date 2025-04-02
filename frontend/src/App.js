@@ -10,7 +10,7 @@ import ResetPassword from "./pages/ResetPassword/ResetPassword";
 
 
 const clientId = process.env.REACT_APP_CLIENT_ID;// Replace with actual Client ID
-
+console.log("BASE_URL:", process.env.REACT_APP_API_URL);
 function App() {
     return (
         <GoogleOAuthProvider clientId={clientId}>
