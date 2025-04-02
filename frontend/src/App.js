@@ -6,12 +6,29 @@ import Login from "./pages/Login";
 import SignupSuccess from "./pages/SignupSucess"
 import Home from "./pages/Home"
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
-
-
+import api from "./utils/axiosConfig";
+import BASE_URL from "./utils/config";
 
 const clientId = process.env.REACT_APP_CLIENT_ID;// Replace with actual Client ID
 console.log("BASE_URL:", process.env.REACT_APP_API_URL);
 function App() {
+      useEffect(() => {
+    const fetchCSRFToken = async () => {
+      try {
+        const response = await api.get(`${BASE_URL}/api/auth/csrf/`);
+        const csrfToken = response.data.csrfToken;
+        api.defaults.headers.common['X-CSRFToken'] = csrfToken;
+        console.log("✅ CSRF token set:", csrfToken);
+      } catch (error) {
+        console.error("❌ Failed to fetch CSRF token:", error);
+      }
+    };
+
+    fetchCSRFToken();
+  }, []);
+
+
+
     return (
         <GoogleOAuthProvider clientId={clientId}>
             <Router>
