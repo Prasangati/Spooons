@@ -19,12 +19,9 @@ from django.urls import path, include
 from django.http import HttpResponse
 # Just a placeholder
 
-def react_frontend(request):
-    return HttpResponse("React App", status=200)
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),  # Include API URLs
+    path('api/', include('api.urls')),
     path('journal/', include('journal_entries.urls')),
-    path("", react_frontend),  # Let React handle other routes
-
+    path('', lambda request: JsonResponse({'message': 'Backend root'})),  # Just a placeholder
 ]
