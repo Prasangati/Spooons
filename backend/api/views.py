@@ -23,8 +23,7 @@ logger = logging.getLogger(__name__)
 
 @ensure_csrf_cookie
 def csrf_view(request):
-    token = get_token(request)
-    return JsonResponse({'csrfToken': token})
+    return JsonResponse({'csrfToken': get_token(request)})
 
 @require_POST
 def google_signup(request):
