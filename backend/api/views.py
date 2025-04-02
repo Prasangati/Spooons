@@ -1,8 +1,6 @@
 import json
-import traceback  # Add at top of file
+from django.http import JsonResponse
 from django.contrib.auth import get_user_model, login, logout, authenticate
-from django.http import JsonResponse, HttpResponseNotAllowed
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
 from django.conf import settings
 from google.oauth2 import id_token
@@ -12,27 +10,35 @@ from rest_framework import status
 from .serializers import LoginSerializer,PasswordResetSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_decode
+from django.views.decorators.csrf import ensure_csrf_cookie
+import logging
+
+logger = logging.getLogger(__name__)
 
 
-@csrf_exempt
+
+
+@ensure_csrf_cookie
+def csrf_view(request):
+    return JsonResponse({"message": "CSRF cookie set"})
+
+
+
+@require_POST
 def google_signup(request):
-    if request.method != "POST":
-        return JsonResponse({"error": "Method not allowed"}, status=405)
-
     try:
-        # Debug raw request body (consider using proper logging)
         raw_body = request.body
-        print(f"Raw request body: {raw_body}")
+        logger.debug(f"Raw request body: {raw_body}")
 
-        # Parse JSON with error handling
         data = json.loads(raw_body.decode('utf-8'))
 
-        # Extract token and ensure it is present
         token = data.get("token")
         if not token:
+            logger.warning("Token not provided in request")
             return JsonResponse({"error": "Token not provided"}, status=400)
 
-        # Verify token
         try:
             id_info = id_token.verify_oauth2_token(
                 token,
@@ -40,21 +46,20 @@ def google_signup(request):
                 settings.GOOGLE_OAUTH_CLIENT_ID
             )
         except ValueError as e:
-            print(f"Token Verification Error: {str(e)}")
+            logger.warning(f"Token verification failed: {str(e)}")
             return JsonResponse({"error": "Invalid token"}, status=400)
 
-        # Check token expiration
         expiry_timestamp = id_info.get("exp")
         if expiry_timestamp and datetime.now(timezone.utc).timestamp() > expiry_timestamp:
+            logger.info("Expired Google token")
             return JsonResponse({"error": "Expired token"}, status=401)
 
-        # Extract email
         email = id_info.get('email')
         if not email:
+            logger.warning("Email not found in token")
             return JsonResponse({"error": "Email not found in token"}, status=400)
 
         User = get_user_model()
-        # Create/update user
         user, created = User.objects.get_or_create(
             email=email,
             defaults={
@@ -62,9 +67,11 @@ def google_signup(request):
                 "last_name": id_info.get('family_name', ''),
             }
         )
-        # Assign backend for session-based login
+
         user.backend = 'django.contrib.auth.backends.ModelBackend'
         login(request, user)
+
+        logger.info(f"{'Created' if created else 'Logged in'} user: {email}")
 
         return JsonResponse({
             "status": "success",
@@ -72,14 +79,12 @@ def google_signup(request):
         })
 
     except Exception as e:
-        traceback.print_exc()  # Consider using proper logging in production
+        logger.exception("Unexpected error during Google signup")
         return JsonResponse({"error": "Internal server error"}, status=500)
 
-
-@csrf_exempt
+@require_POST
 def signup(request):
-    if request.method != "POST":
-        return HttpResponseNotAllowed(["POST"])
+
 
     try:
         data = json.loads(request.body.decode("utf-8"))
@@ -154,15 +159,22 @@ def authcontext(request):
         })
 
 
-@csrf_exempt
+
+@require_POST
 def logout_view(request):
+    user = request.user if request.user.is_authenticated else None
     logout(request)
-    print("Logged out user")
+
+    if user:
+        logger.info(f"User logged out: {user.email}")
+    else:
+        logger.info("Anonymous user session logged out.")
+
     return JsonResponse({"message": "Successfully logged out."})
 
 
+
 @api_view(['POST'])
-@csrf_exempt
 def login_view(request):
     serializer = LoginSerializer(data=request.data)
 
@@ -226,51 +238,44 @@ def password_reset_request(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-from django.contrib.auth import get_user_model  
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_decode
-from django.http import JsonResponse
-import json
-import traceback
-from django.views.decorators.csrf import csrf_exempt  
 
-User = get_user_model()  
 
-@csrf_exempt  
+User = get_user_model()
+
+@require_POST
 def reset_password_confirm(request):
-    if request.method == "POST":
+    try:
+        data = json.loads(request.body)
+        uid = data.get("uid")
+        token = data.get("token")
+        new_password = data.get("new_password")
+
+        logger.debug(f"Reset request data: uid={uid}, token={token}, new_password={'***' if new_password else 'None'}")
+
+        if not uid or not token or not new_password:
+            logger.warning("Missing fields in password reset request")
+            return JsonResponse({"message": "Missing data."}, status=400)
+
         try:
-            data = json.loads(request.body)
-            uid = data.get("uid")
-            token = data.get("token")
-            new_password = data.get("new_password")
+            user_id = urlsafe_base64_decode(uid).decode()
+            user = User.objects.get(pk=user_id)
+            logger.info(f"Password reset requested for user: {user.email}")
+        except (User.DoesNotExist, ValueError, TypeError) as e:
+            logger.warning(f"Invalid UID or user does not exist: {e}")
+            return JsonResponse({"message": "Invalid user."}, status=400)
 
-            print(f"✅ Received: UID={uid}, Token={token}, New Password={new_password}")  
+        if not default_token_generator.check_token(user, token):
+            logger.warning(f"Invalid or expired token for user: {user.email}")
+            return JsonResponse({"message": "Invalid or expired token."}, status=400)
 
-            if not uid or not token or not new_password:
-                print("❌ Missing data in request")
-                return JsonResponse({"message": "Missing data."}, status=400)
+        user.set_password(new_password)
+        user.save()
+        logger.info(f"Password reset successful for user: {user.email}")
 
-            try:
-                user_id = urlsafe_base64_decode(uid).decode()
-                user = User.objects.get(pk=user_id)  
-                print(f"✅ Found user: {user.email}")
-            except (User.DoesNotExist, ValueError, TypeError) as e:
-                print(f"❌ User lookup error: {e}")
-                return JsonResponse({"message": "Invalid user."}, status=400)
+        return JsonResponse({"message": "Password reset successful."})
 
-            if not default_token_generator.check_token(user, token):
-                print("❌ Invalid or expired token")
-                return JsonResponse({"message": "Invalid or expired token."}, status=400)
+    except Exception as e:
+        logger.exception("Unexpected error during password reset confirmation")
+        return JsonResponse({"message": "An error occurred."}, status=500)
 
-            # Update the password
-            user.set_password(new_password)
-            user.save()
-            print("✅ Password reset successful")
 
-            return JsonResponse({"message": "Password reset successful."})
-
-        except Exception as e:
-            print(f"❌ Server error: {e}")  
-            traceback.print_exc()  
-            return JsonResponse({"message": "An error occurred."}, status=500)

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { GoogleLogin } from "@react-oauth/google";
-import axios from "axios";
 import {Link, useNavigate} from "react-router-dom";
 import "../App.css";
 import "./Signup.css";
@@ -8,6 +7,8 @@ import useGoogleSuccess from "../hooks/useGoogleSuccess";
 import { useAuthContext } from "../context/AuthContext";
 import Loading from "./Loading";
 import BASE_URL from "../utils/config";
+import api from "../utils/axiosConfig";
+
 
 const Signup = () => {
   const handleGoogleSuccess = useGoogleSuccess();
@@ -53,7 +54,8 @@ const Signup = () => {
       return;
     }
     try {
-      const response = await axios.post(
+      await api.get(`${BASE_URL}/api/auth/csrf/`);
+      const response = await api.post(
         `${BASE_URL}/api/auth/signup/`,
         { name, email, password },
         { withCredentials: true, headers: { "Content-Type": "application/json" } }

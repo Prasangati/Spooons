@@ -1,19 +1,22 @@
 import axios from 'axios';
 import { useNavigate, useLocation } from "react-router-dom";
 import BASE_URL from '../../utils/config';
-
+import {getCookie} from "../../utils/utils";
+import api from "../../utils/axiosConfig";
 
 const LogOut = () => {
   const navigate = useNavigate();
-  //const location = useLocation();
+
 
   const handleLogout = async () => {
     try {
       // Call the logout endpoint on your backend.
-      await axios.post(
+      await api.post(
         `${BASE_URL}/api/auth/logout/`,
         {},
-        { withCredentials: true }
+        { withCredentials: true, headers: {
+        'Content-Type': 'application/json', // Optional but good practice
+      },}
       );
       // After a successful logout, redirect to login for now
       navigate("/login");

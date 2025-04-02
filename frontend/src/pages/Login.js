@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
-import axios from "axios";
 import useGoogleSuccess from "../hooks/useGoogleSuccess";
 import { useAuthContext } from "../context/AuthContext";
 import "./Login.css";
 import "../App.css";
 import Loading from "./Loading";
 import BASE_URL from "../utils/config";
+import api from "../utils/axiosConfig";
+
 
 function Login() {
   const handleGoogleSuccess = useGoogleSuccess();
@@ -54,7 +55,8 @@ function Login() {
     setLoadingLocal(true);
 
     try {
-      await axios.post(
+      await api.get(`${BASE_URL}/api/auth/csrf/`);
+      await api.post(
         `${BASE_URL}/api/auth/login/`,
         { email, password },
         { withCredentials: true, headers: { "Content-Type": "application/json" } }
@@ -124,7 +126,7 @@ function Login() {
          //clear previous request before making new request
         setResetMessage("Processing reset password request...");
         try {
-            const response = await axios.post(`${BASE_URL}/api/auth/reset/`, { email: resetEmail.trim() });
+            const response = await api.post(`${BASE_URL}/api/auth/reset/`, { email: resetEmail.trim() });
             if (response.status === 200) {
                 setResetMessage("If your account exists, a reset link has been sent to your email.");
                 setTimeout(() => setIsModalOpen(false), 2000); // after the reset is successful modal closes 

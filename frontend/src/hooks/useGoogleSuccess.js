@@ -1,12 +1,13 @@
 // useGoogleSuccess.js
 import {useNavigate} from "react-router-dom";
-import axios from "axios";
 import {useAuthContext} from "../context/AuthContext";
 import BASE_URL from "../utils/config";
+import api from "../utils/axiosConfig";
 
 const useGoogleSuccess = () => {
   const navigate = useNavigate();
   const { refreshAuth } = useAuthContext();
+
 
   return async (response) => {
     console.log("Google OAuth Response:", response);
@@ -15,12 +16,14 @@ const useGoogleSuccess = () => {
         console.error("No ID token received from Google");
         return;
       }
-      const res = await axios.post(
+      await api.get(`${BASE_URL}/api/auth/csrf/`);
+      const res = await api.post(
           `${BASE_URL}/api/auth/google-signup/`,
           {token: response.credential},
           {
             withCredentials: true,
-            headers: {"Content-Type": "application/json"},
+            headers: {
+              "Content-Type": "application/json"},
           }
       );
 
