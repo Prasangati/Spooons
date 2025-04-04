@@ -9,12 +9,9 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const method = config.method?.toLowerCase?.() || '';
-  const token = config.headers['X-CSRFToken']; // comes from App.js
-
-  console.log("Request method:", method);
-  console.log("Token already set on config:", token);
-
+  const token = config.headers['X-CSRFToken'];
+  console.log("🔁 Axios Request Method:", config.method);
+  console.log("📎 CSRF Token on request:", token);
   return config;
 });
 
