@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useContext} from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import useGoogleSuccess from "../hooks/useGoogleSuccess";
@@ -8,12 +8,14 @@ import "../App.css";
 import Loading from "./Loading";
 import BASE_URL from "../utils/config";
 import api from "../utils/axiosConfig";
+import {CSRFContext} from "../utils/CSRFContext";
 
 
 function Login() {
   const handleGoogleSuccess = useGoogleSuccess();
   const navigate = useNavigate();
   const { isAuthenticated, loading, refreshAuth } = useAuthContext(); // Get auth state from context
+  const { refreshCSRF } = useContext(CSRFContext);
 
   // Local state for form data and UI state
   const [email, setEmail] = useState("");
@@ -55,14 +57,13 @@ function Login() {
     setLoadingLocal(true);
 
     try {
-      await api.get(`${BASE_URL}/api/auth/csrf/`);
       await api.post(
         `${BASE_URL}/api/auth/login/`,
         { email, password },
         { withCredentials: true, headers: { "Content-Type": "application/json" } }
       );
-       await refreshAuth();
-       navigate("/");
+      await refreshAuth();
+      navigate("/");
     } catch (error) {
     if (error.response) {
       // Handle HTTP error status codes
@@ -127,6 +128,7 @@ function Login() {
         setResetMessage("Processing reset password request...");
         try {
             const response = await api.post(`${BASE_URL}/api/auth/reset/`, { email: resetEmail.trim() });
+
             if (response.status === 200) {
                 setResetMessage("If your account exists, a reset link has been sent to your email.");
                 setTimeout(() => setIsModalOpen(false), 2000); // after the reset is successful modal closes 

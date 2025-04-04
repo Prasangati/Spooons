@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useContext} from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import {Link, useNavigate} from "react-router-dom";
 import "../App.css";
@@ -8,12 +8,13 @@ import { useAuthContext } from "../context/AuthContext";
 import Loading from "./Loading";
 import BASE_URL from "../utils/config";
 import api from "../utils/axiosConfig";
-
+import {CSRFContext} from "../utils/CSRFContext";
 
 const Signup = () => {
   const handleGoogleSuccess = useGoogleSuccess();
   const navigate = useNavigate();
   const { isAuthenticated, loading } = useAuthContext(); // Get auth state from context
+  const { refreshCSRF } = useContext(CSRFContext);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -54,12 +55,12 @@ const Signup = () => {
       return;
     }
     try {
-      await api.get(`${BASE_URL}/api/auth/csrf/`);
       const response = await api.post(
         `${BASE_URL}/api/auth/signup/`,
         { name, email, password },
         { withCredentials: true, headers: { "Content-Type": "application/json" } }
       );
+      await refreshCSRF();
 
       console.log("Signup successful:", response.data);
       navigate("/signup-success");

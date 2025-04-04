@@ -2,11 +2,15 @@
 import {useNavigate} from "react-router-dom";
 import {useAuthContext} from "../context/AuthContext";
 import BASE_URL from "../utils/config";
+import { useContext } from "react";
 import api from "../utils/axiosConfig";
+import { CSRFContext } from "../utils/CSRFContext";
+
 
 const useGoogleSuccess = () => {
   const navigate = useNavigate();
   const { refreshAuth } = useAuthContext();
+  const { refreshCSRF } = useContext(CSRFContext);
 
 
   return async (response) => {
@@ -29,6 +33,7 @@ const useGoogleSuccess = () => {
 
       console.log("Signup successful:", res.data);
       await refreshAuth();
+      await refreshCSRF();
       navigate("/", {state: {user: res.data.user}});
     } catch (error) {
       console.error("Signup failed:", error.response?.data || error);
