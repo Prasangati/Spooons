@@ -6,12 +6,11 @@ import Login from "./pages/Login";
 import SignupSuccess from "./pages/SignupSucess";
 import Home from "./pages/Home";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
-import {CSRFProvider} from "./utils/CSRFContext";
-import BASE_URL from "./utils/config";
+import CSRFProvider from "./utils/CSRFContext";
+
 
 const clientId = process.env.REACT_APP_CLIENT_ID;
 
-console.log("BASE_URL:", process.env.REACT_APP_API_URL);
 
 function App() {
 
