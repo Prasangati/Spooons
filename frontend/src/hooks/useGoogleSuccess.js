@@ -4,7 +4,7 @@ import {useAuthContext} from "../context/AuthContext";
 import BASE_URL from "../utils/config";
 import { useContext } from "react";
 import api from "../utils/axiosConfig";
-import { CSRFContext } from "../utils/CSRFContext";
+import  { CSRFContext } from "../utils/CSRFContext";
 
 
 const useGoogleSuccess = () => {

@@ -8,7 +8,7 @@ import "../App.css";
 import Loading from "./Loading";
 import BASE_URL from "../utils/config";
 import api from "../utils/axiosConfig";
-import {CSRFContext} from "../utils/CSRFContext";
+import { CSRFContext } from "../utils/CSRFContext";
 
 
 function Login() {

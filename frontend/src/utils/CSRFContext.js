@@ -11,9 +11,9 @@ const CSRFProvider = ({ children }) => {
       const response = await api.get(`${BASE_URL}/api/auth/csrf/`);
       const csrfToken = response.data.csrfToken;
       api.defaults.headers.common["X-CSRFToken"] = csrfToken;
-      console.log("✅ CSRF token set globally:", csrfToken);
+      console.log("CSRF token set globally:", csrfToken);
     } catch (err) {
-      console.error("❌ Failed to fetch CSRF token:", err);
+      console.error(" Failed to fetch CSRF token:", err);
     }
   };
 
