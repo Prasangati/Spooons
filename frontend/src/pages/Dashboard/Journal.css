@@ -318,6 +318,13 @@
     justify-content: space-around;
     gap: 10px;
   }
+
+.edit-modal {
+    max-width: 700px; 
+    width: 95%;
+    min-height: 300px; 
+  }
+  
   .delete-btn {
     background-color: #fbeaea;
     color: #a00;

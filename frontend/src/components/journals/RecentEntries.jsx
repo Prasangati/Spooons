@@ -11,13 +11,10 @@ const RecentEntries = () => {
   const [entryToDelete, setEntryToDelete] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-const [entryBeingEdited, setEntryBeingEdited] = useState(null);
-const [editedTitle, setEditedTitle] = useState("");
-const [editedText, setEditedText] = useState("");
-
-
-  const toggleExpand = (id) => {
-  setExpandedEntryId(expandedEntryId === id ? null : id);};
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [entryBeingEdited, setEntryBeingEdited] = useState(null);
+  const [editedTitle, setEditedTitle] = useState("");
+  const [editedText, setEditedText] = useState("");
 
   
   useEffect(() => {
@@ -36,7 +33,6 @@ const [editedText, setEditedText] = useState("");
 
     fetchRecentEntries();
   }, []);
-
 
   const handleConfirmDelete = async (id) => {
     try {
@@ -59,16 +55,19 @@ const [editedText, setEditedText] = useState("");
   };
   
   const handleEditClick = (entry) => {
-    setEntryBeingEdited(entry.id);
+    setEntryBeingEdited(entry); 
     setEditedTitle(entry.title);
     setEditedText(entry.entry);
+    setEditModalOpen(true);   
   };
 
-  const handleSaveEdit = async (id) => {
+  const handleSaveEdit = async () => {
+    if (!entryBeingEdited) return;
+
     try {
       const csrfToken = getCookie("csrftoken");
       const response = await axios.put(
-        `http://localhost:8000/journal/entries/${id}/`,
+        `http://localhost:8000/journal/entries/${entryBeingEdited.id}/`,
         {
           title: editedTitle,
           entry: editedText,
@@ -80,15 +79,18 @@ const [editedText, setEditedText] = useState("");
           },
         }
       );
-        setEntries((prev) =>
-        prev.map((e) => (e.id === id ? response.data : e))
+
+      setEntries((prev) =>
+        prev.map((e) => (e.id === entryBeingEdited.id ? response.data : e))
       );
+      setEditModalOpen(false);
       setEntryBeingEdited(null);
     } catch (error) {
       console.error("Error saving edited entry:", error);
       alert("Could not update entry.");
     }
   };
+
   
   return (
     <div className="recent-entries-container">
@@ -102,49 +104,23 @@ const [editedText, setEditedText] = useState("");
             entries.map((entry) => (
               <div
               key={entry.id}
-              className={`entry-card ${
-                expandedEntryId === entry.id ? "expanded" : ""
-              }`}
+              className={`entry-card ${expandedEntryId === entry.id ? "expanded" : "" }`}
             >
               <h4>{entry.title}</h4>
               <span className="entry-date">
                 {new Date(entry.created_at).toLocaleString()}
               </span>
-
-              {entryBeingEdited === entry.id ? (
-                  <div className="edit-form">
-                    <input
-                      type="text"
-                      value={editedTitle}
-                      onChange={(e) => setEditedTitle(e.target.value)}
-                      className="title-input"
-                    />
-                    <textarea
-                      value={editedText}
-                      onChange={(e) => setEditedText(e.target.value)}
-                      className="journal-input"
-                    />
-                    <div className="button-group">
-                      <button className="send-btn" onClick={() => handleSaveEdit(entry.id)}>
-                        Save
-                      </button>
-                      <button className="cancel-btn" onClick={() => setEntryBeingEdited(null)}>
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-
               <p className="entry-text">{entry.entry}</p>
-                )}
               <div className="entry-icons">
-                <button
-                  className="icon-btn"
-                  onClick={() => handleEditClick(entry)}
-                  title="Edit"
-                >
-                  ✏️
-                </button>
+                          <button
+              className="icon-btn"
+              onClick={() => handleEditClick(entry)}
+              title="Edit"
+            >
+              ✏️
+            </button>
+
+
                 <button
                   className="icon-btn"
                   onClick={() => {
@@ -187,6 +163,35 @@ const [editedText, setEditedText] = useState("");
     </div>
 
 )}
+
+{editModalOpen && entryBeingEdited && (
+        <div className="modal-overlay">
+        <div className="modal-box edit-modal">
+            <h4>Edit Entry</h4>
+            <input
+              type="text"
+              className="title-input"
+              value={editedTitle}
+              onChange={(e) => setEditedTitle(e.target.value)}
+            />
+            <textarea
+              className="journal-input"
+              value={editedText}
+              onChange={(e) => setEditedText(e.target.value)}
+            />
+            <div className="modal-buttons">
+              <button className="cancel-btn" onClick={() => setEditModalOpen(false)}>
+                Cancel
+              </button>
+              <button className="send-btn" onClick={handleSaveEdit}>
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
 </div>
   );
 };
