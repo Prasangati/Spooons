@@ -1,8 +1,8 @@
 import React from "react";
-import { useAuthContext } from "../context/AuthContext";
-import LandingPage from "./LandingPage";
-import Loading from "./Loading";
-import Dashboard from "./Dashboard/Dashboard";
+import { useAuthContext } from "../../context/AuthContext";
+import LandingPage from "../LandingPage/LandingPage";
+import Loading from "../Loading/Loading";
+import Dashboard from "../Dashboard/Dashboard";
 
 export default function Home() {
   const { isAuthenticated, loading } = useAuthContext();

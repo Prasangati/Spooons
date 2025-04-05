@@ -1,14 +1,14 @@
 import React, {useState, useEffect, useContext} from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
-import useGoogleSuccess from "../hooks/useGoogleSuccess";
-import { useAuthContext } from "../context/AuthContext";
+import useGoogleSuccess from "../../hooks/useGoogleSuccess";
+import { useAuthContext } from "../../context/AuthContext";
 import "./Login.css";
-import "../App.css";
-import Loading from "./Loading";
-import BASE_URL from "../utils/config";
-import api from "../utils/axiosConfig";
-import { CSRFContext } from "../utils/CSRFContext";
+import "../../App.css";
+import Loading from "../Loading/Loading";
+import BASE_URL from "../../utils/config";
+import api from "../../utils/axiosConfig";
+import { CSRFContext } from "../../utils/CSRFContext";
 
 
 function Login() {

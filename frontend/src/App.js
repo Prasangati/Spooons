@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import Signup from "./pages/Signup";
-import Login from "./pages/Login";
-import SignupSuccess from "./pages/SignupSucess";
-import Home from "./pages/Home";
+import Signup from "./pages/Signup/Signup";
+import Login from "./pages/Login/Login";
+import SignupSuccess from "./pages/SignupSuccess/SignupSuccess";
+import Home from "./pages/Home/Home";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import CSRFProvider from "./utils/CSRFContext";
 

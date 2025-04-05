@@ -1,14 +1,14 @@
 import React, {useState, useEffect, useContext} from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import {Link, useNavigate} from "react-router-dom";
-import "../App.css";
+import "../../App.css";
 import "./Signup.css";
-import useGoogleSuccess from "../hooks/useGoogleSuccess";
-import { useAuthContext } from "../context/AuthContext";
-import Loading from "./Loading";
-import BASE_URL from "../utils/config";
-import api from "../utils/axiosConfig";
-import { CSRFContext } from "../utils/CSRFContext";
+import useGoogleSuccess from "../../hooks/useGoogleSuccess";
+import { useAuthContext } from "../../context/AuthContext";
+import Loading from "../Loading/Loading";
+import BASE_URL from "../../utils/config";
+import api from "../../utils/axiosConfig";
+import { CSRFContext } from "../../utils/CSRFContext";
 
 const Signup = () => {
   const handleGoogleSuccess = useGoogleSuccess();
@@ -179,7 +179,7 @@ const Signup = () => {
 
         <p className="login-text">
           Already have an account?{" "}
-          <a href="/login" className="login-link">
+          <a href="/Login/Login" className="login-link">
             Login
           </a>
         </p>

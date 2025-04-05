@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import { useNavigate } from "react-router-dom";
-import "../App.css";
-import "../EditProfile.css";
-import BASE_URL from "../utils/config";
-import api from "../utils/axiosConfig";
+import "../../App.css";
+import "./EditProfile.css";
+import BASE_URL from "../../utils/config";
+import api from "../../utils/axiosConfig";
 
 const EditProfile = ({ userId }) => {
   const [profile, setProfile] = useState({ username: "", email: "", password: "", bio: "" });

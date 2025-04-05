@@ -1,6 +1,6 @@
-import Navbar from "../components/Landing/Navbar";
-import HeroSection from "../components/Landing/HeroSection";
-import FeatureSection from "../components/Landing/FeatureSection";
+import Navbar from "../../components/Landing/Navbar";
+import HeroSection from "../../components/Landing/HeroSection";
+import FeatureSection from "../../components/Landing/FeatureSection";
 
 
 function LandingPage() {
