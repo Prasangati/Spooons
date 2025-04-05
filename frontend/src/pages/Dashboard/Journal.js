@@ -6,10 +6,11 @@ import RecentEntries from "../../components/journals/RecentEntries";
 
 
 function JournalEntries() {
-  const [loading, setLoading] = useState(false);
+  const [ setLoading] = useState(false);
   const [title, setTitle] = useState(""); // state for entry title
   const [entries, setEntries] = useState([]); // storing journal entries
   const [newEntry, setNewEntry] = useState(""); // current input
+
   const [showNewEntryForm, setShowNewEntryForm] = useState(false); //  past entries
   const csrfToken = getCookie('csrftoken');
 
@@ -115,6 +116,7 @@ function JournalEntries() {
     setNewEntry("");
     setShowNewEntryForm(false);
   };
+
   return (
     <div className="journal-container">
       {!showNewEntryForm ? (

@@ -1,12 +1,13 @@
 // components/RecentEntries.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import {getCookie} from "../../utils/utils";
 import Loading from "../../pages/Loading";
 
 const RecentEntries = () => {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
     const fetchRecentEntries = async () => {
       try {
@@ -23,6 +24,26 @@ const RecentEntries = () => {
 
     fetchRecentEntries();
   }, []);
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this entry?")) return;
+  
+    try {
+      const csrfToken = getCookie("csrftoken");
+      await axios.delete(`http://localhost:8000/journal/entries/${id}/`, {
+        withCredentials: true,
+        headers: {
+          "X-CSRFToken": csrfToken,
+        },
+      });
+  
+      setEntries(entries.filter((entry) => entry.id !== id));
+    } catch (error) {
+      console.error("Error deleting entry:", error);
+      alert("Could not delete entry.");
+    }
+  };
+  
+
 
   return (
     <div className="recent-entries-container">
@@ -40,6 +61,15 @@ const RecentEntries = () => {
                   {new Date(entry.created_at).toLocaleString()}
                 </span>
                 <p className="entry-text">{entry.entry}</p>
+
+                <div className="entry-actions">
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDelete(entry.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             ))
           ) : (
