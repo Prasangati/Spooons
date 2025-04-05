@@ -8,6 +8,9 @@ const RecentEntries = () => {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedEntryId, setExpandedEntryId] = useState(null);
+  const [entryToDelete, setEntryToDelete] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   const toggleExpand = (id) => {
   setExpandedEntryId(expandedEntryId === id ? null : id);};
 
@@ -28,9 +31,9 @@ const RecentEntries = () => {
 
     fetchRecentEntries();
   }, []);
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this entry?")) return;
-  
+
+
+  const handleConfirmDelete = async (id) => {
     try {
       const csrfToken = getCookie("csrftoken");
       await axios.delete(`http://localhost:8000/journal/entries/${id}/`, {
@@ -40,14 +43,16 @@ const RecentEntries = () => {
         },
       });
   
-      setEntries(entries.filter((entry) => entry.id !== id));
+      setEntries((prevEntries) => prevEntries.filter((entry) => entry.id !== id));
+      setShowDeleteModal(false);
+      setEntryToDelete(null);
     } catch (error) {
       console.error("Error deleting entry:", error);
       alert("Could not delete entry.");
+      setShowDeleteModal(false);
     }
   };
   
-
 
   return (
     <div className="recent-entries-container">
@@ -70,8 +75,7 @@ const RecentEntries = () => {
                 {new Date(entry.created_at).toLocaleString()}
               </span>
               <p className="entry-text">{entry.entry}</p>
-            
-              {/* Icons in top-right */}
+          
               <div className="entry-icons">
                 <button
                   className="icon-btn"
@@ -82,22 +86,47 @@ const RecentEntries = () => {
                 </button>
                 <button
                   className="icon-btn"
-                  onClick={() => handleDelete(entry.id)}
+                  onClick={() => {
+                    setEntryToDelete(entry);
+                    setShowDeleteModal(true);
+                  }}
                   title="Delete"
                 >
                   🗑️
                 </button>
               </div>
             </div>
-            
-          
+
             ))
           ) : (
             <p className="no-entries">No recent entries found.</p>
           )}
         </div>
       )}
+
+{showDeleteModal && (
+        <div className="modal-overlay">
+          <div className="modal-box">
+            <p>Are you sure you want to delete this entry?</p>
+            <div className="modal-buttons">
+              <button
+                className="cancel-btn"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="delete-btn"
+                onClick={() => handleConfirmDelete(entryToDelete.id)}
+              >
+                Yes, Delete
+              </button>
+            </div>
+          </div>
     </div>
+
+)}
+</div>
   );
 };
 
