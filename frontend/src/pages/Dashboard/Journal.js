@@ -6,7 +6,7 @@ import RecentEntries from "../../components/journals/RecentEntries";
 
 
 function JournalEntries() {
-  const [ setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState(""); // state for entry title
   const [entries, setEntries] = useState([]); // storing journal entries
   const [newEntry, setNewEntry] = useState(""); // current input
