@@ -7,6 +7,10 @@ import Loading from "../../pages/Loading";
 const RecentEntries = () => {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [expandedEntryId, setExpandedEntryId] = useState(null);
+  const toggleExpand = (id) => {
+  setExpandedEntryId(expandedEntryId === id ? null : id);};
+
   
   useEffect(() => {
     const fetchRecentEntries = async () => {
@@ -55,22 +59,38 @@ const RecentEntries = () => {
         <div className="entries-list">
           {entries.length > 0 ? (
             entries.map((entry) => (
-              <div key={entry.id} className="entry-card">
-                <h4>{entry.title}</h4>
-                <span className="entry-date">
-                  {new Date(entry.created_at).toLocaleString()}
-                </span>
-                <p className="entry-text">{entry.entry}</p>
-
-                <div className="entry-actions">
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDelete(entry.id)}
-                  >
-                    Delete
-                  </button>
-                </div>
+              <div
+              key={entry.id}
+              className={`entry-card ${
+                expandedEntryId === entry.id ? "expanded" : ""
+              }`}
+            >
+              <h4>{entry.title}</h4>
+              <span className="entry-date">
+                {new Date(entry.created_at).toLocaleString()}
+              </span>
+              <p className="entry-text">{entry.entry}</p>
+            
+              {/* Icons in top-right */}
+              <div className="entry-icons">
+                <button
+                  className="icon-btn"
+                  onClick={() => console.log("Edit", entry.id)} // replace with modal later
+                  title="Edit"
+                >
+                  ✏️
+                </button>
+                <button
+                  className="icon-btn"
+                  onClick={() => handleDelete(entry.id)}
+                  title="Delete"
+                >
+                  🗑️
+                </button>
               </div>
+            </div>
+            
+          
             ))
           ) : (
             <p className="no-entries">No recent entries found.</p>
