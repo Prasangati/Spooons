@@ -65,24 +65,7 @@ function JournalEntries() {
     }
   }, []);
   
-  
-  //draft
-  const handleSaveDraft = () => {
-    if (title.trim() === "") {
-      alert("Title is required to save.");
-      return;
-    }
-    const draftEntry = {
-      id: entries.length + 1,
-      title,
-      text: newEntry,
-      date: new Date().toLocaleString(),
-      status: "Draft",
-    };
-    setEntries([draftEntry, ...entries]);
-    resetForm();
-  };
-//submit - confirmation
+// add new entry
 
   const handleSendEntry = async () => {
   if (title.trim() === "") {
@@ -93,11 +76,6 @@ function JournalEntries() {
     alert("Entry cannot be empty.");
     return;
   }
-
-  if (!window.confirm("Are you sure you're ready to send this journal entry?")) {
-    return;
-  }
-
   setLoading(true); // show Loading component
 
   try {
@@ -119,10 +97,8 @@ function JournalEntries() {
 
     const createdEntry = response.data;
 
-
     setEntries([createdEntry, ...entries]);
     resetForm();
-    alert("Entry successfully submitted!");
   } catch (error) {
     console.error("Error sending entry:", error);
     alert("Something went wrong. Please try again.");
@@ -130,9 +106,6 @@ function JournalEntries() {
     setLoading(false); // hide Loading component
   }
   };
-
-
-
 
   const handleInputChange = (e) => {
     setNewEntry(e.target.value);
@@ -185,11 +158,8 @@ function JournalEntries() {
             onChange={(e) => setNewEntry(e.target.value)}
           />
     <div className="button-group">
-            <button className="save-draft-btn" onClick={handleSaveDraft}>
-              Save as Draft
-            </button>
             <button className="send-btn" onClick={handleSendEntry}>
-              Send
+              Add
             </button>
             <button
               className="cancel-btn"
