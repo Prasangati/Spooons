@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Loading from "../../pages/Loading/Loading";
-import BASE_URL from '../../utils/config';
+import BASE_URL from "../../utils/config";
 
 
 const RecentEntries = () => {
