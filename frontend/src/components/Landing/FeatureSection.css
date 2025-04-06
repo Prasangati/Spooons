@@ -20,7 +20,6 @@
     position: relative;
     background: white;
     padding: 8rem 2rem;
-    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -58,7 +57,7 @@
 
 
 .feature-heading {
-    font-size: 4.5rem;
+    font-size: 48px;
     font-weight: bold;
     font-family: Tahoma, sans-serif;
     color: #333;
