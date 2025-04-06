@@ -33,18 +33,18 @@ const RecentEntries = () => {
     fetchRecentEntries();
   }, []);
 
-  const handleConfirmDelete = async (id) => {
+  const handleConfirmDelete = async (entry_number) => {
 
     try {
       const csrfToken = getCookie("csrftoken");
-      await axios.delete(`http://localhost:8000/journal/entries/${id}/`, {
+      await axios.delete(`http://localhost:8000/journal/entries/${entry_number}/`, {
         withCredentials: true,
         headers: {
           "X-CSRFToken": csrfToken,
         },
       });
   
-      setEntries((prevEntries) => prevEntries.filter((entry) => entry.id !== id));
+      setEntries((prevEntries) => prevEntries.filter((entry) => entry.entry_number !== entry_number));
       setShowDeleteModal(false);
       setEntryToDelete(null);
     } catch (error) {
@@ -67,7 +67,7 @@ const RecentEntries = () => {
     try {
       const csrfToken = getCookie("csrftoken");
       const response = await axios.put(
-        `http://localhost:8000/journal/entries/${entryBeingEdited.id}/`,
+        `http://localhost:8000/journal/entries/${entryBeingEdited.entry_number}/`,
         {
           title: editedTitle,
           entry: editedText,
@@ -81,7 +81,7 @@ const RecentEntries = () => {
       );
 
       setEntries((prev) =>
-        prev.map((e) => (e.id === entryBeingEdited.id ? response.data : e))
+        prev.map((e) => (e.entry_number === entryBeingEdited.entry_number ? response.data : e))
       );
       setEditModalOpen(false);
       setEntryBeingEdited(null);
@@ -107,7 +107,7 @@ const RecentEntries = () => {
           {entries.length > 0 ? (
             entries.map((entry) => (
               <div
-              key={entry.id}
+              key={entry.entry_number}
          className="entry-card">
               <h4>{entry.title}</h4>
               <span className="entry-date">
@@ -158,7 +158,7 @@ const RecentEntries = () => {
               </button>
       <button
   className="delete-btn"
-  onClick={() => handleConfirmDelete(entryToDelete?.id)}
+  onClick={() => handleConfirmDelete(entryToDelete?.entry_number)}
 >
   Yes, Delete
 </button>
