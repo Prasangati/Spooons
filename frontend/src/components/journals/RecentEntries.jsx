@@ -7,7 +7,6 @@ import Loading from "../../pages/Loading";
 const RecentEntries = () => {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [expandedEntryId, setExpandedEntryId] = useState(null);
   const [entryToDelete, setEntryToDelete] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -35,6 +34,7 @@ const RecentEntries = () => {
   }, []);
 
   const handleConfirmDelete = async (id) => {
+
     try {
       const csrfToken = getCookie("csrftoken");
       await axios.delete(`http://localhost:8000/journal/entries/${id}/`, {
@@ -85,10 +85,14 @@ const RecentEntries = () => {
       );
       setEditModalOpen(false);
       setEntryBeingEdited(null);
+      setEditedTitle("");
+      setEditedText("");
+
     } catch (error) {
       console.error("Error saving edited entry:", error);
       alert("Could not update entry.");
-    }
+    } finally {
+      setLoading(false); }
   };
 
   
@@ -104,8 +108,7 @@ const RecentEntries = () => {
             entries.map((entry) => (
               <div
               key={entry.id}
-              className={`entry-card ${expandedEntryId === entry.id ? "expanded" : "" }`}
-            >
+         className="entry-card">
               <h4>{entry.title}</h4>
               <span className="entry-date">
                 {new Date(entry.created_at).toLocaleString()}
@@ -121,16 +124,17 @@ const RecentEntries = () => {
             </button>
 
 
-                <button
-                  className="icon-btn"
-                  onClick={() => {
-                    setEntryToDelete(entry);
-                    setShowDeleteModal(true);
-                  }}
-                  title="Delete"
-                >
-                  🗑️
-                </button>
+            <button
+  className="icon-btn"
+  onClick={() => {
+    setShowDeleteModal(true);
+    setEntryToDelete(entry); 
+  }}
+  title="Delete"
+>
+  🗑️
+</button>
+
               </div>
             </div>
 
@@ -152,12 +156,13 @@ const RecentEntries = () => {
               >
                 Cancel
               </button>
-              <button
-                className="delete-btn"
-                onClick={() => handleConfirmDelete(entryToDelete.id)}
-              >
-                Yes, Delete
-              </button>
+      <button
+  className="delete-btn"
+  onClick={() => handleConfirmDelete(entryToDelete?.id)}
+>
+  Yes, Delete
+</button>
+
             </div>
           </div>
     </div>
