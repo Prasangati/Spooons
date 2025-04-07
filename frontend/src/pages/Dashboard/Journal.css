@@ -324,6 +324,13 @@
     width: 95%;
     min-height: 300px; 
   }
+  .edit-modal h4 {
+    font-size: 20px;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.5px;
+    color: #04442d;
+    font-family: 'Georgia', serif;
+  }
   
   .delete-btn {
     background-color: #fbeaea;
