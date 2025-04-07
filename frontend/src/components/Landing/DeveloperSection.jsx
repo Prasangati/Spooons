@@ -3,9 +3,9 @@ import './DeveloperSection.css';
 
 const developers = [
   { name: 'Prasanga Tiwari', img: '/dev1.png' },
-  { name: 'Jane Doe', img: '/dev2.png' },
-  { name: 'John Smith', img: '/dev3.png' },
-  { name: 'Alex Kim', img: '/dev4.png' },
+  { name: 'Malak S.', img: '/dev2.png' },
+  { name: 'Raitah J.', img: '/dev3.png' },
+  { name: 'Ryan M.', img: '/dev4.png' },
 ];
 
 export default function DeveloperSection() {

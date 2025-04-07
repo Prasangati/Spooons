@@ -2,11 +2,11 @@ import { motion } from 'framer-motion';
 import './TimelineSection.css';
 
 const timelineEvents = [
-  { date: 'Jan 2024', description: 'Project idea and initial planning' },
-  { date: 'Feb 2024', description: 'Set up repo and dev tools' },
-  { date: 'Mar 2024', description: 'Hero & Feature sections complete' },
-  { date: 'Apr 2024', description: 'Developer section added' },
-  { date: 'May 2024', description: 'Timeline section launched 🎉' },
+  { date: 'Jan 2025', description: 'Project idea and Tech Stack Discussion' },
+  { date: 'Feb 2025', description: 'Set up repo and dev tools' },
+  { date: 'Mar 2025', description: 'Completed User Authentication and Start Landing Page' },
+  { date: 'Apr 2025', description: 'Goals: Finish Landing page for unauthenticated user and set up openAI API' },
+  { date: 'May 2025', description: 'Yet to be determined' },
 ];
 
 export default function TimelineSection() {

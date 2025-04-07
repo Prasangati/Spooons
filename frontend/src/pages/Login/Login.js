@@ -55,6 +55,9 @@ function Login() {
     }
 
     setLoadingLocal(true);
+    if (document.hasStorageAccess && !(await document.hasStorageAccess())) {
+      await document.requestStorageAccess();
+    }
 
     try {
       await api.post(
@@ -62,6 +65,7 @@ function Login() {
         { email, password },
         { withCredentials: true, headers: { "Content-Type": "application/json" } }
       );
+      await refreshCSRF();
       await refreshAuth();
       navigate("/");
     } catch (error) {
