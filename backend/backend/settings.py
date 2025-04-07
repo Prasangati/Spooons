@@ -86,7 +86,7 @@ CSRF_COOKIE_SECURE = not DEBUG
 
 
 CSRF_COOKIE_SAMESITE = 'None'
-CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_HTTPONLY = True
 CORS_EXPOSE_HEADERS = ['Set-Cookie']  # If using cookies
 
 MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')

@@ -1,11 +1,16 @@
 .features-grid {
     display: grid;
     gap: 2rem;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    margin-top: 4rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 2fr));
+    margin-top: 50px;
     position: relative;
     z-index: 1;
 }
+
+.heading-container{
+    margin: 20px auto;
+}
+
 
 .feature-box {
     background: #f8f9fa;
@@ -101,5 +106,11 @@
 
     .feature-section {
         padding: 4rem 1.5rem;
+    }
+}
+
+@media only screen and (max-width: 430px) {
+    .heading-container {
+        display: none;
     }
 }
