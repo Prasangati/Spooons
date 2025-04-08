@@ -19,6 +19,7 @@ const useAuth = () => {
         setIsAuthenticated(false);
         setUser(null);
       }
+      console.log("Message from useauthcontext: ", isAuthenticated);
     } catch (err) {
       setError(err);
       setIsAuthenticated(false);

@@ -43,6 +43,7 @@ const useGoogleSuccess = () => {
       );
 
       console.log("Signup successful:", res.data);
+
       await refreshAuth();
       await refreshCSRF();
       navigate("/", {state: {user: res.data.user}});

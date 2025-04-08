@@ -68,7 +68,10 @@ def google_signup(request):
         )
 
         user.backend = 'django.contrib.auth.backends.ModelBackend'
+        print("Before logged in")
         login(request, user)
+        if user.is_authenticated:
+            print("Authentication confirmed")
 
         logger.info(f"{'Created' if created else 'Logged in'} user: {email}")
 
@@ -83,8 +86,6 @@ def google_signup(request):
 
 @require_POST
 def signup(request):
-
-
     try:
         data = json.loads(request.body.decode("utf-8"))
     except json.JSONDecodeError:
@@ -140,6 +141,7 @@ def signup(request):
 def authcontext(request):
     if request.user.is_authenticated:
         # Prepare a user info object with the data you want to expose.
+        print("User is authenticated")
         user_info = {
             'email': request.user.email,
             'first_name': request.user.first_name,
@@ -152,6 +154,7 @@ def authcontext(request):
             'user': user_info
         })
     else:
+        print("User is NOT authenticated according to authcontext")
         return JsonResponse({
             'isAuthenticated': False,
             'user': None

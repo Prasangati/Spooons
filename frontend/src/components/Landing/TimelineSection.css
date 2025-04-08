@@ -16,9 +16,10 @@
 }
 
 .timeline-title {
-  font-size: 36px;
-  margin-bottom: 60px;
+  font-size: 48px;
+  font-weight: bold;
   color: #333;
+  margin-bottom: 60px;
   position: sticky;
   top: 20px;
   background-color: #bee7e9;

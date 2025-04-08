@@ -21,6 +21,8 @@ export default function Home() {
   }
 
 
+
+
   // Render Dashboard if authenticated, LandingPage otherwise
   return isAuthenticated ? <Dashboard /> : <LandingPage />;
 }
