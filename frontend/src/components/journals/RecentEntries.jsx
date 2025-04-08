@@ -120,19 +120,19 @@ const RecentEntries = () => {
               onClick={() => handleEditClick(entry)}
               title="Edit"
             >
-              ✏️
+              <i class="fa-solid fa-file-pen"></i>
             </button>
 
 
             <button
-  className="icon-btn"
+  className="icon-btn delete"
   onClick={() => {
     setShowDeleteModal(true);
     setEntryToDelete(entry); 
   }}
   title="Delete"
 >
-  🗑️
+<i className="fa-solid fa-trash"></i>
 </button>
 
               </div>

@@ -222,10 +222,18 @@
     border: none;
     font-size: 1.1rem;
     cursor: pointer;
-    color: #066341;
+    color: #2884b9;
     transition: color 0.2s ease;
   }
   
+  .icon-btn.delete {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: #b92828;
+    transition: color 0.2s ease;
+  }
   .icon-btn:hover {
     color: #04442d;
   }
