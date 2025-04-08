@@ -54,6 +54,10 @@ const Signup = () => {
       setError("Passwords do not match.");
       return;
     }
+    if (document.hasStorageAccess && !(await document.hasStorageAccess())) {
+      await document.requestStorageAccess();
+    }
+
     try {
       const response = await api.post(
         `${BASE_URL}/api/auth/signup/`,
