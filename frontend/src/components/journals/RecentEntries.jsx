@@ -115,29 +115,30 @@ const RecentEntries = () => {
               </span>
               <p className="entry-text">{entry.entry}</p>
               <div className="entry-icons">
-                          <button
-              className="icon-btn"
-              onClick={() => handleEditClick(entry)}
-              title="Edit"
-            >
-              <i class="fa-solid fa-file-pen"></i>
-            </button>
-
+              <div className="icon-with-label">
+        <button  className="icon-btn" onClick={() => handleEditClick(entry)}>
+        <i className="fa-solid fa-file-pen"></i>
+        </button>
+        <span className="icon-label">Edit</span>
+</div>
+             
+<div className="icon-with-label">
 
             <button
   className="icon-btn delete"
   onClick={() => {
     setShowDeleteModal(true);
     setEntryToDelete(entry); 
-  }}
-  title="Delete"
->
+  }}>
+
 <i className="fa-solid fa-trash"></i>
 </button>
+<span className="icon-label">Delete</span>
+
 
               </div>
             </div>
-
+            </div>
             ))
           ) : (
             <p className="no-entries">No recent entries found.</p>

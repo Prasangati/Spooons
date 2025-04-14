@@ -220,7 +220,7 @@
   .icon-btn {
     background: none;
     border: none;
-    font-size: 1.1rem;
+    font-size: 20px;
     cursor: pointer;
     color: #2884b9;
     transition: color 0.2s ease;
@@ -229,7 +229,7 @@
   .icon-btn.delete {
     background: none;
     border: none;
-    font-size: 1.1rem;
+    font-size: 20px;
     cursor: pointer;
     color: #b92828;
     transition: color 0.2s ease;
@@ -237,7 +237,34 @@
   .icon-btn:hover {
     color: #04442d;
   }
-  
+  .icon-with-label {
+  position: relative;
+  display: inline-block;
+}
+
+.icon-label {
+  visibility: hidden;
+  opacity: 0;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 4px;
+  padding: 2px 6px;
+  position: absolute;
+  bottom: -1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  transition: opacity 0.2s ease-in-out;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.icon-with-label:hover .icon-label {
+  visibility: visible;
+  opacity: 1;
+}
 .back-btn {
     margin-top: 10px;
     background: #066341;
