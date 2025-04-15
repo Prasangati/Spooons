@@ -107,10 +107,7 @@ function JournalEntries() {
     setLoading(false); // hide Loading component
   }
   };
-
-  // const handleInputChange = (e) => {
-  //   setNewEntry(e.target.value);
-  // };
+  
   const resetForm = () => {
     setTitle("");
     setNewEntry("");
