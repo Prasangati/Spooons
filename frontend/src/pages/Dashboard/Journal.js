@@ -108,9 +108,9 @@ function JournalEntries() {
   }
   };
 
-  const handleInputChange = (e) => {
-    setNewEntry(e.target.value);
-  };
+  // const handleInputChange = (e) => {
+  //   setNewEntry(e.target.value);
+  // };
   const resetForm = () => {
     setTitle("");
     setNewEntry("");
@@ -144,7 +144,7 @@ function JournalEntries() {
           </div>
 
       ) : (
-          <div className="new-entry-form">
+          <div className="new-entry">
             <input
                 type="text"
                 className="title-input"
@@ -158,6 +158,7 @@ function JournalEntries() {
             placeholder="A space for reflection . . ."
             value={newEntry}
             onChange={(e) => setNewEntry(e.target.value)}
+
           />
     <div className="button-group">
             <button className="send-btn" onClick={handleSendEntry}>

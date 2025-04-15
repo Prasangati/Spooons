@@ -10,15 +10,14 @@
   } 
 .journal-container {
     max-width: 900px;
-    margin: auto;
-    padding: 2rem;
+    margin: 32px auto;
+    padding: 32px;
     font-family: 'Georgia', serif;
     background: #F8FCFB;
-    box-shadow: 0 0 10px rgba(0,0,0,0.05);
-    border-radius: 10px;
+    box-shadow:  0px 6px 24px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    min-height: 800px;
 }
-
-
 .journal-nav {
     display: flex;
     justify-content: space-between;
@@ -28,7 +27,6 @@
     border-radius: 8px 8px 0 0;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
-
 .journal-nav button {
     flex: 1;
     text-align: center;
@@ -41,29 +39,28 @@
     color: #066341;
     transition: all 0.3s ease;
 }
-
 .journal-nav .active {
     border-bottom: 3px solid #066341;
     font-weight: bold;
 }
-
 .title-input {
-    width: 100%;
-    margin-bottom: 1.2rem;
-    padding: 1rem;
-    border: 1px solid #b8ccc9;
-    border-radius: 10px;
-    font-family: 'Georgia', serif;
-    font-size: 1.05rem;
-    background: white;
-    color: #04442d;
+  width: 100%;
+  font-size: 17px;
+  font-family: 'Short Stack', sans-serif;      padding: 8px 16px;
+  padding: 16px;
+  background-color: #ffffff;
+  color: #4f4d4d;
+  border: none;
+  border-bottom: 1px solid #e4ebe6;
+  border-radius: 8px 8px 0 0;
+  outline: none;
+  margin-bottom: 0;
 }
 
 .title-input:focus {
-    border: 2px solid #066341;
-    outline: none;
+  background-color: #f6f9f9;
+  border-bottom: 2px dashed #d6ede4;
 }
-
 .quote-text {
     font-style: italic;
     font-size: 20px;
@@ -71,85 +68,81 @@
     font-family: 'Homemade Apple';
   }
   
-.journal-input-box {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
 .journal-input {
-    background-image: repeating-linear-gradient(
-        to bottom,
-        #ffffff,
-        #ffffff 31px,
-        #eaf4f2 32px
-      ); 
-      height: 200px;
-      width: 100%;
-      font-size: 16px;
-      line-height: 32px;
-      color: #333;
-      font-family: 'Short Stack', sans-serif;      padding: 8px 16px;
-      resize: vertical;
-      border: 1px solid #b8ccc9;
-      border-radius: 10px;
-      background-color: #ffffff;
-      color: rgba(50, 50, 50, 0.9);
+  width: 100%;
+  height: 320px;
+  padding: 10px 16px 8px 16px; /* more top padding */
+  font-size: 17px;
+  font-family: 'Short Stack', sans-serif;
+  line-height: 32px; /* match background line spacing exactly */
+  color: #4f4d4d;
+  border: none;
+  border-radius: 0 0 8px 8px;
+  resize: vertical;
+  outline: none;
+  background-color: #ffffff;
+
+  background-image: repeating-linear-gradient(
+    to bottom,
+    #ffffff,
+    #ffffff 31px,
+    #eaf4f2 32px
+  );
+  background-position: 0px 0px;
+  background-size: 100% 32px;
 
 }
 
 .journal-input:focus {
-    border: 2px solid #066341;
-    outline: none;
+  background-color: #fcfefd;
 }
 
 .button-group {
     display: flex;
     gap: 10px;
-    margin-top: 10px;
+    justify-content: flex-end;
+    margin-top: 16px;
 
 }
-
-.save-draft-btn,
+.journal-entry-box {
+  border: 1px solid #d2e3dd;
+  border-radius: 8px;
+  background: #ffffff;
+  overflow: hidden;
+}
 .send-btn,
-.cancel-btn  {
-    padding: 10px 24px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    transition: 0.3s ease;
-}
-
-.save-draft-btn {
-    background-color: #b8ccc9;
-    color:  #04442d;
+.cancel-btn {
+  min-width: 80px;
+  height: 40px;
+  padding: 6px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
 .send-btn {
-    background-color: #066341;
-    color: white;
-}
-
-.save-draft-btn:hover {
-    background-color:  #a0bdb8;
+  background-color: #066341;
+  color: #fff;
 }
 
 .send-btn:hover {
-    background-color: #04442d;
+  background-color: #04442d;
+  transform: translateY(-1px);
 }
 
 .cancel-btn {
-    background-color: #ccc;
-    color: #333;
-    margin-left: auto;
+  background-color: #bcbcbc;
+  color: #fff;
+}
 
-  }
-  
-  .cancel-btn:hover {
-    background-color: #999;
-  }
+.cancel-btn:hover {
+  background-color: #999;
+  transform: translateY(-1px);
+}
 
 .entries-title {
     font-size: 1.5rem;
@@ -227,12 +220,7 @@
   }
   
   .icon-btn.delete {
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
     color: #b92828;
-    transition: color 0.2s ease;
   }
   .icon-btn:hover {
     color: #04442d;
@@ -295,13 +283,14 @@
     background-color: #04442d;
     transform: scale(1.05);
   }
-  .new-entry-form {
-    background-color: #ffffff;
-    border: 2px solid #EAF4F2;
-    padding: 1.5rem;
-    border-radius: 15px;
-    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.03);
-    margin-top: 20px;
+  .new-entry {
+    margin: 32px auto;
+    max-width: 700px;
+    padding: 32px;
+    background-color: #fefefc;
+    border: 1px solid #c9d6cf;
+    border-radius: 12px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
   }
 .back-btn:hover {
     background: #04442d;
