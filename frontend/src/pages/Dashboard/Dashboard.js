@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import "./Dashboard.css";
 import LogOut from "../../components/Auth/LogOut"; //logout Button
 import Journal from "./Journal"; // journal component
+import Resources from "./Resources"; // resources component
 
 function Dashboard() {
    const [activeTab, setActiveTab] = useState("Journal");
@@ -31,7 +32,7 @@ function Dashboard() {
             {/* <h1 className="greeting">{quotes[currentQuoteIndex]}</h1> */}
                {activeTab === "Journal" && <Journal />}
                {activeTab === "Progress" && <p>Track your progress here</p>}
-               {activeTab === "Resources" && <p>Personalized mental health resources</p>}
+               {activeTab === "Resources" && <Resources />}
             </section>
          </main>
       </div>
