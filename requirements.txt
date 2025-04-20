@@ -26,3 +26,4 @@ urllib3==2.3.0
 google-auth
 gunicorn
 whitenoise
+djangorestframework-simplejwt

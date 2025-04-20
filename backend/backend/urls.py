@@ -20,6 +20,8 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 
 
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),

@@ -5,7 +5,6 @@ import Login from "./pages/Login/Login";
 import SignupSuccess from "./pages/SignupSuccess/SignupSuccess";
 import Home from "./pages/Home/Home";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
-import CSRFProvider from "./utils/CSRFContext";
 
 
 const clientId = process.env.REACT_APP_CLIENT_ID;
@@ -15,7 +14,6 @@ function App() {
 
 
   return (
-    <CSRFProvider>
       <GoogleOAuthProvider clientId={clientId}>
         <Router>
           <Routes>
@@ -29,7 +27,6 @@ function App() {
           </Routes>
         </Router>
       </GoogleOAuthProvider>
-    </CSRFProvider>
   );
 }
 

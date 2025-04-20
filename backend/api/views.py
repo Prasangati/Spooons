@@ -3,12 +3,13 @@ from django.http import JsonResponse
 from django.contrib.auth import get_user_model, login, logout, authenticate
 from django.views.decorators.http import require_GET, require_POST
 from django.conf import settings
+from rest_framework.permissions import IsAuthenticated
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
 from datetime import datetime, timezone  # Correct import for UTC handling
 from rest_framework import status
 from .serializers import LoginSerializer,PasswordResetSerializer
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_decode
@@ -28,14 +29,10 @@ def csrf_view(request):
 @require_POST
 def google_signup(request):
     try:
-        raw_body = request.body
-        logger.debug(f"Raw request body: {raw_body}")
-
-        data = json.loads(raw_body.decode('utf-8'))
-
+        data = json.loads(request.body.decode("utf-8"))
         token = data.get("token")
+
         if not token:
-            logger.warning("Token not provided in request")
             return JsonResponse({"error": "Token not provided"}, status=400)
 
         try:
@@ -44,45 +41,45 @@ def google_signup(request):
                 google_requests.Request(),
                 settings.GOOGLE_OAUTH_CLIENT_ID
             )
-        except ValueError as e:
-            logger.warning(f"Token verification failed: {str(e)}")
+        except ValueError:
             return JsonResponse({"error": "Invalid token"}, status=400)
 
-        expiry_timestamp = id_info.get("exp")
-        if expiry_timestamp and datetime.now(timezone.utc).timestamp() > expiry_timestamp:
-            logger.info("Expired Google token")
+        if datetime.now(timezone.utc).timestamp() > id_info.get("exp", 0):
             return JsonResponse({"error": "Expired token"}, status=401)
 
-        email = id_info.get('email')
+        email = id_info.get("email")
         if not email:
-            logger.warning("Email not found in token")
             return JsonResponse({"error": "Email not found in token"}, status=400)
 
         User = get_user_model()
         user, created = User.objects.get_or_create(
             email=email,
             defaults={
-                "first_name": id_info.get('given_name', ''),
-                "last_name": id_info.get('family_name', ''),
+                "first_name": id_info.get("given_name", ""),
+                "last_name": id_info.get("family_name", "")
             }
         )
 
-        user.backend = 'django.contrib.auth.backends.ModelBackend'
-        print("Before logged in")
-        login(request, user)
-        if user.is_authenticated:
-            print("Authentication confirmed")
-
-        logger.info(f"{'Created' if created else 'Logged in'} user: {email}")
-
+        #  Generate JWT tokens
+        refresh = RefreshToken.for_user(user)
         return JsonResponse({
             "status": "success",
-            "user": {"email": email}
+            "user": {
+                "email": user.email,
+                "first_name": user.first_name,
+                "last_name": user.last_name
+            },
+            "tokens": {
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+            }
         })
 
     except Exception as e:
         logger.exception("Unexpected error during Google signup")
         return JsonResponse({"error": "Internal server error"}, status=500)
+
+
 
 @require_POST
 def signup(request):
@@ -137,30 +134,16 @@ def signup(request):
         }
     })
 
-@require_GET
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])  # Makes sure user has valid JWT
 def authcontext(request):
-    if request.user.is_authenticated:
-        # Prepare a user info object with the data you want to expose.
-        print("User is authenticated")
-        user_info = {
-            'email': request.user.email,
-            'first_name': request.user.first_name,
-            'last_name': request.user.last_name,
-            # You can include other fields as needed.
-            # 'profile_picture': request.user.profile_picture,
-        }
-        return JsonResponse({
-            'isAuthenticated': True,
-            'user': user_info
-        })
-    else:
-        print("User is NOT authenticated according to authcontext")
-        return JsonResponse({
-            'isAuthenticated': False,
-            'user': None
-        })
-
-
+    user = request.user  # Set by JWT middleware
+    user_info = {
+        'email': user.email,
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+    }
+    return Response({'isAuthenticated': True, 'user': user_info})
 
 @require_POST
 def logout_view(request):

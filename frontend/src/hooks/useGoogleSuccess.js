@@ -18,9 +18,9 @@ const useGoogleSuccess = () => {
     if (document.hasStorageAccess && !(await document.hasStorageAccess())) {
     try {
       await document.requestStorageAccess();
-      console.log("✅ Storage access granted.");
+      console.log(" Storage access granted.");
     } catch (err) {
-      console.warn("❌ Storage access denied:", err);
+      console.warn(" Storage access denied:", err);
       // You can choose to show a user-friendly message here if you want.
     }
     }
