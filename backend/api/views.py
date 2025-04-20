@@ -8,6 +8,7 @@ from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
 from datetime import datetime, timezone  # Correct import for UTC handling
 from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from .serializers import LoginSerializer,PasswordResetSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -60,8 +61,13 @@ def google_signup(request):
             }
         )
 
+        #  Don't allow disabled accounts to sign in
+        if not user.is_active:
+            return JsonResponse({"error": "Account is disabled"}, status=401)
+
         #  Generate JWT tokens
         refresh = RefreshToken.for_user(user)
+
         return JsonResponse({
             "status": "success",
             "user": {
@@ -78,8 +84,6 @@ def google_signup(request):
     except Exception as e:
         logger.exception("Unexpected error during Google signup")
         return JsonResponse({"error": "Internal server error"}, status=500)
-
-
 
 @require_POST
 def signup(request):
@@ -145,17 +149,16 @@ def authcontext(request):
     }
     return Response({'isAuthenticated': True, 'user': user_info})
 
-@require_POST
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def logout_view(request):
-    user = request.user if request.user.is_authenticated else None
-    logout(request)
-
-    if user:
-        logger.info(f"User logged out: {user.email}")
-    else:
-        logger.info("Anonymous user session logged out.")
-
-    return JsonResponse({"message": "Successfully logged out."})
+    try:
+        refresh_token = request.data.get("refresh")
+        token = RefreshToken(refresh_token)
+        token.blacklist()
+        return Response({"message": "Successfully logged out."}, status=status.HTTP_200_OK)
+    except TokenError:
+        return Response({"error": "Invalid or expired token."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])

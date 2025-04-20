@@ -58,20 +58,28 @@ const Signup = () => {
       await document.requestStorageAccess();
     }
 
-    try {
-      const response = await api.post(
-        `${BASE_URL}/api/auth/signup/`,
-        { name, email, password },
-        { withCredentials: true, headers: { "Content-Type": "application/json" } }
-      );
-      await refreshCSRF();
+  try {
+    const response = await api.post(
+      `${BASE_URL}/api/auth/signup/`,
+      { name, email, password },
+      {
+        headers: { "Content-Type": "application/json" }
+      }
+    );
 
-      console.log("Signup successful:", response.data);
-      navigate("/signup-success");
-    } catch (error) {
-      console.error("Signup failed:", error.response?.data || error);
-      setError(error.response?.data?.message || "Signup failed. Please try again.");
-    }
+    const { access, refresh, user } = response.data;
+
+    //  Store tokens locally
+    localStorage.setItem("access", access);
+    localStorage.setItem("refresh", refresh);
+    localStorage.setItem("user", JSON.stringify(user));
+
+    console.log("Signup successful:", response.data);
+    navigate("/signup-success");
+  } catch (error) {
+    console.error("Signup failed:", error.response?.data || error);
+    setError(error.response?.data?.error || "Signup failed. Please try again.");
+  }
   };
 
   // Use effect to redirect authenticated users to home page
