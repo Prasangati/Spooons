@@ -86,6 +86,7 @@ function Resources() {
 
     return (
         <div className="resources-container">
+            <div className = "clip"></div>
             <ResourceFilter onFilter={handleFilter} />
             <div className="resources-list">
                 {filteredResources.length > 0 ? (
