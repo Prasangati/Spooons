@@ -158,7 +158,6 @@ def logout_view(request):
     return JsonResponse({"message": "Successfully logged out."})
 
 
-
 @api_view(['POST'])
 def login_view(request):
     serializer = LoginSerializer(data=request.data)
@@ -174,7 +173,6 @@ def login_view(request):
     User = get_user_model()
 
     try:
-        # First check if account exists
         user = User.objects.get(email=email)
     except User.DoesNotExist:
         return Response(
@@ -182,7 +180,6 @@ def login_view(request):
             status=status.HTTP_401_UNAUTHORIZED
         )
 
-    # Now check password
     auth_user = authenticate(request, email=email, password=password)
     if not auth_user:
         return Response(
@@ -190,24 +187,28 @@ def login_view(request):
             status=status.HTTP_401_UNAUTHORIZED
         )
 
-    # Check if account is active
     if not auth_user.is_active:
         return Response(
             {"error": "Account is disabled"},
             status=status.HTTP_401_UNAUTHORIZED
         )
 
-    login(request, auth_user)
+    refresh = RefreshToken.for_user(auth_user)
+    access = refresh.access_token
 
     return Response({
         "status": "success",
         "user": {
             "email": auth_user.email,
             "first_name": auth_user.first_name,
-            "last_name": auth_user.last_name
-            # "profile_picture": auth_user.profile_picture,
+            "last_name": auth_user.last_name,
+        },
+        "tokens": {
+            "refresh": str(refresh),
+            "access": str(access),
         }
     })
+
 
 
 @api_view(['POST'])
