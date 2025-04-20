@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./Resources.css";
+// until i figure out how to fetch from backend
+const dummyData = [
+  { id: 1, title: "Coping with Anxiety", date: "2025-04-10" },
+  { id: 2, title: "Mindful Breathing", date: "2025-04-12" },
+  { id: 3, title: "Healthy Sleep Habits", date: "2025-04-14" },
+];
 
 const ResourceFilter = ({ onFilter }) => {
     const [keyword, setKeyword] = useState("");
@@ -51,8 +57,8 @@ function Resources() {
         const fetchResources = async () => {
             // Replace with real API call if needed
             // How to connect to backend?
-            setResources(data);
-            setFilteredResources(data);
+            setResources(dummyData);
+            setFilteredResources(dummyData);
         };
 
         fetchResources().then(() => {});
