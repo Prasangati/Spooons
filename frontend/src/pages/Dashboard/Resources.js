@@ -16,6 +16,14 @@ const ResourceFilter = ({ onFilter }) => {
         onFilter({ keyword, startDate, endDate });
     };
 
+    // reset the filtering
+    const handleClear = () => {
+        setKeyword("");
+        setStartDate("");
+        setEndDate();
+        onFilter({ keyword: "", startDate: "", endDate: "" });
+    }
+
     return (
         <div className="filter">
             <div>
@@ -43,7 +51,8 @@ const ResourceFilter = ({ onFilter }) => {
                 />
             </div>
 
-            <button onClick={handleFilter}>Apply Filters</button>
+            <button onClick={handleFilter}style={{ backgroundColor: "#066341"}}>Apply Filters</button>
+            <button onClick={handleClear} style={{ backgroundColor: "#ffb3ab"}}>Clear Filters</button>
         </div>
     );
 };
