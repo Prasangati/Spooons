@@ -52,4 +52,40 @@
     border: 2px solid #b8ccc9;
 }
 
+.apply-btn,
+.clear-btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Apply Filters - Deep Green */
+.apply-btn {
+    background-color: #066341;
+    color: white;
+}
+
+.apply-btn:hover {
+    background-color: #04442d;
+    transform: translateY(-1px) scale(1.03);
+    box-shadow: 0 4px 8px rgba(6, 99, 65, 0.15);
+}
+
+.clear-btn {
+    background-color: #ffb3ab;
+    color: #5c1e17;
+}
+
+.clear-btn:hover {
+    background-color: #e9968c;
+    transform: translateY(-1px) scale(1.03);
+    box-shadow: 0 4px 8px rgba(255, 179, 171, 0.3);
+}
+
+
 

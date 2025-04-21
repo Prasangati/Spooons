@@ -51,8 +51,8 @@ const ResourceFilter = ({ onFilter }) => {
                 />
             </div>
 
-            <button onClick={handleFilter}style={{ backgroundColor: "#066341"}}>Apply Filters</button>
-            <button onClick={handleClear} style={{ backgroundColor: "#ffb3ab"}}>Clear Filters</button>
+           <button className="apply-btn" onClick={handleFilter}>Apply Filters</button>
+           <button className="clear-btn" onClick={handleClear}>Clear Filters</button>
         </div>
     );
 };
