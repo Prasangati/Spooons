@@ -99,31 +99,22 @@ function JournalEntries() {
   setLoading(true); // show Loading component
 
   try {
-    console.log("Sending journal entry...");
-    const response = await api.post(
-      `${BASE_URL}/journal/entries/`,
-      {
-        title: title,
-        entry: newEntry,
-      },
-      {
-        withCredentials: true,
-       headers: {
-      }
-      }
-    );
+  console.log("Sending journal entry...");
+  const response = await api.post("/journal/entries/", {
+    title,
+    entry: newEntry,
+  });
 
-    const createdEntry = response.data;
+  const createdEntry = response.data;
 
-
-    setEntries([createdEntry, ...entries]);
-    resetForm();
-    alert("Entry successfully submitted!");
+  setEntries([createdEntry, ...entries]);
+  resetForm();
+  alert("Entry successfully submitted!");
   } catch (error) {
     console.error("Error sending entry:", error);
     alert("Something went wrong. Please try again.");
   } finally {
-    setLoading(false); // hide Loading component
+    setLoading(false);
   }
   };
 

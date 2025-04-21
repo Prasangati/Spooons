@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useState, useEffect} from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import {Link, useNavigate} from "react-router-dom";
 import "../../App.css";
@@ -8,13 +8,11 @@ import { useAuthContext } from "../../context/AuthContext";
 import Loading from "../Loading/Loading";
 import BASE_URL from "../../utils/config";
 import api from "../../utils/axiosConfig";
-import { CSRFContext } from "../../utils/CSRFContext";
 
 const Signup = () => {
   const handleGoogleSuccess = useGoogleSuccess();
   const navigate = useNavigate();
-  const { isAuthenticated, loading } = useAuthContext(); // Get auth state from context
-  const { refreshCSRF } = useContext(CSRFContext);
+  const { isAuthenticated, loading, refreshAuth} = useAuthContext(); // Get auth state from context
 
   const [formData, setFormData] = useState({
     name: "",
@@ -67,19 +65,22 @@ const Signup = () => {
       }
     );
 
-    const { access, refresh, user } = response.data;
+    const {
+      tokens: { access, refresh },
+      user
+    } = response.data;
 
-    //  Store tokens locally
     localStorage.setItem("access", access);
     localStorage.setItem("refresh", refresh);
     localStorage.setItem("user", JSON.stringify(user));
 
-    console.log("Signup successful:", response.data);
+    await refreshAuth();
     navigate("/signup-success");
   } catch (error) {
     console.error("Signup failed:", error.response?.data || error);
     setError(error.response?.data?.error || "Signup failed. Please try again.");
   }
+
   };
 
   // Use effect to redirect authenticated users to home page

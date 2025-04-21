@@ -113,41 +113,44 @@ def signup(request):
         pass
 
     try:
-        # Create the new user
-        User.objects.create_user(
+        # Create the user
+        user = User.objects.create_user(
             email=email,
             first_name=first_name,
             last_name=last_name,
             password=password
         )
-        # Authenticate the user using the credentials
-        user = authenticate(request, email=email, password=password)
-        if user is not None:
-            login(request, user)  # login now sets the backend automatically
-        else:
-            return JsonResponse({"error": "Authentication failed."}, status=400)
+
+        # Generate JWT tokens
+        refresh = RefreshToken.for_user(user)
+        print(str(refresh))
+        print(str(refresh.access_token))
+
+        return JsonResponse({
+            "status": "success",
+            "user": {
+                "email": user.email,
+                "first_name": user.first_name,
+                "last_name": user.last_name
+            },
+            "tokens": {
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+            }
+        })
     except Exception as e:
         return JsonResponse({"error": f"Error creating user: {e}"}, status=500)
-
-    return JsonResponse({
-        "status": "success",
-        "user": {
-            "email": user.email,
-            "first_name": user.first_name,
-            "last_name": user.last_name
-        }
-    })
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])  # Makes sure user has valid JWT
 def authcontext(request):
-    user = request.user  # Set by JWT middleware
-    user_info = {
-        'email': user.email,
-        'first_name': user.first_name,
-        'last_name': user.last_name,
-    }
-    return Response({'isAuthenticated': True, 'user': user_info})
+    return Response({
+        'user': {
+            'email': request.user.email,
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name,
+        }
+    })
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

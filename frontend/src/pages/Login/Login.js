@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useState, useEffect} from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import useGoogleSuccess from "../../hooks/useGoogleSuccess";
@@ -8,14 +8,12 @@ import "../../App.css";
 import Loading from "../Loading/Loading";
 import BASE_URL from "../../utils/config";
 import api from "../../utils/axiosConfig";
-import { CSRFContext } from "../../utils/CSRFContext";
 
 
 function Login() {
   const handleGoogleSuccess = useGoogleSuccess();
   const navigate = useNavigate();
   const { isAuthenticated, loading, refreshAuth } = useAuthContext(); // Get auth state from context
-  const { refreshCSRF } = useContext(CSRFContext);
 
   // Local state for form data and UI state
   const [email, setEmail] = useState("");
@@ -70,10 +68,11 @@ function Login() {
 
       const { access, refresh, user } = response.data;
 
-      // ✅ Store tokens locally
+      //  Store tokens locally
       localStorage.setItem("access", access);
       localStorage.setItem("refresh", refresh);
       localStorage.setItem("user", JSON.stringify(user));
+      await refreshAuth();
 
       navigate("/");
     } catch (error) {

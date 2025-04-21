@@ -9,31 +9,31 @@ const useAuth = () => {
   const [error, setError] = useState(null);
 
   const checkAuth = async () => {
-    const token = localStorage.getItem('accessToken');
-    if (!token) {
-      setIsAuthenticated(false);
-      setUser(null);
-      setLoading(false);
-      return;
-    }
+  const token = localStorage.getItem("access");
 
-    try {
-      const res = await api.get(`${BASE_URL}/api/auth/me/`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  if (!token) {
+    setIsAuthenticated(false);
+    setUser(null);
+    setLoading(false); // ✅ prevent infinite loading
+    return;
+  }
 
-      setIsAuthenticated(true);
-      setUser(res.data.user);
-    } catch (err) {
-      setError(err);
-      setIsAuthenticated(false);
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    const res = await api.get(`${BASE_URL}/api/auth/me/`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    setIsAuthenticated(true);
+    setUser(res.data.user);
+  } catch (err) {
+    setIsAuthenticated(false);
+    setUser(null);
+  } finally {
+    setLoading(false); // ✅ important to run no matter what
+  }
+};
+
+
 
   useEffect(() => {
     checkAuth();
