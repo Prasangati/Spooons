@@ -60,6 +60,11 @@ const ResourceFilter = ({ onFilter }) => {
 function Resources() {
     const [resources, setResources] = useState([]);
     const [filteredResources, setFilteredResources] = useState([]);
+    const [favoriteIds, setFavoriteIds] = useState(() => {
+        const stored = localStorage.getItem("favoriteResources");
+        return stored ? JSON.parse(stored) : [];
+    });
+    const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
 
     useEffect(() => {
         // Fetch resources from API or data source
@@ -93,15 +98,44 @@ function Resources() {
         setFilteredResources(filtered);
     };
 
+    const toggleFavorite = (id) => {
+    const updated = favoriteIds.includes(id)
+      ? favoriteIds.filter(favId => favId !== id)
+      : [...favoriteIds, id];
+
+    setFavoriteIds(updated);
+    localStorage.setItem("favoriteResources", JSON.stringify(updated));
+  };
+
+  const displayedResources = showOnlyFavorites
+    ? filteredResources.filter(r => favoriteIds.includes(r.id))
+    : filteredResources;
+
     return (
         <div className="resources-container">
             <div className = "clip"></div>
             <ResourceFilter onFilter={handleFilter} />
+            <div style={{ textAlign: "right", marginBottom: "10px" }}>
+                <label style={{ fontSize: "14px", color: "#066341" }}>
+                  <input
+                    type="checkbox"
+                    checked={showOnlyFavorites}
+                    onChange={() => setShowOnlyFavorites(!showOnlyFavorites)}
+                  />
+                  {" "}Show only favorites
+                </label>
+          </div>
             <div className="resources-list">
                 {filteredResources.length > 0 ? (
                     filteredResources.map((resource) => (
                         <div key={resource.id} className="resource-item">
                             <h3>{resource.title}</h3>
+                            <button
+                                className="heart-btn"
+                                onClick={() => toggleFavorite(resource.id)}
+                                title={favoriteIds.includes(resource.id) ? "Unsave" : "Save"}>
+                                {favoriteIds.includes(resource.id) ? "❤️" : "🤍"}
+                            </button>
                             <p>Date: {resource.date}</p>
                         </div>
                     ))
