@@ -51,8 +51,8 @@ function Resources() {
         const fetchResources = async () => {
             // Replace with real API call if needed
             // How to connect to backend?
-            setResources(data);
-            setFilteredResources(data);
+            //setResources(data);
+            //setFilteredResources(data);
         };
 
         fetchResources().then(() => {});
