@@ -34,6 +34,9 @@
     border: 2px solid #EAF4F2;
     border-radius: 8px;
     box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.03);
+    position: sticky; /* keep the filter form sticky */
+    top: 0;
+    z-index: 100;
 }
 
 .filter div {
