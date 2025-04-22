@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useState, useEffect} from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import useGoogleSuccess from "../../hooks/useGoogleSuccess";
@@ -8,14 +8,12 @@ import "../../App.css";
 import Loading from "../Loading/Loading";
 import BASE_URL from "../../utils/config";
 import api from "../../utils/axiosConfig";
-import { CSRFContext } from "../../utils/CSRFContext";
 
 
 function Login() {
   const handleGoogleSuccess = useGoogleSuccess();
   const navigate = useNavigate();
   const { isAuthenticated, loading, refreshAuth } = useAuthContext(); // Get auth state from context
-  const { refreshCSRF } = useContext(CSRFContext);
 
   // Local state for form data and UI state
   const [email, setEmail] = useState("");
@@ -60,54 +58,59 @@ function Login() {
     }
 
     try {
-      await api.post(
+      const response = await api.post(
         `${BASE_URL}/api/auth/login/`,
         { email, password },
-        { withCredentials: true, headers: { "Content-Type": "application/json" } }
+        {
+          headers: { "Content-Type": "application/json" }
+        }
       );
-      await refreshCSRF();
+
+      const { access, refresh, user } = response.data;
+
+      //  Store tokens locally
+      localStorage.setItem("access", access);
+      localStorage.setItem("refresh", refresh);
+      localStorage.setItem("user", JSON.stringify(user));
       await refreshAuth();
+
       navigate("/");
     } catch (error) {
-    if (error.response) {
-      // Handle HTTP error status codes
-      switch (error.response.status) {
-        case 401:
-          // Check backend's specific error message
-          const backendError = error.response.data?.error?.toLowerCase();
+      if (error.response) {
+        // Handle HTTP error status codes
+        switch (error.response.status) {
+          case 401:
+            const backendError = error.response.data?.error?.toLowerCase();
+            if (backendError.includes("account with this email does not exist")) {
+              setError("Account not found. Please check your email address.");
+            } else if (backendError.includes("incorrect password")) {
+              setError("Wrong password. Please try again.");
+            } else if (backendError.includes("account is disabled")) {
+              setError("Account disabled. Contact support.");
+            } else {
+              setError("Invalid credentials. Please try again.");
+            }
+            break;
 
-          if (backendError.includes("account with this email does not exist")) {
-            setError("Account not found. Please check your email address.");
-          } else if (backendError.includes("incorrect password")) {
-            setError("Wrong password. Please try again.");
-          } else if (backendError.includes("account is disabled")) {
-            setError("Account disabled. Contact support.");
-          } else {
-            setError("Invalid credentials. Please try again.");
-          }
-          break;
+          case 400:
+            setError("Invalid request. Please check your input.");
+            break;
 
-        case 400:
-          setError("Invalid request. Please check your input.");
-          break;
+          case 500:
+            setError("Server error. Please try again later.");
+            break;
 
-        case 500:
-          setError("Server error. Please try again later.");
-          break;
-
-        default:
-          setError("Something went wrong. Please try again.");
+          default:
+            setError("Something went wrong. Please try again.");
+        }
+      } else if (error.request) {
+        setError("Network error. Please check your internet connection.");
+      } else {
+        setError("Request setup error. Please try again.");
       }
-    } else if (error.request) {
-      // The request was made but no response was received
-      setError("Network error. Please check your internet connection.");
-    } else {
-      // Something happened in setting up the request
-      setError("Request setup error. Please try again.");
+    } finally {
+      setLoadingLocal(false);
     }
-  } finally {
-    setLoadingLocal(false);
-  }
   };
 
 

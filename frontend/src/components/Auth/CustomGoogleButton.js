@@ -1,5 +1,4 @@
 import { useGoogleLogin } from '@react-oauth/google';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import BASE_URL from '../../utils/config';
 import api from "../../utils/axiosConfig";
@@ -21,7 +20,17 @@ const handleGoogleSuccess = async (tokenResponse) => {
           "Content-Type": "application/json" },
       }
     );
-    navigate("/signup-success");
+
+    const { tokens, user } = res.data || {};
+    const { access, refresh } = tokens || {};
+
+    if (access && refresh) {
+      localStorage.setItem("access", access);
+      localStorage.setItem("refresh", refresh);
+      localStorage.setItem("user", JSON.stringify(user));
+    }
+
+    navigate("/", { replace: true });
   } catch (error) {
     console.error("Signup failed:", error.response?.data || error);
   }

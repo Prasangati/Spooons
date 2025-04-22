@@ -8,6 +8,7 @@ from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
 from datetime import datetime, timezone  # Correct import for UTC handling
 from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from .serializers import LoginSerializer,PasswordResetSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -60,8 +61,13 @@ def google_signup(request):
             }
         )
 
+        #  Don't allow disabled accounts to sign in
+        if not user.is_active:
+            return JsonResponse({"error": "Account is disabled"}, status=401)
+
         #  Generate JWT tokens
         refresh = RefreshToken.for_user(user)
+
         return JsonResponse({
             "status": "success",
             "user": {
@@ -78,8 +84,6 @@ def google_signup(request):
     except Exception as e:
         logger.exception("Unexpected error during Google signup")
         return JsonResponse({"error": "Internal server error"}, status=500)
-
-
 
 @require_POST
 def signup(request):
@@ -109,54 +113,55 @@ def signup(request):
         pass
 
     try:
-        # Create the new user
-        User.objects.create_user(
+        # Create the user
+        user = User.objects.create_user(
             email=email,
             first_name=first_name,
             last_name=last_name,
             password=password
         )
-        # Authenticate the user using the credentials
-        user = authenticate(request, email=email, password=password)
-        if user is not None:
-            login(request, user)  # login now sets the backend automatically
-        else:
-            return JsonResponse({"error": "Authentication failed."}, status=400)
+
+        # Generate JWT tokens
+        refresh = RefreshToken.for_user(user)
+        print(str(refresh))
+        print(str(refresh.access_token))
+
+        return JsonResponse({
+            "status": "success",
+            "user": {
+                "email": user.email,
+                "first_name": user.first_name,
+                "last_name": user.last_name
+            },
+            "tokens": {
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+            }
+        })
     except Exception as e:
         return JsonResponse({"error": f"Error creating user: {e}"}, status=500)
-
-    return JsonResponse({
-        "status": "success",
-        "user": {
-            "email": user.email,
-            "first_name": user.first_name,
-            "last_name": user.last_name
-        }
-    })
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])  # Makes sure user has valid JWT
 def authcontext(request):
-    user = request.user  # Set by JWT middleware
-    user_info = {
-        'email': user.email,
-        'first_name': user.first_name,
-        'last_name': user.last_name,
-    }
-    return Response({'isAuthenticated': True, 'user': user_info})
+    return Response({
+        'user': {
+            'email': request.user.email,
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name,
+        }
+    })
 
-@require_POST
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def logout_view(request):
-    user = request.user if request.user.is_authenticated else None
-    logout(request)
-
-    if user:
-        logger.info(f"User logged out: {user.email}")
-    else:
-        logger.info("Anonymous user session logged out.")
-
-    return JsonResponse({"message": "Successfully logged out."})
-
+    try:
+        refresh_token = request.data.get("refresh")
+        token = RefreshToken(refresh_token)
+        token.blacklist()
+        return Response({"message": "Successfully logged out."}, status=status.HTTP_200_OK)
+    except TokenError:
+        return Response({"error": "Invalid or expired token."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
@@ -174,7 +179,6 @@ def login_view(request):
     User = get_user_model()
 
     try:
-        # First check if account exists
         user = User.objects.get(email=email)
     except User.DoesNotExist:
         return Response(
@@ -182,7 +186,6 @@ def login_view(request):
             status=status.HTTP_401_UNAUTHORIZED
         )
 
-    # Now check password
     auth_user = authenticate(request, email=email, password=password)
     if not auth_user:
         return Response(
@@ -190,24 +193,28 @@ def login_view(request):
             status=status.HTTP_401_UNAUTHORIZED
         )
 
-    # Check if account is active
     if not auth_user.is_active:
         return Response(
             {"error": "Account is disabled"},
             status=status.HTTP_401_UNAUTHORIZED
         )
 
-    login(request, auth_user)
+    refresh = RefreshToken.for_user(auth_user)
+    access = refresh.access_token
 
     return Response({
         "status": "success",
         "user": {
             "email": auth_user.email,
             "first_name": auth_user.first_name,
-            "last_name": auth_user.last_name
-            # "profile_picture": auth_user.profile_picture,
+            "last_name": auth_user.last_name,
+        },
+        "tokens": {
+            "refresh": str(refresh),
+            "access": str(access),
         }
     })
+
 
 
 @api_view(['POST'])

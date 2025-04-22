@@ -12,13 +12,20 @@ const RecentEntries = () => {
   useEffect(() => {
     const fetchRecentEntries = async () => {
       try {
+        const token = localStorage.getItem("access");
+
         const response = await axios.get(`${BASE_URL}/journal/entries/recent/`, {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
         });
+
         setEntries(response.data);
       } catch (error) {
-        console.error('Failed to fetch recent entries:', error);
-      } finally {
+        console.error("Failed to fetch recent entries:", error);
+      }
+       finally {
         setLoading(false);
       }
     };
