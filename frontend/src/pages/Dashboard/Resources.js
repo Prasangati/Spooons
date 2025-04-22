@@ -117,9 +117,15 @@ function Resources() {
     localStorage.setItem("favoriteResources", JSON.stringify(updated));
   };
 
+  const sortedResources = [...filteredResources].sort((a, b) => {
+  return sortOrder === "newest"
+    ? new Date(b.date) - new Date(a.date)
+    : new Date(a.date) - new Date(b.date);
+});
+
   const displayedResources = showOnlyFavorites
-    ? filteredResources.filter(r => favoriteIds.includes(r.id))
-    : filteredResources;
+   ? sortedResources.filter(r => favoriteIds.includes(r.id))
+  : sortedResources;
 
     return (
         <div className="resources-container">
