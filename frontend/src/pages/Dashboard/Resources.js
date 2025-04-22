@@ -99,6 +99,12 @@ function Resources() {
     };
 
     const toggleFavorite = (id) => {
+    const button = document.getElementById(`heart-${id}`);
+    if (button) {
+        button.classList.add("clicked");
+        setTimeout(() => button.classList.remove("clicked"), 400);
+    }
+
     const updated = favoriteIds.includes(id)
       ? favoriteIds.filter(favId => favId !== id)
       : [...favoriteIds, id];
@@ -131,6 +137,7 @@ function Resources() {
                         <div key={resource.id} className="resource-item">
                             <h3>{resource.title}</h3>
                             <button
+                                id={`heart-${resource.id}`}
                                 className="heart-btn"
                                 onClick={() => toggleFavorite(resource.id)}
                                 title={favoriteIds.includes(resource.id) ? "Unsave" : "Save"}>
