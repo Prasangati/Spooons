@@ -67,6 +67,7 @@ function Resources() {
         return stored ? JSON.parse(stored) : [];
     });
     const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
+    const [sortOrder, setSortOrder] = useState("newest"); // or "oldest"
 
     useEffect(() => {
         // Fetch resources from API or data source
@@ -100,6 +101,7 @@ function Resources() {
         setFilteredResources(filtered);
     };
 
+
     const toggleFavorite = (id) => {
     const button = document.getElementById(`heart-${id}`);
     if (button) {
@@ -124,14 +126,20 @@ function Resources() {
             <div className = "clip"></div>
             <ResourceFilter onFilter={handleFilter} />
             <div style={{ textAlign: "right", marginBottom: "10px" }}>
-                <label style={{ fontSize: "14px", color: "#066341" }}>
+                <button
+                    className="sort-btn"
+                    onClick={() => setSortOrder(sortOrder === "newest" ? "oldest" : "newest")}
+                  >
+                    Sort: {sortOrder === "newest" ? "Newest → Oldest" : "Oldest → Newest"}
+              </button>
+              <label style={{ fontSize: "14px", color: "#066341" }}>
                   <input
                     type="checkbox"
                     checked={showOnlyFavorites}
                     onChange={() => setShowOnlyFavorites(!showOnlyFavorites)}
                   />
                   {" "}Show only favorites
-                </label>
+              </label>
           </div>
             <div className="resources-list">
                 {displayedResources.length > 0 ? (

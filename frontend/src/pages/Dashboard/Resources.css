@@ -142,6 +142,26 @@
   align-items: center;
 }
 
+/* Sorting */
+
+.sort-btn {
+  background: none;
+  border: 1px solid #b8ccc9;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #066341;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.sort-btn:hover {
+  background-color: #EAF4F2;
+  transform: scale(1.05);
+}
+
+
 
 
 
