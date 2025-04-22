@@ -126,8 +126,8 @@ function Resources() {
                 </label>
           </div>
             <div className="resources-list">
-                {filteredResources.length > 0 ? (
-                    filteredResources.map((resource) => (
+                {displayedResources.length > 0 ? (
+                    displayedResources.map((resource) => (
                         <div key={resource.id} className="resource-item">
                             <h3>{resource.title}</h3>
                             <button
