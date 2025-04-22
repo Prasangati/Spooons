@@ -131,14 +131,21 @@ function Resources() {
         <div className="resources-container">
             <div className = "clip"></div>
             <ResourceFilter onFilter={handleFilter} />
-            <div style={{ textAlign: "right", marginBottom: "10px" }}>
+            <div style={{
+                textAlign: "right",
+                marginBottom: "10px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: "10px"}}>
                 <button
                     className="sort-btn"
                     onClick={() => setSortOrder(sortOrder === "newest" ? "oldest" : "newest")}
                   >
                     Sort: {sortOrder === "newest" ? "Newest → Oldest" : "Oldest → Newest"}
               </button>
-              <label style={{ fontSize: "14px", color: "#066341" }}>
+              <label style={{ fontSize: "14px", color: "#066341"}}>
                   <input
                     type="checkbox"
                     checked={showOnlyFavorites}
