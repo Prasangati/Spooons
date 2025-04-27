@@ -165,7 +165,10 @@ function JournalEntries() {
               type="button"
               className="add-tag-btn"       
               onClick={() => setShowTagInput(true)}
-            > # </button>
+            > 
+              <i className="fa-solid fa-hashtag"></i>
+
+             </button>
           
           {showTagInput && (
               <input

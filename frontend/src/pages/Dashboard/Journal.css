@@ -341,4 +341,100 @@
   .delete-btn:hover {
     background-color: #fca7a7;
   }
+  .new-entry .title-with-tag {
+    position: relative;
+    width: 100%;
+    margin-bottom: 0;
+    border: none;
+    background: transparent;
+    padding: 0;
+  }
+  
+  .new-entry .title-with-tag .title-input {
+    width: 100%;
+    padding: 1%;
+    font-size: 100%;
+    font-family: 'Short Stack', sans-serif;
+    color: #4f4d4d;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #e4ebe6;
+    outline: none;
+  }
+  
+  .new-entry .title-with-tag .add-tag-btn {
+    position: absolute;
+    top: 50%;
+    right: 1%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 120%;
+    color: #066341;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .new-entry .title-with-tag .tag-input-mini {
+    position: absolute;
+    top: 50%;
+    right: 1%;
+    transform: translateY(-50%);
+    width: 0;
+    opacity: 0;
+    font-size: 90%;
+    color: #044a2a;
+    background: transparent;
+    border: none;
+    outline: none;
+    transition: width 0.3s ease, opacity 0.3s ease;
+    padding: 0;
+  }
+  
+  .new-entry .title-with-tag.adding .tag-input-mini {
+    width: 80px;
+    opacity: 1;
+  }
+  
+  .new-entry .title-with-tag.adding .add-tag-btn {
+    transform: translate(-80px, -50%);
+  }
+  
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  
+  .tag-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #EAF4F2;
+    color: #066341;
+    padding: 4px 8px;
+    border-radius: 16px;
+    font-size: 85%;
+  }
+  
+  .tag-chip .remove-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    background: none;
+    border: none;
+    padding: 0;
+    margin-left: 6px;
+    font-size: 90%;
+    line-height: 1;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    cursor: pointer;
+  }
+  
+  .tag-chip:hover .remove-btn {
+    visibility: visible;
+    opacity: 1;
+  }
   
