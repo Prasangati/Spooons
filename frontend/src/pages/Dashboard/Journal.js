@@ -4,12 +4,17 @@ import axios from "axios";
 import {getCookie} from "../../utils/utils";
 import RecentEntries from "../../components/journals/RecentEntries";
 
-
 function JournalEntries() {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState(""); // state for entry title
   const [entries, setEntries] = useState([]); // storing journal entries
   const [newEntry, setNewEntry] = useState(""); // current input
+
+
+  const [tagInput, setTagInput] = useState("");    // #tag
+  const [tags, setTags]  = useState([]);    
+  const [showTagInput, setShowTagInput] = useState(false); 
+
 
   const [showNewEntryForm, setShowNewEntryForm] = useState(false); //  past entries
   const csrfToken = getCookie('csrftoken');
@@ -32,11 +37,32 @@ function JournalEntries() {
     }, 6000); 
     return () => clearInterval(quoteInterval); // cleanupon unmount
   }, []);
-  useEffect(() => {
-    localStorage.setItem("journalEntries", JSON.stringify(entries));
-  }, [entries]);
+
+  const resetForm = () => {
+    setTitle("");
+    setNewEntry("");
+    setTagInput("");             
+    setTags([]);                 
+    setShowTagInput(false);      
+    setShowNewEntryForm(false);
+  };
+
+  const handleAddTag = () => {
+    const raw = tagInput.trim().replace(/^#/, "");
+    if (raw && !tags.includes(raw)) {
+      setTags([raw, ...tags]);
+    }
+    setTagInput("");
+    setShowTagInput(false);
+  };
 
 
+  const handleTagKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAddTag();
+    }
+  };
 
   //temp - will update this functionality  
   const prompts = [
@@ -69,50 +95,34 @@ function JournalEntries() {
 // add new entry
 
   const handleSendEntry = async () => {
-  if (title.trim() === "") {
-    alert("Title is required to send.");
-    return;
-  }
-  if (newEntry.trim() === "") {
-    alert("Entry cannot be empty.");
-    return;
-  }
+    if (!title.trim()) return alert("Title is required.");
+    if (!newEntry.trim()) return alert("Entry cannot be empty.");
+
   setLoading(true); // show Loading component
 
   try {
-    console.log("Sending journal entry...");
     console.log("CSRF token:", getCookie('csrftoken'));
     const response = await axios.post(
       'http://localhost:8000/journal/entries/',
       {
         title: title,
         entry: newEntry,
+        tags,
       },
       {
         withCredentials: true,
-       headers: {
-      'X-CSRFToken': csrfToken,
-      }
+       headers: {'X-CSRFToken': csrfToken,}
       }
     );
-
     const createdEntry = response.data;
-
     setEntries([createdEntry, ...entries]);
     resetForm();
   } catch (error) {
     console.error("Error sending entry:", error);
     alert("Something went wrong. Please try again.");
-  } finally {
-    setLoading(false); // hide Loading component
-  }
+  } finally { setLoading(false); }
   };
-  
-  const resetForm = () => {
-    setTitle("");
-    setNewEntry("");
-    setShowNewEntryForm(false);
-  };
+
 
   return (
     <div className="journal-container">
@@ -142,14 +152,52 @@ function JournalEntries() {
 
       ) : (
           <div className="new-entry">
-            <input
+          <div className={`title-with-tag ${showTagInput ? "adding" : ""}`}>
+          <input
                 type="text"
                 className="title-input"
                 placeholder="Title *"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
           />
+          <button
+              type="button"
+              className="add-tag-btn"       
+              onClick={() => setShowTagInput(true)}
+            > # </button>
+          
+          {showTagInput && (
+              <input
+                type="text"
+                className="tag-input-mini"  
+                placeholder="tag"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onKeyDown={handleTagKeyDown} 
+                onBlur={() => setShowTagInput(false)} 
+                autoFocus
+              />
+            )}
+          </div>
+
+ 
+          <div className="tag-list">
+            {tags.map((t) => (
+              <span key={t} className="tag-chip">
+                #{t}
+                <button
+                  type="button"
+                  className="remove-btn"
+                  aria-label={`Remove ${t}`}
+                  onClick={() => setTags(tags.filter((x) => x !== t))}
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+          
           <textarea
             className="journal-input"
             placeholder="A space for reflection . . ."
@@ -159,7 +207,7 @@ function JournalEntries() {
           />
     <div className="button-group">
             <button className="send-btn" onClick={handleSendEntry}>
-              Add
+            {loading ? "Adding…" : "Add"}
             </button>
             <button
               className="cancel-btn"
