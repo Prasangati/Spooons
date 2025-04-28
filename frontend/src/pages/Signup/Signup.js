@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import { GoogleLogin } from "@react-oauth/google";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import "../App.css";
+import {Link, useNavigate} from "react-router-dom";
+import "../../App.css";
 import "./Signup.css";
-import useGoogleSuccess from "../hooks/useGoogleSuccess";
-import { useAuthContext } from "../context/AuthContext";
+import useGoogleSuccess from "../../hooks/useGoogleSuccess";
+import { useAuthContext } from "../../context/AuthContext";
+import Loading from "../Loading/Loading";
+import BASE_URL from "../../utils/config";
+import api from "../../utils/axiosConfig";
 
 const Signup = () => {
   const handleGoogleSuccess = useGoogleSuccess();
   const navigate = useNavigate();
-  const { isAuthenticated, loading } = useAuthContext(); // Get auth state from context
+  const { isAuthenticated, loading, refreshAuth} = useAuthContext(); // Get auth state from context
 
   const [formData, setFormData] = useState({
     name: "",
@@ -50,19 +52,35 @@ const Signup = () => {
       setError("Passwords do not match.");
       return;
     }
-    try {
-      const response = await axios.post(
-        "http://localhost:8000/api/auth/signup/",
-        { name, email, password },
-        { withCredentials: true, headers: { "Content-Type": "application/json" } }
-      );
-
-      console.log("Signup successful:", response.data);
-      navigate("/signup-success");
-    } catch (error) {
-      console.error("Signup failed:", error.response?.data || error);
-      setError(error.response?.data?.message || "Signup failed. Please try again.");
+    if (document.hasStorageAccess && !(await document.hasStorageAccess())) {
+      await document.requestStorageAccess();
     }
+
+  try {
+    const response = await api.post(
+      `${BASE_URL}/api/auth/signup/`,
+      { name, email, password },
+      {
+        headers: { "Content-Type": "application/json" }
+      }
+    );
+
+    const {
+      tokens: { access, refresh },
+      user
+    } = response.data;
+
+    localStorage.setItem("access", access);
+    localStorage.setItem("refresh", refresh);
+    localStorage.setItem("user", JSON.stringify(user));
+
+    await refreshAuth();
+    navigate("/signup-success");
+  } catch (error) {
+    console.error("Signup failed:", error.response?.data || error);
+    setError(error.response?.data?.error || "Signup failed. Please try again.");
+  }
+
   };
 
   // Use effect to redirect authenticated users to home page
@@ -75,13 +93,19 @@ const Signup = () => {
 
   // Optionally, show a loading indicator if auth check is in progress
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />
   }
 
   return (
     <div id="home-container">
       <div className="signup-box">
-        <img src="/logo.png" alt="Welcome Logo" className="welcome-image" />
+        <Link to="/">
+          <img
+            src="/logo.png"
+            alt="Welcome Logo"
+            className="welcome-image"
+          />
+        </Link>
 
         <form className="signup-form" onSubmit={handleSignupSubmit}>
           {error && <p className="error-message">{error}</p>}
@@ -96,7 +120,7 @@ const Signup = () => {
               onChange={handleChange}
               required
             />
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name"> Username </label>
           </div>
 
           {/* email input box */}
@@ -168,7 +192,7 @@ const Signup = () => {
 
         <p className="login-text">
           Already have an account?{" "}
-          <a href="/login" className="login-link">
+          <a href="/Login/Login" className="login-link">
             Login
           </a>
         </p>

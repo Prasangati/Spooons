@@ -23,6 +23,12 @@ time, mark, audio, video {
 	font: inherit;
 	vertical-align: baseline;
 }
+
+body, html {
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
@@ -51,21 +57,19 @@ table {
   box-sizing: border-box;
   font-family: 'Arial', sans-serif;
  }
- 
- body {
+body {
   background: #bee7e9;
   background-size: 300% 300%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
   margin: 0;
- }
- 
- 
+  padding: 0;
+  box-sizing: border-box;
+  overflow-x: hidden; /* prevent horizontal scroll */
+}
 
- 
- 
+
+
+
+
 
  
  

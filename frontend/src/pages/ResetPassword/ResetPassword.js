@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import "./ResetPassword.css";
-
+import api from "../../utils/axiosConfig";
 
 const ResetPassword = () => {
   const { uid, token } = useParams(); // Extract user ID and token from URL
@@ -32,10 +31,11 @@ const ResetPassword = () => {
     }
 
     try {
-        const response = await axios.post(
+        const response = await api.post(
             "http://localhost:8000/api/auth/reset-password-confirm/", 
             { uid, token, new_password: password }, 
-            { headers: { "Content-Type": "application/json" } }
+            { headers: {
+                "Content-Type": "application/json" } }
         );
 
         console.log("Password reset successful:", response.data);
