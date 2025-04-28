@@ -2,7 +2,8 @@ import React, { useState, useEffect} from "react";
 import "./Dashboard.css";
 import LogOut from "../../components/Auth/LogOut"; //logout Button
 import Journal from "./Journal"; // journal component
-import Resources from "./Resources"; // resources component
+import Resources from "./Resources";
+import {Link} from "react-router-dom"; // resources component
 
 function Dashboard() {
    const [activeTab, setActiveTab] = useState("Journal");
@@ -34,7 +35,9 @@ function Dashboard() {
           ☰
    </button>
 
-    <img src="/logo.png" alt="spooons Logo" className="sp-logo" />
+    <Link to="/" className="logo">
+                    <img src="/logo.png" alt="Logo" />
+    </Link>
     <ul className="nav-links desktop">
     <li className={activeTab === "Journal" ? "active" : ""} onClick={() => setActiveTab("Journal")}>Journal</li>
       <li className={activeTab === "Progress" ? "active" : ""} onClick={() => setActiveTab("Progress")}>Progress</li>

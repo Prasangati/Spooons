@@ -3,8 +3,13 @@ display: flex;
 flex-direction: column;
 width: 100vw;
 height: 100vh;
-background-color: #EAF4F2;
+background-color: #bee7e9;
 position: relative;
+}
+
+.logo img {
+  height: 80px;
+  transition: height 0.3s ease-in-out;
 }
 
 .navbar {
@@ -25,10 +30,7 @@ display: flex;
 align-items: center;
 gap: 30px; }
 
-.sp-logo {
-width: 210px;  
-height: auto; 
-}
+
 .nav-links {
 list-style: none;
 display: flex;
@@ -49,10 +51,10 @@ padding: 0;
 
 .nav-links li:hover,
 .nav-links .active {
-    background-color: green;
+    background-color: #bee7e9;
     border-color: #3c6465;
     border-radius: 5px;
-    color: white;
+    color: black;
 }
 .logout-container {
 display: flex;
