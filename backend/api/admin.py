@@ -33,3 +33,5 @@ class CustomUserAdmin(BaseUserAdmin):
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(JournalEntry)
+
+

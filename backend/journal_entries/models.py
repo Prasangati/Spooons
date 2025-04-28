@@ -14,6 +14,28 @@ class JournalEntry(models.Model):
     entry = models.TextField()
     created_at = models.DateTimeField(default=timezone.now, db_index=True)
 
+# {
+#   "stressors": ["Work deadlines", "Lack of personal time"],
+#   "ai_feedback": "It seems like you're feeling overwhelmed with work deadlines. Remember to prioritize rest and set boundaries.",
+#   "resources": [
+#     {
+#       "name": "Headspace App",
+#       "description": "Meditation and breathing exercises for daily stress relief.",
+#       "link": "https://www.headspace.com/"
+#     },
+#     {
+#       "name": "Mindful.org",
+#       "description": "Provides free guided mindfulness exercises.",
+#       "link": "https://www.mindful.org/"
+#     }
+#   ]
+# }
+
+    # ai_feedback = models.TextField(null=True, blank=True)
+    # stressors = models.JSONField(default=list, blank=True)
+    # resources = models.JSONField(default=list, blank=True)
+
+
     class Meta:
         ordering = ['-created_at']
         verbose_name_plural = 'Journal Entries'
