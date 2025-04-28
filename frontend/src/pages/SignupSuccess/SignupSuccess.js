@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAuthContext } from "../context/AuthContext";
-import LogOut from "../components/Auth/LogOut";
+import { useAuthContext } from "../../context/AuthContext";
+import LogOut from "../../components/Auth/LogOut";
 const SignupSuccess = () => {
     const navigate = useNavigate();
     const location = useLocation();

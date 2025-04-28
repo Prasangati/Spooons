@@ -1,15 +1,24 @@
-.journal-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    padding: 30px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 800px;
-    width: 90%; /* responsiveness */
 
+.floating-quote {
+    background-color: #EAF4F2;
+    border: 2px double #066341;
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(6, 99, 65, 0.1);
+  }
+  
+  
+.journal-container {
+    max-width: 900px;
     margin: auto;
+    padding: 2rem;
+    font-family: 'Georgia', serif;
+    background: #F8FCFB;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    border-radius: 10px;
 }
 
 .journal-nav {
@@ -42,13 +51,14 @@
 
 .title-input {
     width: 100%;
-    font-size: 18px;
-    padding: 12px;
-    border: 2px solid #b8ccc9;
-    border-radius: 6px;
-    margin-bottom: 10px;
+    margin-bottom: 1.2rem;
+    padding: 1rem;
+    border: 1px solid #b8ccc9;
+    border-radius: 10px;
+    font-family: 'Georgia', serif;
+    font-size: 1.05rem;
     background: white;
-    transition: border 0.3s ease;
+    color: #04442d;
 }
 
 .title-input:focus {
@@ -56,6 +66,13 @@
     outline: none;
 }
 
+.quote-text {
+    font-style: italic;
+    font-size: 20px;
+    color: #04442d;
+    font-family: 'Homemade Apple';
+  }
+  
 .journal-input-box {
     display: flex;
     flex-direction: column;
@@ -63,15 +80,24 @@
 }
 
 .journal-input {
-    width: 100%;
-    height: 200px;
-    padding: 12px;
-    border: 2px solid #b8ccc9;
-    border-radius: 6px;
-    font-size: 14px;
-    resize: vertical;
-    background: white;
-    transition: border 0.3s ease;
+    background-image: repeating-linear-gradient(
+        to bottom,
+        #ffffff,
+        #ffffff 31px,
+        #eaf4f2 32px
+      ); 
+      height: 200px;
+      width: 100%;
+      font-size: 16px;
+      line-height: 32px;
+      color: #333;
+      font-family: 'Short Stack', sans-serif;      padding: 8px 16px;
+      resize: vertical;
+      border: 1px solid #b8ccc9;
+      border-radius: 10px;
+      background-color: #ffffff;
+      color: rgba(50, 50, 50, 0.9);
+
 }
 
 .journal-input:focus {
@@ -82,15 +108,16 @@
 .button-group {
     display: flex;
     gap: 10px;
-    justify-content: flex-end;
     margin-top: 10px;
+
 }
 
 .save-draft-btn,
-.send-btn {
-    padding: 12px 20px;
+.send-btn,
+.cancel-btn  {
+    padding: 10px 24px;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 14px;
     font-weight: bold;
@@ -98,8 +125,8 @@
 }
 
 .save-draft-btn {
-    background-color: gray;
-    color: white;
+    background-color: #b8ccc9;
+    color:  #04442d;
 }
 
 .send-btn {
@@ -108,26 +135,34 @@
 }
 
 .save-draft-btn:hover {
-    background-color: #555;
+    background-color:  #a0bdb8;
 }
 
 .send-btn:hover {
     background-color: #04442d;
 }
 
+.cancel-btn {
+    background-color: #ccc;
+    color: #333;
+    margin-left: auto;
+
+  }
+  
+  .cancel-btn:hover {
+    background-color: #999;
+  }
+
 .entries-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
+    font-size: 1.5rem;
+    border-bottom: 2px solid #b8ccc9;
+    color: #04442d;
+    margin-bottom: 1rem;
 }
 
 .entries-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    max-height: 300px;
-    overflow-y: auto;
-    padding: 10px;
+    margin-bottom: 2rem;
+
 }
 
 .entries-list::-webkit-scrollbar {
@@ -140,12 +175,12 @@
 }
 
 .entry-card {
-    background: #f8f9fa;
-    padding: 15px;
-    border: 1px solid #b8ccc9;
-    border-radius: 8px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
+    background: #fff;
+    border: 1px solid #066341;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
 }
 
 .entry-card:hover {
@@ -159,13 +194,13 @@
 }
 
 .entry-date {
-    font-size: 12px;
-    color: gray;
-    display: block;
-    margin-bottom: 5px;
+    font-size: 0.8rem;
+    color: #6b6b6b;
 }
 
 .entry-text {
+    white-space: pre-wrap;
+    margin-top: 0.5rem;
     font-size: 14px;
     color: #333;
 }
@@ -183,7 +218,31 @@
     font-weight: bold;
     transition: 0.3s;
 }
-
+.add-entry-btn {
+    display: block;
+    margin: 2rem auto;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    background-color: #066341;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s ease;
+  }
+  .add-entry-btn:hover {
+    background-color: #04442d;
+    transform: scale(1.05);
+  }
+  .new-entry-form {
+    background-color: #ffffff;
+    border: 2px solid #EAF4F2;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.03);
+    margin-top: 20px;
+  }
 .back-btn:hover {
     background: #04442d;
 }

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
 from dotenv import load_dotenv
+load_dotenv()
 from urllib.parse import urlparse
 from pathlib import Path
 import psycopg2
@@ -22,20 +23,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-z=2l9eohswjbf+!)w1skgv*hhqp*p48#5%_rwbay6h7a$rnx7w'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
-
-
+ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host]
 # Application definition
 
 INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'django.contrib.admin',
     'django.contrib.sites',
+    'journal_entries',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
     'social_django',
     'corsheaders',
-    # 'journal_entries'
+    'rest_framework_simplejwt.token_blacklist'
 ]
 
 
@@ -60,26 +60,30 @@ AUTH_USER_MODEL = "api.CustomUser"
 SITE_ID = 1  # Required by django-allauth
 
 MIDDLEWARE = [
+    'backend.middleware.debug_exception_middleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
 ]
 
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
+print("CORS_ALLOWED_ORIGINS:", CORS_ALLOWED_ORIGINS)
 
 CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
+
+
+
 CORS_EXPOSE_HEADERS = ['Set-Cookie']  # If using cookies
+
+MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 
 
@@ -99,7 +103,7 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')  # From Step 2
 DEFAULT_FROM_EMAIL = 'prasangahere@gmail.com'  # Use your domain or app name
 
 # Frontend URL for password reset links
-FRONTEND_URL = 'http://localhost:3000'  # Your React app's URL
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
 
 
@@ -127,7 +131,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-load_dotenv()
+
 #tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
 
 tmpPostgres = urlparse(os.getenv('DATABASE_URL'))
@@ -143,10 +147,10 @@ DATABASES = {
         'PORT': 5432,
         'OPTIONS': {
             'sslmode': 'require',
-            'options': 'endpoint=ep-lingering-hill-a8wkvoca-pooler',
         },
     }
 }
+
 
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -166,9 +170,9 @@ GOOGLE_OAUTH_CLIENT_ID = os.getenv("CLIENT_ID")
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv("CLIENT_ID")
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv("CLIENT_SECRET")
 
+LOGIN_REDIRECT_URL = f"{FRONTEND_URL}/signup-success"
+LOGOUT_REDIRECT_URL = f"{FRONTEND_URL}/signup"
 
-LOGIN_REDIRECT_URL = "http://localhost:3000/signup-success"
-LOGOUT_REDIRECT_URL = "http://localhost:3000/signup"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -188,9 +192,33 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+
+
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
+
+
+print("DEBUG setting:", DEBUG)
 
 LANGUAGE_CODE = 'en-us'
 
@@ -205,7 +233,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 

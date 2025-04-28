@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useState, useEffect} from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
-import axios from "axios";
-import useGoogleSuccess from "../hooks/useGoogleSuccess";
-import { useAuthContext } from "../context/AuthContext";
+import useGoogleSuccess from "../../hooks/useGoogleSuccess";
+import { useAuthContext } from "../../context/AuthContext";
 import "./Login.css";
-import "../App.css";
+import "../../App.css";
+import Loading from "../Loading/Loading";
+import BASE_URL from "../../utils/config";
+import api from "../../utils/axiosConfig";
+
 
 function Login() {
   const handleGoogleSuccess = useGoogleSuccess();
@@ -24,13 +27,13 @@ function Login() {
   // If authentication status is determined and the user is authenticated, redirect to the dashboard
   useEffect(() => {
     if (!loading && isAuthenticated) {
-      navigate("/");
+        navigate("/");
     }
   }, [loading, isAuthenticated, navigate]);
 
   // Optional: Show a loading indicator while checking auth state
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   const handleForgotPassword = () => {
@@ -50,56 +53,64 @@ function Login() {
     }
 
     setLoadingLocal(true);
+    if (document.hasStorageAccess && !(await document.hasStorageAccess())) {
+      await document.requestStorageAccess();
+    }
 
     try {
-      await axios.post(
-        "http://localhost:8000/api/auth/login/",
+      const response = await api.post(
+        `${BASE_URL}/api/auth/login/`,
         { email, password },
-        { withCredentials: true, headers: { "Content-Type": "application/json" } }
+        {
+          headers: { "Content-Type": "application/json" }
+        }
       );
-       refreshAuth();
-      // Only navigate on successful login
+
+      const { access, refresh, user } = response.data;
+
+      //  Store tokens locally
+      localStorage.setItem("access", access);
+      localStorage.setItem("refresh", refresh);
+      localStorage.setItem("user", JSON.stringify(user));
+      await refreshAuth();
+
       navigate("/");
     } catch (error) {
-    if (error.response) {
-      // Handle HTTP error status codes
-      switch (error.response.status) {
-        case 401:
-          // Check backend's specific error message
-          const backendError = error.response.data?.error?.toLowerCase();
+      if (error.response) {
+        // Handle HTTP error status codes
+        switch (error.response.status) {
+          case 401:
+            const backendError = error.response.data?.error?.toLowerCase();
+            if (backendError.includes("account with this email does not exist")) {
+              setError("Account not found. Please check your email address.");
+            } else if (backendError.includes("incorrect password")) {
+              setError("Wrong password. Please try again.");
+            } else if (backendError.includes("account is disabled")) {
+              setError("Account disabled. Contact support.");
+            } else {
+              setError("Invalid credentials. Please try again.");
+            }
+            break;
 
-          if (backendError.includes("account with this email does not exist")) {
-            setError("Account not found. Please check your email address.");
-          } else if (backendError.includes("incorrect password")) {
-            setError("Wrong password. Please try again.");
-          } else if (backendError.includes("account is disabled")) {
-            setError("Account disabled. Contact support.");
-          } else {
-            setError("Invalid credentials. Please try again.");
-          }
-          break;
+          case 400:
+            setError("Invalid request. Please check your input.");
+            break;
 
-        case 400:
-          setError("Invalid request. Please check your input.");
-          break;
+          case 500:
+            setError("Server error. Please try again later.");
+            break;
 
-        case 500:
-          setError("Server error. Please try again later.");
-          break;
-
-        default:
-          setError("Something went wrong. Please try again.");
+          default:
+            setError("Something went wrong. Please try again.");
+        }
+      } else if (error.request) {
+        setError("Network error. Please check your internet connection.");
+      } else {
+        setError("Request setup error. Please try again.");
       }
-    } else if (error.request) {
-      // The request was made but no response was received
-      setError("Network error. Please check your internet connection.");
-    } else {
-      // Something happened in setting up the request
-      setError("Request setup error. Please try again.");
+    } finally {
+      setLoadingLocal(false);
     }
-  } finally {
-    setLoadingLocal(false);
-  }
   };
 
 
@@ -123,7 +134,8 @@ function Login() {
          //clear previous request before making new request
         setResetMessage("Processing reset password request...");
         try {
-            const response = await axios.post("http://localhost:8000/api/auth/reset/", { email: resetEmail.trim() });
+            const response = await api.post(`${BASE_URL}/api/auth/reset/`, { email: resetEmail.trim() });
+
             if (response.status === 200) {
                 setResetMessage("If your account exists, a reset link has been sent to your email.");
                 setTimeout(() => setIsModalOpen(false), 2000); // after the reset is successful modal closes 
@@ -142,7 +154,14 @@ function Login() {
   return (
     <div id="home-container">
       <div className="login-box">
-        <img src="/logo.png" alt="Welcome Logo" className="welcome-image" />
+
+        <Link to="/">
+          <img
+            src="/logo.png"
+            alt="Welcome Logo"
+            className="welcome-image"
+          />
+        </Link>
 
         {/* Error Message */}
         {error && <p className="error-message">{error}</p>}
@@ -201,7 +220,7 @@ function Login() {
         >
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
-            onError={() => console.log("❌ Google Signup Failed")}
+            onError={() => console.log("Google Signup Failed")}
           />
         </div>
 
