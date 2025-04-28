@@ -117,7 +117,7 @@ const RecentEntries = () => {
               <div className="entry-icons">
               <div className="icon-with-label">
         <button  className="icon-btn" onClick={() => handleEditClick(entry)}>
-        <i className="fa-solid fa-file-pen"></i>
+        <i class="fa-solid fa-pencil"></i>
         </button>
         <span className="icon-label">Edit</span>
 </div>

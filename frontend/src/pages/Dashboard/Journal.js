@@ -140,15 +140,14 @@ function JournalEntries() {
 
       {!showNewEntryForm ? (
 
-          <div>
-            <RecentEntries />
+          <>
+            <RecentEntries entries={entries}/>
             <button
                 className="add-entry-btn"
                 onClick={() => setShowNewEntryForm(true)}
             >
-              + Add New Entry
-            </button>
-          </div>
+<i class="fa-solid fa-file-circle-plus"></i>            </button>
+</>
 
       ) : (
           <div className="new-entry">
