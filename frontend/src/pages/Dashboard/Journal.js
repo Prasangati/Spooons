@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Journal.css";
 import RecentEntries from "../../components/journals/RecentEntries";
-import BASE_URL from "../../utils/config";
 import api from "../../utils/axiosConfig";
 
 function JournalEntries() {
