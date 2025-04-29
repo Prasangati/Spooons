@@ -1,5 +1,5 @@
-import jwtDecode from 'jwt-decode';
-
+import { jwtDecode } from 'jwt-decode';
+import api from './axiosConfig';
 // Check if token is expired
 export function isTokenExpired(token) {
   if (!token) return true;
@@ -14,7 +14,7 @@ export function isTokenExpired(token) {
 }
 
 // Attempt to refresh access token
-import api from './axiosConfig';
+
 
 export async function refreshAccessToken() {
   const refresh = localStorage.getItem('refresh');
