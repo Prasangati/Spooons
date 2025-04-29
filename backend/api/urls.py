@@ -8,10 +8,11 @@ from .views import (
     signup, authcontext, logout_view, login_view,
     password_reset_request, reset_password_confirm, google_signup,
 )
+
 urlpatterns = [
     path('auth/google-signup/', google_signup, name='google-signup'),
     path('auth/signup/', signup, name='signup'),
-    path('auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  # 🔁 replace with JWT login
+    path('auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('auth/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 

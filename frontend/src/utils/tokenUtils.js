@@ -1,36 +1,48 @@
-import { jwtDecode } from 'jwt-decode';
-import api from './axiosConfig';
-// Check if token is expired
+import {jwtDecode} from "jwt-decode";
+
 export function isTokenExpired(token) {
   if (!token) return true;
+
   try {
     const { exp } = jwtDecode(token);
-    if (!exp) return true;
-    const now = Date.now() / 1000;
-    return exp < now;
-  } catch (error) {
+    return !exp || (exp * 1000 < Date.now());
+  } catch (err) {
     return true;
   }
 }
-
-// Attempt to refresh access token
-
 
 export async function refreshAccessToken() {
   const refresh = localStorage.getItem('refresh');
   if (!refresh) return null;
 
   try {
-    const res = await api.post('/api/auth/token/refresh/', { refresh });
-    const newAccess = res.data.access;
-    if (newAccess) {
-      localStorage.setItem('access', newAccess);
-      return newAccess;
-    } else {
-      return null;
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/token/refresh/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ refresh }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Refresh token invalid');
     }
+
+    const data = await response.json();
+
+    //  Save new tokens
+    const { access, refresh: newRefresh } = data;
+    localStorage.setItem("access", access);
+    if (newRefresh) {
+      localStorage.setItem("refresh", newRefresh);
+    }
+
+    return access;
   } catch (error) {
-    console.error("Failed to refresh access token:", error);
+    console.error('Token refresh failed:', error);
+    localStorage.removeItem("access");
+    localStorage.removeItem("refresh");
+    localStorage.removeItem("user");
     return null;
   }
 }
