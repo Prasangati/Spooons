@@ -82,7 +82,8 @@ function Resources() {
     console.error("Error fetching resources:", error);
     }
   };
-    fetchResources();
+
+  fetchResources();
   }, []);
 
   useEffect(() => {
@@ -186,15 +187,33 @@ function Resources() {
         {displayedResources.length > 0 ? (
           displayedResources.map((resource) => (
             <div key={resource.id} className="resource-item">
-              <h3>{resource.title}</h3>
-              <button
-                id={`heart-${resource.id}`}
-                className="heart-btn"
-                onClick={() => toggleFavorite(resource.id)}
-                title={favoriteIds.includes(resource.id) ? "Unsave" : "Save"}>
-                {favoriteIds.includes(resource.id) ? "❤️" : "🤍"}
-              </button>
-              <p>Date: {resource.date}</p>
+              <div className="resource-header">
+                <h3>{resource.title}</h3>
+                <button
+                  id={`heart-${resource.id}`}
+                  className="heart-btn"
+                  onClick={() => toggleFavorite(resource.id)}
+                  title={favoriteIds.includes(resource.id) ? "Unsave" : "Save"}>
+                  {favoriteIds.includes(resource.id) ? "❤️" : "🤍"}
+                </button>
+              </div>
+                <p>Date: {resource.date}</p>
+
+                {resource.description && (
+                  <p><strong>Description:</strong> {resource.description}</p>
+                )}
+
+                {resource.link && (
+                  <p>
+                    <a
+                      href={resource.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      🔗 Visit Resource
+                    </a>
+                  </p>
+                )}
             </div>
           ))
         ) : (
