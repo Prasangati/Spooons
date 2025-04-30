@@ -64,8 +64,24 @@ function Resources() {
 
   useEffect(() => {
     const fetchResources = async () => {
+      try {
+        const response = await fetch("/api/resources/", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // if using token auth
+      },
+    });
 
-    };
+    if (!response.ok) new Error("Failed to fetch resources");
+
+    const data = await response.json();
+
+    setResources(data);
+    setFilteredResources(data);
+  }
+  catch (error) {
+    console.error("Error fetching resources:", error);
+    }
+  };
     fetchResources();
   }, []);
 
