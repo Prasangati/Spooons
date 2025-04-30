@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Resources.css";
 
-const dummyData = [
-  { id: 1, title: "Coping with Anxiety", date: "2025-04-10" },
-  { id: 2, title: "Mindful Breathing", date: "2025-04-12" },
-  { id: 3, title: "Healthy Sleep Habits", date: "2025-04-14" },
-  { id: 4, title: "Creating a Calming Night Routine", date: "2025-04-19" },
-  { id: 5, title: "Grounding Techniques for Panic", date: "2025-04-21" },
-];
-
 const ResourceFilter = ({ onFilter }) => {
   const [keyword, setKeyword] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -72,8 +64,7 @@ function Resources() {
 
   useEffect(() => {
     const fetchResources = async () => {
-      setResources(dummyData);
-      setFilteredResources(dummyData);
+
     };
     fetchResources();
   }, []);
