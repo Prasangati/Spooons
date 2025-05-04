@@ -4,6 +4,8 @@ from django.utils.translation import gettext_lazy as _
 
 from .models import CustomUser
 
+from journal_entries.models import JournalEntry
+
 class CustomUserAdmin(BaseUserAdmin):
     model = CustomUser
     list_display = ('email', 'first_name', 'last_name', 'is_staff', 'is_active')
