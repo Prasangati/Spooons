@@ -1,4 +1,4 @@
-import React, { useState } from React;
+import React, { useState } from "react";
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css'
 import './JournalCalendar.css'
@@ -19,7 +19,7 @@ function JournalCalendar({ journalEntries, onSelectEntry }) {
         }
     };
 
-    const tile = ({ date }) => {
+    const tileClassName = ({ date }) => {
         const iso = date.toISOString().split("T")["0"];
         const hasEntry = journalEntries.some(entry =>
             new Date(entry.date).toISOString().split("T")[0] === iso
