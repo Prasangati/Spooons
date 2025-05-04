@@ -36,3 +36,5 @@ function JournalCalendar({ journalEntries, onSelectEntry }) {
         </div>
     );
 }
+
+export default JournalCalendar;
