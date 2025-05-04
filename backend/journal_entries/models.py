@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.db import transaction
 from django.conf import settings
+from taggit.managers import TaggableManager
 
 class JournalEntry(models.Model):
     user = models.ForeignKey(
@@ -13,6 +14,7 @@ class JournalEntry(models.Model):
     title = models.CharField(max_length=200)
     entry = models.TextField()
     created_at = models.DateTimeField(default=timezone.now, db_index=True)
+    tags = TaggableManager()
 
     class Meta:
         ordering = ['-created_at']

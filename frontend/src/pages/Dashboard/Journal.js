@@ -21,7 +21,6 @@ function JournalEntries() {
 
   const quotes = [
       "Be not afraid of growing slowly, be afraid only of standing still. — Chinese Proverb",
-      "The only person you are destined to become is the person you decide to be. — Ralph Waldo Emerson",
       "Do your best until you know better. Then when you know better, do better. — Maya Angelou",
       "Strive for progress, not perfection.  ― David Perlmutter",
       "Your future is hidden in your daily routine. — Mike Murdock", 
@@ -33,10 +32,11 @@ function JournalEntries() {
 
   useEffect(() => {
     const quoteInterval = setInterval(() => {
-      setCurrentQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
+      setCurrentQuoteIndex((i) => (i + 1) % quotes.length);
     }, 6000); 
     return () => clearInterval(quoteInterval); // cleanupon unmount
-  }, []);
+  }, [quotes.length]);
+
 
   const resetForm = () => {
     setTitle("");
@@ -146,7 +146,8 @@ function JournalEntries() {
                 className="add-entry-btn"
                 onClick={() => setShowNewEntryForm(true)}
             >
-<i class="fa-solid fa-file-circle-plus"></i>            </button>
+ <i className="fa-solid fa-file-circle-plus"></i>
+</button>
 </>
 
       ) : (

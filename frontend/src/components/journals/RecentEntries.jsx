@@ -14,8 +14,27 @@ const RecentEntries = () => {
   const [entryBeingEdited, setEntryBeingEdited] = useState(null);
   const [editedTitle, setEditedTitle] = useState("");
   const [editedText, setEditedText] = useState("");
+  const [expandedCardId, setExpandedCardId] = useState(null);
 
-  
+  const [tagInput, setTagInput] = useState("");
+  const [showTagInput, setShowTagInput] = useState(false);
+  const handleTagKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAddTag();
+    }
+  };
+  const handleAddTag = () => {
+    const raw = tagInput.trim().replace(/^#/, "");
+    if (raw && !entryBeingEdited?.tags?.includes(raw)) {
+      setEntryBeingEdited({
+        ...entryBeingEdited,
+        tags: [raw, ...(entryBeingEdited?.tags || [])]
+      });
+    }
+    setTagInput("");
+    setShowTagInput(false);
+  };
   useEffect(() => {
     const fetchRecentEntries = async () => {
       try {
@@ -63,6 +82,7 @@ const RecentEntries = () => {
 
   const handleSaveEdit = async () => {
     if (!entryBeingEdited) return;
+    setLoading(true);
 
     try {
       const csrfToken = getCookie("csrftoken");
@@ -71,12 +91,11 @@ const RecentEntries = () => {
         {
           title: editedTitle,
           entry: editedText,
+          tags: entryBeingEdited.tags || [],
         },
         {
           withCredentials: true,
-          headers: {
-            "X-CSRFToken": csrfToken,
-          },
+          headers: { "X-CSRFToken": csrfToken},
         }
       );
 
@@ -106,19 +125,39 @@ const RecentEntries = () => {
         <div className="entries-list">
           {entries.length > 0 ? (
             entries.map((entry) => (
-              <div
-              key={entry.entry_number}
-         className="entry-card">
+             
+<div
+  key={entry.entry_number}
+  className={`entry-card ${expandedCardId === entry.entry_number ? "expanded" : ""}`}
+  onClick={() =>
+    setExpandedCardId(expandedCardId === entry.entry_number ? null : entry.entry_number)
+  }
+>
+              
               <h4>{entry.title}</h4>
               <span className="entry-date">
                 {new Date(entry.created_at).toLocaleString()}
               </span>
-              <p className="entry-text">{entry.entry}</p>
+              {entry.tags?.length > 0 && (
+  <div className="tag-list">
+    {entry.tags.map(t => (
+      <span key={t} className="tag-chip">#{t}</span>
+    ))}
+  </div>
+)}
+
+<p className="entry-text">
+
+  {expandedCardId === entry.entry_number
+    ? entry.entry
+    : entry.entry.slice(0, 100) + (entry.entry.length > 100 ? "..." : "")}
+</p>
+             
               <div className="entry-icons">
               <div className="icon-with-label">
         <button  className="icon-btn" onClick={() => handleEditClick(entry)}>
-        <i class="fa-solid fa-pencil"></i>
-        </button>
+        <i className="fa-solid fa-pencil"></i>
+                </button>
         <span className="icon-label">Edit</span>
 </div>
              
@@ -174,12 +213,59 @@ const RecentEntries = () => {
         <div className="modal-overlay">
         <div className="modal-box edit-modal">
             <h4>Edit Entry</h4>
-            <input
-              type="text"
-              className="title-input"
-              value={editedTitle}
-              onChange={(e) => setEditedTitle(e.target.value)}
-            />
+            <div className={`title-with-tag ${showTagInput ? "adding" : ""}`}>
+        <input
+          type="text"
+          className="title-input"
+          value={editedTitle}
+          onChange={(e) => setEditedTitle(e.target.value)}
+          placeholder="Title *"
+        />
+        <button
+          type="button"
+          className="add-tag-btn"
+          onClick={() => setShowTagInput(true)}
+        >
+          <i className="fa-solid fa-hashtag"></i>
+        </button>
+
+        {showTagInput && (
+          <input
+            type="text"
+            className="tag-input-mini"
+            placeholder="tag"
+            value={tagInput}
+            onChange={(e) => setTagInput(e.target.value)}
+            onKeyDown={handleTagKeyDown}
+            onBlur={() => setShowTagInput(false)}
+            autoFocus
+          />
+        )}
+      </div>
+      {entryBeingEdited.tags?.length > 0 && (
+    <div className="tag-list">
+      {entryBeingEdited.tags.map((t) => (
+        <span key={t} className="tag-chip">
+          #{t}
+          <button
+            type="button"
+            className="remove-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              setEntryBeingEdited({
+                ...entryBeingEdited,
+                tags: entryBeingEdited.tags.filter((x) => x !== t)
+              });
+            }}
+          >
+            ×
+          </button>
+        </span>
+      ))}
+    </div>
+
+      )}
+
             <textarea
               className="journal-input"
               value={editedText}
@@ -190,7 +276,8 @@ const RecentEntries = () => {
                 Cancel
               </button>
               <button className="send-btn" onClick={handleSaveEdit}>
-                Save
+              {loading ? "Saving..." : "Save"}
+
               </button>
             </div>
           </div>
