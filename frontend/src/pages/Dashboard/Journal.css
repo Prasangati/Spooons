@@ -96,23 +96,48 @@
   font-size: 20px;
   color: var(--green-dark);
 }
-.send-btn {
+.button-group {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 16px;
+
+}
+.send-btn,
+.cancel-btn {
   min-width: 80px;
   height: 40px;
   padding: 6px 20px;
   font-size: 14px;
   font-weight: 600;
-  background: var(--green);
-  color: #fff;
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  transition: 0.2s;
-  box-shadow: var(--shadow-light);
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
 .send-btn:hover {
   background: var(--green-dark);
+  transform: translateY(-1px);
+}
+.send-btn {
+  background-color: #066341;
+  color: #fff;
+}
+
+.send-btn:hover {
+  background-color: #04442d;
+  transform: translateY(-1px);
+}
+
+.cancel-btn {
+  background-color: #bcbcbc;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background-color: #a09e9e;
   transform: translateY(-1px);
 }
 
@@ -313,7 +338,7 @@
   position: absolute;
   inset: auto 0 0;
   height: 30px;
-  background: linear-gradient(to top, #fff, transparent);
+  background: linear-gradient(to top, #ffffff, transparent);
   pointer-events: none;
 }
 
@@ -343,7 +368,7 @@
   transform: translateY(-50%);
   width: 0;
   opacity: 0;
-  font-size: 90%;
+  font-size: 100%;
   color: #044a2a;
   background: transparent;
   border: none;
@@ -372,12 +397,12 @@
 .tag-chip {
   display: inline-flex;
   align-items: center;
-  background: #fff;
+  background: #ffffff;
   color: var(--green);
   padding: 4px 12px;
   border: 1px solid #c1e1d8;
   border-radius: 16px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
@@ -465,4 +490,22 @@
 
 .edit-modal .title-with-tag.adding .add-tag-btn {
   transform: translate(-130px, -50%);
+}
+.clear-tag-btn {
+  background-color: #EAF4F2;
+  color: #066341;
+  border: 2px solid #066341;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-family: 'Georgia', serif;
+  cursor: pointer;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 5px rgba(6, 99, 65, 0.1);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.clear-tag-btn:hover {
+  background-color: #066341;
+  color: #ffffff;
 }
