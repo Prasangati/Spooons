@@ -29,6 +29,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # DEBUG = os.getenv('DEBUG', 'False') == 'True'
 DEBUG = True
 
+LOGIN_USERNAME_FIELDS = ['email']
+
 ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host]
 # Application definition
 

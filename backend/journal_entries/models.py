@@ -12,7 +12,9 @@ class JournalEntry(models.Model):
     entry_number = models.PositiveIntegerField(null=True, editable=False)
     title = models.CharField(max_length=200)
     entry = models.TextField()
+    date = models.DateField(default=timezone.now) 
     created_at = models.DateTimeField(default=timezone.now, db_index=True)
+
 
 # {
 #   "stressors": ["Work deadlines", "Lack of personal time"],
@@ -31,9 +33,7 @@ class JournalEntry(models.Model):
 #   ]
 # }
 
-    # ai_feedback = models.TextField(null=True, blank=True)
-    # stressors = models.JSONField(default=list, blank=True)
-    # resources = models.JSONField(default=list, blank=True)
+
 
 
     class Meta:
@@ -58,3 +58,37 @@ class JournalEntry(models.Model):
                 ).select_for_update().order_by('-entry_number').first()
                 self.entry_number = last.entry_number + 1 if last else 1
         super().save(*args, **kwargs)
+
+class Stressor(models.Model):
+    journal_entry = models.ForeignKey(
+        'JournalEntry',
+        on_delete=models.CASCADE,
+        related_name='stressors'
+    )
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
+
+class Resource(models.Model):
+    journal_entry = models.ForeignKey(
+        'JournalEntry',
+        on_delete=models.CASCADE,
+        related_name='resources'
+    )
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    link = models.URLField()
+
+
+
+class AIFeedback(models.Model):
+    journal_entry = models.OneToOneField(
+        'JournalEntry',
+        on_delete=models.CASCADE,
+        related_name='ai_feedback'
+    )
+    feedback = models.TextField()
+
+    def __str__(self):
+        return f"Feedback for Entry #{self.journal_entry.id}"

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Resources.css";
+import RecentResources from "../../components/resources/RecentResources";
+
 
 const ResourceFilter = ({ onFilter }) => {
     const [keyword, setKeyword] = useState("");
@@ -82,13 +84,9 @@ function Resources() {
         <div className="resources-container">
             <ResourceFilter onFilter={handleFilter} />
             <div className="resources-list">
-                {filteredResources.length > 0 ? (
-                    filteredResources.map((resource) => (
-                        <div key={resource.id} className="resource-item">
-                            <h3>{resource.title}</h3>
-                            <p>Date: {resource.date}</p>
-                        </div>
-                    ))
+                {1> 0 ? (
+                        <RecentResources />
+
                 ) : (
                     <p>No resources found.</p>
                 )}

@@ -40,3 +40,12 @@ class JournalEntryViewSet(viewsets.ModelViewSet):
         recent_entries = self.get_queryset().order_by('-created_at')[:5]
         serializer = self.get_serializer(recent_entries, many=True)
         return Response(serializer.data)
+
+from rest_framework import viewsets
+from .models import Resource
+from .serializers import ResourceSerializer
+
+class ResourceViewSet(viewsets.ReadOnlyModelViewSet):  # Only GET methods
+    queryset = Resource.objects.all().order_by('-id')[:10]
+    serializer_class = ResourceSerializer
+
