@@ -1,11 +1,10 @@
-// components/RecentEntries.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Loading from "../../pages/Loading/Loading";
 import BASE_URL from "../../utils/config";
 
 
-const RecentEntries = () => {
+const AllStressors = () => {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -61,4 +60,4 @@ const RecentEntries = () => {
   );
 };
 
-export default RecentEntries;
+export default AllStressors;
