@@ -208,8 +208,9 @@ function JournalEntries() {
             placeholder="A space for reflection . . ."
             value={newEntry}
             onChange={(e) => {
-              if (e.target.value.length <= MAX_ENTRY_LENGTH) {
-              setNewEntry(e.target.value);
+              const value = e.target.value;
+              if (value.length <= MAX_ENTRY_LENGTH) {
+              setNewEntry(value);
             }
           }}
           />
