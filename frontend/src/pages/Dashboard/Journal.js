@@ -63,6 +63,7 @@ function JournalEntries() {
       handleAddTag();
     }
   };
+  const MAX_ENTRY_LENGTH = 500;// chr  limit
 
   //temp - will update this functionality  
   const prompts = [
@@ -200,14 +201,23 @@ function JournalEntries() {
               </span>
             ))}
           </div>
-          
+          <div className="entry-box-wrapper">
+
           <textarea
             className="journal-input"
             placeholder="A space for reflection . . ."
             value={newEntry}
-            onChange={(e) => setNewEntry(e.target.value)}
-
+            onChange={(e) => {
+              if (e.target.value.length <= MAX_ENTRY_LENGTH) {
+              setNewEntry(e.target.value);
+            }
+          }}
           />
+            <div className="char-counter-inside">
+            {MAX_ENTRY_LENGTH - newEntry.length}
+          </div>
+          </div>
+
     <div className="button-group">
             <button className="send-btn" onClick={handleSendEntry}>
             {loading ? "Adding…" : "Add"}

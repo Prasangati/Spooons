@@ -4,6 +4,8 @@ from .models import JournalEntry
 
 class JournalEntrySerializer(TaggitSerializer, serializers.ModelSerializer):
     tags = TagListSerializerField()
+    entry = serializers.CharField(max_length=300)  #  limit entry char
+
        
 
     class Meta:
