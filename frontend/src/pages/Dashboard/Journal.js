@@ -63,7 +63,7 @@ function JournalEntries() {
       handleAddTag();
     }
   };
-  const MAX_ENTRY_LENGTH = 500;// chr  limit
+  const MAX_ENTRY_LENGTH = 300;// chr  limit
 
   //temp - will update this functionality  
   const prompts = [
