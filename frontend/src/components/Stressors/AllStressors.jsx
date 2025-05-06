@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from "../../utils/axiosConfig";
 import Loading from "../../pages/Loading/Loading";
 import BASE_URL from "../../utils/config";
 
@@ -13,12 +13,9 @@ const AllStressors = () => {
       try {
         const token = localStorage.getItem("access");
 
-        const response = await axios.get(`${BASE_URL}/journal/entries/recent/`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
-        });
+        const response = await api.get('/journal/stressors/recent/');
+
+
 
         setEntries(response.data);
       } catch (error) {
@@ -34,7 +31,7 @@ const AllStressors = () => {
 
   return (
     <div className="recent-entries-container">
-      <h3 className="entries-title">Recent Journal Entries</h3>
+      <h3 className="entries-title">Stressors</h3>
 
       {loading ? (
             <Loading />
@@ -52,7 +49,7 @@ const AllStressors = () => {
               </div>
             ))
           ) : (
-            <p className="no-entries">No recent entries found.</p>
+            <p className="no-entries">No Stressors added.</p>
           )}
         </div>
       )}
