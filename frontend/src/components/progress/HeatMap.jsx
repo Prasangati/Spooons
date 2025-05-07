@@ -2,47 +2,67 @@ import React from "react";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
 
-const JournalHeatMap = ( {entries} ) => {
+
+const JournalHeatmap = ({ entries }) => {
   const today = new Date();
-  const startDate = new Date(today);
+  const startDate = new Date();
   startDate.setFullYear(today.getFullYear() - 1);
+  startDate.setDate(startDate.getDate() - 7); // extra padding to ensure May shows up
 
-const aggregatedData = entries.reduce((acc, entry) => {
-  if (!entry.date) return acc; // Skip if date is missing
+console.log("Entries passed to heatmap:", entries); // making sure heatmap actually takes in entries
 
-  const parsedDate = new Date(entry.date);
-  if (isNaN(parsedDate.getTime())) return acc; // Skip if date is invalid
+  // formatting
+  const formatDate = (date) =>
+    new Date(date).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
 
-  const date = parsedDate.toISOString().split("T")[0];
+  // Safely aggregate data
+  const aggregatedData = entries.reduce((acc, entry) => {
+    if (!entry.date) return acc;
 
-  acc[date] = acc[date]
-    ? { date, count: acc[date].count + 1 }
-    : { date, count: 1 };
+    const parsedDate = new Date(entry.date);
+    if (isNaN(parsedDate.getTime())) return acc;
 
-  return acc;
-}, {});
+    const date = parsedDate.toISOString().split("T")[0];
+
+    acc[date] = acc[date]
+      ? { date, count: acc[date].count + 1 }
+      : { date, count: 1 };
+    return acc;
+  }, {});
 
   const finalHeatmapData = Object.values(aggregatedData);
 
   return (
-      <div className="heatmap-container">
-         <CalendarHeatmap
+    <div className="heatmap-container">
+      <p className="heatmap-range">
+        Showing entries from <strong>{formatDate(startDate)}</strong> to{" "}
+        <strong>{formatDate(today)}</strong>
+      </p>
+
+      <CalendarHeatmap
         startDate={startDate}
         endDate={today}
         values={finalHeatmapData}
         classForValue={(value) => {
-          if (!value) return "color-empty";
+          if (!value || !value.count) return "color-empty";
           if (value.count >= 5) return "color-high";
           if (value.count >= 3) return "color-medium";
           return "color-low";
         }}
         tooltipDataAttrs={(value) => ({
-          "data-tip": `${value.date}: ${value.count} entr${value.count === 1 ? "y" : "ies"}`,
+          "data-tip": value?.date
+            ? `${value.date}: ${value.count || 0} entr${value.count === 1 ? "y" : "ies"}`
+            : "No entry",
         })}
         showWeekdayLabels
       />
-      </div>
+    </div>
   );
 };
 
-export default JournalHeatMap
+export default JournalHeatmap;
+
