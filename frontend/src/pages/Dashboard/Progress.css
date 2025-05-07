@@ -9,8 +9,17 @@
   text-align: center;
 }
 
+.progress-heading {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: #04442d;
+  font-family: "Georgia", serif;
+}
+
 .subtext {
   color: #066341;
   font-size: 1rem;
   margin-bottom: 1.5rem;
+  font-family: "Short Stack", sans-serif;
 }
+

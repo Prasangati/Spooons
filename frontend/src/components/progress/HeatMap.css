@@ -1,0 +1,37 @@
+/* Container styling */
+.heatmap-container {
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #f8fcfb;
+  border-radius: 12px;
+  box-shadow: 0 6px 14px rgba(6, 99, 65, 0.08);
+  font-family: "Short Stack", sans-serif;
+  max-width: 900px;
+  text-align: center;
+}
+
+/* Date range label */
+.heatmap-range {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  color: #04442d;
+  font-family: "Short Stack", sans-serif;
+}
+
+.color-empty {
+  fill: #e4ebe6 !important;
+}
+.color-low {
+  fill: #cce5da !important;
+}
+.color-medium {
+  fill: #88cdb4 !important;
+}
+.color-high {
+  fill: #3fa38c !important;
+}
+
+
+
+
+

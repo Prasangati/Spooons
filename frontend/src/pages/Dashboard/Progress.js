@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+// /pages/Dashboard/Progress.js
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import JournalHeatmap from "../../components/progress/HeatMap";
 import "./Progress.css";
-
 
 function Progress() {
   const [entries, setEntries] = useState([]);
@@ -16,7 +16,6 @@ function Progress() {
         });
 
         const data = response.data;
-
         if (Array.isArray(data)) {
           setEntries(data);
         } else if (data.entries && Array.isArray(data.entries)) {
@@ -26,7 +25,7 @@ function Progress() {
           setEntries([]);
         }
       } catch (error) {
-        console.error("Error fetching entries for progress:", error);
+        console.error("Failed to fetch entries for progress tracker:", error);
         setEntries([]);
       } finally {
         setLoading(false);
@@ -36,17 +35,10 @@ function Progress() {
     fetchEntries();
   }, []);
 
-
-
   return (
     <div className="progress-container">
-      <p className="progress-subtext">See your journaling patterns over time</p>
-
-      {loading ? (
-        <p>Loading heatmap...</p>
-      ) : (
-        <JournalHeatmap entries={entries} />
-      )}
+      <p className="subtext">See your journaling patterns over time</p>
+      {loading ? <p>Loading heatmap...</p> : <JournalHeatmap entries={entries} />}
     </div>
   );
 }
