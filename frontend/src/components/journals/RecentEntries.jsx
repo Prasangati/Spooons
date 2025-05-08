@@ -80,6 +80,7 @@ const RecentEntries = () => {
     setEditedText(entry.entry);
     setEditModalOpen(true);   
   };
+  const MAX_ENTRY_LENGTH = 500;     
 
   const handleSaveEdit = async () => {
     if (!entryBeingEdited) return;
@@ -290,12 +291,22 @@ const RecentEntries = () => {
     </div>
 
       )}
-
+      <div className="entry-box-wrapper">   
             <textarea
               className="journal-input"
               value={editedText}
-              onChange={(e) => setEditedText(e.target.value)}
+              onChange={(e) => { 
+                const value = e.target.value;
+                if (value.length <= MAX_ENTRY_LENGTH) {
+                  setEditedText(value);
+                }
+              }}
             />
+
+          <div className="char-counter-inside">
+              {MAX_ENTRY_LENGTH - editedText.length}
+            </div>
+          </div>
             <div className="modal-buttons">
               <button className="cancel-btn" onClick={() => setEditModalOpen(false)}>
                 Cancel
