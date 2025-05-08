@@ -46,6 +46,9 @@ const JournalHeatmap = ({ entries }) => {
             : "No entry",
         })}
         showWeekdayLabels
+        horizontal={true}
+        gutterSize={2}
+        weekdayLabels={["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
       />
 
          <div className="heatmap-legend">
