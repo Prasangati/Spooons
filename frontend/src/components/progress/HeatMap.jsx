@@ -35,20 +35,32 @@ const JournalHeatmap = ({ entries }) => {
 
   function getStreakStats(datesSet) {
   let today = new Date();
+
   let currentStreak = 0;
   let maxStreak = 0;
   let streak = 0;
+  let broken = false;
 
   for (let i = 0; i < 550; i++) {
-    const dayStr = today.toLocaleDateString("en-CA"); // "YYYY-MM-DD"
-    if (datesSet.has(dayStr)) {
+    const dateStr = today.toLocaleDateString("en-CA");
+
+    if (datesSet.has(dateStr)) {
       streak++;
-      if (i === 0) currentStreak = streak; // today included in streak
+
+      // If we haven't hit a break yet, update current streak
+      if (!broken) {
+        currentStreak++;
+      }
     } else {
-      if (streak > maxStreak) maxStreak = streak;
+      if (!broken) {
+        broken = true;
+      }
+
+      maxStreak = Math.max(maxStreak, streak);
       streak = 0;
     }
-    today.setDate(today.getDate() - 1); // go back a day
+
+    today.setDate(today.getDate() - 1);
   }
 
   maxStreak = Math.max(maxStreak, streak);
