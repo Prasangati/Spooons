@@ -10,8 +10,6 @@ const JournalHeatmap = ({ entries }) => {
   startDate.setFullYear(today.getFullYear() - 1);
   startDate.setDate(startDate.getDate() - 7);
 
-  console.log("Entries passed to heatmap:", entries);
-
   const aggregatedData = entries.reduce((acc, entry) => {
     if (!entry.created_at) return acc;
     const parsedDate = new Date(entry.created_at);
@@ -80,7 +78,6 @@ const { currentStreak, maxStreak } = getStreakStats(entryDates);
         endDate={today}
         values={finalHeatmapData}
         classForValue={(value) => {
-          console.log("Heatmap cell value:", value);
           if (!value || !value.count) return "color-empty";
           if (value.count >= 5) return "color-high";
           if (value.count >= 3) return "color-medium";
