@@ -47,7 +47,6 @@ const JournalHeatmap = ({ entries }) => {
     if (datesSet.has(dateStr)) {
       streak++;
 
-      // If we haven't hit a break yet, update current streak
       if (!broken) {
         currentStreak++;
       }

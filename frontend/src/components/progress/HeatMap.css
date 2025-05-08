@@ -19,16 +19,16 @@
 }
 
 .react-calendar-heatmap .color-low {
-  fill: #cce5da !important;
+  fill: #cce5da;
 }
 .react-calendar-heatmap .color-medium {
-  fill: #88cdb4 !important;
+  fill: #88cdb4;
 }
 .react-calendar-heatmap .color-high {
-  fill: #3fa38c !important;
+  fill: #3fa38c;
 }
 .react-calendar-heatmap .color-empty {
-  fill: #e4ebe6 !important;
+  fill: #f8fcfb;
 }
 
 
@@ -51,7 +51,7 @@
 }
 
 .legend-empty {
-  background-color: #e4ebe6;
+  background-color: #f8fcfb;
 }
 .legend-low {
   background-color: #cce5da;
