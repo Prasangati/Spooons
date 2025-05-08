@@ -13,7 +13,7 @@ const JournalHeatmap = ({ entries }) => {
   console.log("Entries passed to heatmap:", entries);
 
   const aggregatedData = entries.reduce((acc, entry) => {
-    if (!entry.date) return acc;
+    if (!entry.created_at) return acc;
     const parsedDate = new Date(entry.created_at);
     if (isNaN(parsedDate.getTime())) return acc;
 
@@ -26,7 +26,6 @@ const JournalHeatmap = ({ entries }) => {
   }, {});
 
   const finalHeatmapData = Object.values(aggregatedData);
-  console.log("Final heatmap data:", finalHeatmapData);
 
   return (
     <div className="heatmap-container">

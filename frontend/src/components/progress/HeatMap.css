@@ -18,18 +18,19 @@
   font-family: "Short Stack", sans-serif;
 }
 
-.color-empty {
-  fill: #e4ebe6 !important;
-}
-.color-low {
+.react-calendar-heatmap .color-low {
   fill: #cce5da !important;
 }
-.color-medium {
+.react-calendar-heatmap .color-medium {
   fill: #88cdb4 !important;
 }
-.color-high {
+.react-calendar-heatmap .color-high {
   fill: #3fa38c !important;
 }
+.react-calendar-heatmap .color-empty {
+  fill: #e4ebe6 !important;
+}
+
 
 .heatmap-legend {
   display: flex;
