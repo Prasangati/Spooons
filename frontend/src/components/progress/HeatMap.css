@@ -44,6 +44,7 @@
   font-size: 0.85rem;
   color: #04442d;
   font-family: "Short Stack", sans-serif;
+  margin-bottom: 1rem;
 }
 
 .legend-square {
@@ -116,9 +117,22 @@
 
 .modal-footer {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 16px;
+  padding-top: 16px;
+}
+
+@media (max-width: 600px) {
+  .modal-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .modal-footer button {
+    width: 100%;
+    font-size: 16px;
+  }
 }
 
 .modal-footer button {
@@ -140,6 +154,9 @@
   background: var(--green-dark);
   transform: translateY(-1px);
 }
+
+
+
 
 
 
