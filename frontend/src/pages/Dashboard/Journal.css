@@ -221,18 +221,19 @@
 .add-entry-btn {
     display: block;
     margin: 2rem auto;
+    color: #4f7c7d;
     padding: 0.8rem 1.5rem;
     font-size: 1rem;
-    background-color: #066341;
-    color: white;
-    border: none;
+    background-color: white;
+    border: 2px solid #4f7c7d;
     border-radius: 25px;
     cursor: pointer;
     font-weight: bold;
     transition: 0.3s ease;
   }
   .add-entry-btn:hover {
-    background-color: #04442d;
+    background-color: green;
+      color: white;
     transform: scale(1.05);
   }
   .new-entry-form {
