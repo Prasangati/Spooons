@@ -1,10 +1,15 @@
 // /components/progress/Heatmap.jsx
-import React from "react";
+import React, {useState} from "react";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
 import "./HeatMap.css"
 
 const JournalHeatmap = ({ entries }) => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [entriesForDate, setEntriesForDate] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [expandedIndex, setExpandedIndex] = useState(null);
+
   const today = new Date();
   const startDate = new Date();
   startDate.setFullYear(today.getFullYear() - 1);
@@ -70,6 +75,26 @@ const JournalHeatmap = ({ entries }) => {
 
 const { currentStreak, maxStreak } = getStreakStats(entryDates);
 
+// pull up a modal with archived entries when a cell is clicked
+
+ const handleDayClick = (value) => {
+    if(!value || value.count === 0) return;
+
+    const formatted = value.date;
+
+    const filtered = entries.filter(
+      (entry) =>
+        new Date(entry.created_at).toLocaleDateString("en-CA") === formatted
+    );
+
+    if (filtered.length > 0) {
+      setSelectedDate(formatted);
+      setEntriesForDate(filtered);
+      setModalOpen(true);
+      setExpandedIndex(null);
+    }
+ };
+
   return (
     <div className="heatmap-container">
 
@@ -103,6 +128,7 @@ const { currentStreak, maxStreak } = getStreakStats(entryDates);
         horizontal={true}
         gutterSize={2}
         weekdayLabels={["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
+        onClick={handleDayClick}
       />
 
          <div className="heatmap-legend">
@@ -114,6 +140,46 @@ const { currentStreak, maxStreak } = getStreakStats(entryDates);
           <span>More</span>
         </div>
 
+
+          {modalOpen && (
+        <div className="modal-backdrop">
+          <div className="heatmap-modal">
+            <h2>Entries for {selectedDate}</h2>
+
+            {entriesForDate.map((entry, index) => (
+              <div key={index} className="entry-preview">
+                <div
+                  className="accordion-header"
+                  onClick={() =>
+                    setExpandedIndex(index === expandedIndex ? null : index)
+                  }
+                >
+                  <h3>{entry.title}</h3>
+                  <span className="accordion-toggle">
+                    {index === expandedIndex ? "−" : "+"}
+                  </span>
+                </div>
+
+                {index === expandedIndex && (
+                  <div className="accordion-body">
+                    <p>{entry.entry.slice(0, 200)}...</p>
+                    {entry.tags?.length > 0 && (
+                      <p>
+                        <strong>🏷️ Tags:</strong> {entry.tags.join(", ")}
+                      </p>
+                    )}
+                  </div>
+                )}
+                <hr />
+              </div>
+            ))}
+
+            <div className="modal-footer">
+              <button onClick={() => setModalOpen(false)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
