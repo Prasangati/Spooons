@@ -31,6 +31,38 @@
   fill: #3fa38c !important;
 }
 
+.heatmap-legend {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #04442d;
+  font-family: "Short Stack", sans-serif;
+}
+
+.legend-square {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  border: 1px solid #c0c0c0;
+}
+
+.legend-empty {
+  background-color: #e4ebe6;
+}
+.legend-low {
+  background-color: #cce5da;
+}
+.legend-medium {
+  background-color: #88cdb4;
+}
+.legend-high {
+  background-color: #3fa38c;
+}
+
+
 
 
 

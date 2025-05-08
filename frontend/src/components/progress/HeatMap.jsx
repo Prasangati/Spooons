@@ -14,10 +14,10 @@ const JournalHeatmap = ({ entries }) => {
 
   const aggregatedData = entries.reduce((acc, entry) => {
     if (!entry.date) return acc;
-    const parsedDate = new Date(entry.date);
+    const parsedDate = new Date(entry.created_at);
     if (isNaN(parsedDate.getTime())) return acc;
 
-    const date = parsedDate.toISOString().split("T")[0];
+    const date = parsedDate.toLocaleDateString("en-CA");
     acc[date] = acc[date]
       ? { date, count: acc[date].count + 1 }
       : { date, count: 1 };
@@ -48,6 +48,16 @@ const JournalHeatmap = ({ entries }) => {
         })}
         showWeekdayLabels
       />
+
+         <div className="heatmap-legend">
+          <span>Less</span>
+          <div className="legend-square legend-empty" />
+          <div className="legend-square legend-low" />
+          <div className="legend-square legend-medium" />
+          <div className="legend-square legend-high" />
+          <span>More</span>
+        </div>
+
     </div>
   );
 };
