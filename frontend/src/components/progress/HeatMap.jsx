@@ -1,4 +1,4 @@
-// /components/progress/JournalHeatmap.jsx
+// /components/progress/Heatmap.jsx
 import React from "react";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
