@@ -64,11 +64,20 @@
 }
 
 .entry-count {
-  font-family: "Short Stack", sans-serif;
+  font-family: "Georgia", serif;
   font-size: 1rem;
   color: #066341;
   margin-bottom: 1rem;
 }
+
+.streak-text {
+  margin-top: 1rem;
+  font-family: "Georgia", serif;
+  font-size: 1rem;
+  color: #04442d;
+  margin-bottom: 1rem;
+}
+
 
 
 
