@@ -29,6 +29,11 @@ const JournalHeatmap = ({ entries }) => {
 
   return (
     <div className="heatmap-container">
+
+        <p className="entry-count">
+        You’ve written <strong>{entries.length}</strong> journal entr{entries.length === 1 ? "y" : "ies"}!
+        </p>
+
       <CalendarHeatmap
         startDate={startDate}
         endDate={today}
