@@ -155,6 +155,10 @@
   transform: translateY(-1px);
 }
 
+.react-calendar-heatmap rect:hover {
+  transform: scale(1.05);
+  transition: transform 0.15s ease-in-out;
+} /* very tiny cells helps to distinguish which are being clicked */
 
 
 
