@@ -39,6 +39,7 @@
   border: none;
   border-bottom: 1px solid var(--teal-line);
   border-radius: 8px 8px 0 0;
+  outline: none;
 }
 
 .title-input:focus {
@@ -74,7 +75,7 @@
   box-shadow: 0 1px 6px rgba(0,0,0,.08);
   padding: 32px;                    
   margin: 32px auto;                
-  max-width: 700px;                  
+  max-width: 900px;                  
 }
 .new-entry .title-input {
   background: transparent;          
