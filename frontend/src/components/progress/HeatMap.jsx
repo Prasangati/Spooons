@@ -39,15 +39,20 @@ const JournalHeatmap = ({ entries }) => {
    );
 
   function getStreakStats(datesSet) {
-  let today = new Date();
+      const format = (d) => d.toLocaleDateString("en-CA");
+  const today = new Date();
+  const todayStr = format(today);
 
   let currentStreak = 0;
   let maxStreak = 0;
   let streak = 0;
   let broken = false;
 
+  // Start counting from yesterday if today hasn't been journaled yet
+  let date = datesSet.has(todayStr) ? new Date(today) : new Date(today.setDate(today.getDate() - 1));
+
   for (let i = 0; i < 550; i++) {
-    const dateStr = today.toLocaleDateString("en-CA");
+    const dateStr = format(date);
 
     if (datesSet.has(dateStr)) {
       streak++;
@@ -64,12 +69,12 @@ const JournalHeatmap = ({ entries }) => {
       streak = 0;
     }
 
-    today.setDate(today.getDate() - 1);
+    date.setDate(date.getDate() - 1);
   }
 
   maxStreak = Math.max(maxStreak, streak);
 
-  return { currentStreak, maxStreak };
+    return { currentStreak, maxStreak };
 }
 
 
