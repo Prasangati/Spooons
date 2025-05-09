@@ -39,7 +39,6 @@
   border: none;
   border-bottom: 1px solid var(--teal-line);
   border-radius: 8px 8px 0 0;
-  outline: none;
 }
 
 .title-input:focus {
@@ -63,11 +62,35 @@
   resize: vertical;
   outline: none;
   box-sizing: border-box;
-  position: relative;
 }
 
 .journal-input:focus {
   background: #fcfefd;
+}
+.new-entry {
+  background: #fefefc;              
+  border: 1px solid #c1e1d8;        
+  border-radius: 12px;
+  box-shadow: 0 1px 6px rgba(0,0,0,.08);
+  padding: 32px;                    
+  margin: 32px auto;                
+  max-width: 700px;                  
+}
+.new-entry .title-input {
+  background: transparent;          
+  padding: 0 16px 12px;              
+  border: none;
+  border-bottom: 1px solid var(--teal-line);
+  border-radius: 0;                  
+}
+.new-entry .journal-input {
+  background-color: transparent;     
+  background-image: repeating-linear-gradient(
+      to bottom,
+      #fefefc 0px,
+      #fefefc 31px,
+      #eaf4f2 32px);                
+  border-radius: 0;                  
 }
 
 .entry-box-wrapper {
