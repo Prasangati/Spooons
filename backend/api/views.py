@@ -1,86 +1,92 @@
 import json
-import traceback  # Add at top of file
+from django.http import JsonResponse
 from django.contrib.auth import get_user_model, login, logout, authenticate
-from django.http import JsonResponse, HttpResponseNotAllowed
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
 from django.conf import settings
+from rest_framework.permissions import IsAuthenticated
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
 from datetime import datetime, timezone  # Correct import for UTC handling
 from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from .serializers import LoginSerializer,PasswordResetSerializer
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_decode
+from django.middleware.csrf import get_token
+from django.views.decorators.csrf import ensure_csrf_cookie
+import logging
+
+logger = logging.getLogger(__name__)
 
 
-@csrf_exempt
+
+
+@ensure_csrf_cookie
+def csrf_view(request):
+    return JsonResponse({'csrfToken': get_token(request)})
+
+@require_POST
 def google_signup(request):
-    if request.method != "POST":
-        return JsonResponse({"error": "Method not allowed"}, status=405)
-
     try:
-        # Debug raw request body (consider using proper logging)
-        raw_body = request.body
-        print(f"Raw request body: {raw_body}")
-
-        # Parse JSON with error handling
-        data = json.loads(raw_body.decode('utf-8'))
-
-        # Extract token and ensure it is present
+        data = json.loads(request.body.decode("utf-8"))
         token = data.get("token")
+
         if not token:
             return JsonResponse({"error": "Token not provided"}, status=400)
 
-        # Verify token
         try:
             id_info = id_token.verify_oauth2_token(
                 token,
                 google_requests.Request(),
                 settings.GOOGLE_OAUTH_CLIENT_ID
             )
-        except ValueError as e:
-            print(f"Token Verification Error: {str(e)}")
+        except ValueError:
             return JsonResponse({"error": "Invalid token"}, status=400)
 
-        # Check token expiration
-        expiry_timestamp = id_info.get("exp")
-        if expiry_timestamp and datetime.now(timezone.utc).timestamp() > expiry_timestamp:
+        if datetime.now(timezone.utc).timestamp() > id_info.get("exp", 0):
             return JsonResponse({"error": "Expired token"}, status=401)
 
-        # Extract email
-        email = id_info.get('email')
+        email = id_info.get("email")
         if not email:
             return JsonResponse({"error": "Email not found in token"}, status=400)
 
         User = get_user_model()
-        # Create/update user
         user, created = User.objects.get_or_create(
             email=email,
             defaults={
-                "first_name": id_info.get('given_name', ''),
-                "last_name": id_info.get('family_name', ''),
+                "first_name": id_info.get("given_name", ""),
+                "last_name": id_info.get("family_name", "")
             }
         )
-        # Assign backend for session-based login
-        user.backend = 'django.contrib.auth.backends.ModelBackend'
-        login(request, user)
+
+        #  Don't allow disabled accounts to sign in
+        if not user.is_active:
+            return JsonResponse({"error": "Account is disabled"}, status=401)
+
+        #  Generate JWT tokens
+        refresh = RefreshToken.for_user(user)
 
         return JsonResponse({
             "status": "success",
-            "user": {"email": email}
+            "user": {
+                "email": user.email,
+                "first_name": user.first_name,
+                "last_name": user.last_name
+            },
+            "tokens": {
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+            }
         })
 
     except Exception as e:
-        traceback.print_exc()  # Consider using proper logging in production
+        logger.exception("Unexpected error during Google signup")
         return JsonResponse({"error": "Internal server error"}, status=500)
 
-
-@csrf_exempt
+@require_POST
 def signup(request):
-    if request.method != "POST":
-        return HttpResponseNotAllowed(["POST"])
-
     try:
         data = json.loads(request.body.decode("utf-8"))
     except json.JSONDecodeError:
@@ -107,62 +113,58 @@ def signup(request):
         pass
 
     try:
-        # Create the new user
-        User.objects.create_user(
+        # Create the user
+        user = User.objects.create_user(
             email=email,
             first_name=first_name,
             last_name=last_name,
             password=password
         )
-        # Authenticate the user using the credentials
-        user = authenticate(request, email=email, password=password)
-        if user is not None:
-            login(request, user)  # login now sets the backend automatically
-        else:
-            return JsonResponse({"error": "Authentication failed."}, status=400)
+
+        # Generate JWT tokens
+        refresh = RefreshToken.for_user(user)
+        print(str(refresh))
+        print(str(refresh.access_token))
+
+        return JsonResponse({
+            "status": "success",
+            "user": {
+                "email": user.email,
+                "first_name": user.first_name,
+                "last_name": user.last_name
+            },
+            "tokens": {
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+            }
+        })
     except Exception as e:
         return JsonResponse({"error": f"Error creating user: {e}"}, status=500)
 
-    return JsonResponse({
-        "status": "success",
-        "user": {
-            "email": user.email,
-            "first_name": user.first_name,
-            "last_name": user.last_name
-        }
-    })
-
-@require_GET
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])  # Makes sure user has valid JWT
 def authcontext(request):
-    if request.user.is_authenticated:
-        # Prepare a user info object with the data you want to expose.
-        user_info = {
+    return Response({
+        'user': {
             'email': request.user.email,
             'first_name': request.user.first_name,
             'last_name': request.user.last_name,
-            # You can include other fields as needed.
-            # 'profile_picture': request.user.profile_picture,
         }
-        return JsonResponse({
-            'isAuthenticated': True,
-            'user': user_info
-        })
-    else:
-        return JsonResponse({
-            'isAuthenticated': False,
-            'user': None
-        })
+    })
 
-
-@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def logout_view(request):
-    logout(request)
-    print("Logged out user")
-    return JsonResponse({"message": "Successfully logged out."})
+    try:
+        refresh_token = request.data.get("refresh")
+        token = RefreshToken(refresh_token)
+        token.blacklist()
+        return Response({"message": "Successfully logged out."}, status=status.HTTP_200_OK)
+    except TokenError:
+        return Response({"error": "Invalid or expired token."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
-@csrf_exempt
 def login_view(request):
     serializer = LoginSerializer(data=request.data)
 
@@ -177,7 +179,6 @@ def login_view(request):
     User = get_user_model()
 
     try:
-        # First check if account exists
         user = User.objects.get(email=email)
     except User.DoesNotExist:
         return Response(
@@ -185,7 +186,6 @@ def login_view(request):
             status=status.HTTP_401_UNAUTHORIZED
         )
 
-    # Now check password
     auth_user = authenticate(request, email=email, password=password)
     if not auth_user:
         return Response(
@@ -193,24 +193,28 @@ def login_view(request):
             status=status.HTTP_401_UNAUTHORIZED
         )
 
-    # Check if account is active
     if not auth_user.is_active:
         return Response(
             {"error": "Account is disabled"},
             status=status.HTTP_401_UNAUTHORIZED
         )
 
-    login(request, auth_user)
+    refresh = RefreshToken.for_user(auth_user)
+    access = refresh.access_token
 
     return Response({
         "status": "success",
         "user": {
             "email": auth_user.email,
             "first_name": auth_user.first_name,
-            "last_name": auth_user.last_name
-            # "profile_picture": auth_user.profile_picture,
+            "last_name": auth_user.last_name,
+        },
+        "tokens": {
+            "refresh": str(refresh),
+            "access": str(access),
         }
     })
+
 
 
 @api_view(['POST'])
@@ -226,51 +230,44 @@ def password_reset_request(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-from django.contrib.auth import get_user_model  
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_decode
-from django.http import JsonResponse
-import json
-import traceback
-from django.views.decorators.csrf import csrf_exempt  
 
-User = get_user_model()  
 
-@csrf_exempt  
+User = get_user_model()
+
+@require_POST
 def reset_password_confirm(request):
-    if request.method == "POST":
+    try:
+        data = json.loads(request.body)
+        uid = data.get("uid")
+        token = data.get("token")
+        new_password = data.get("new_password")
+
+        logger.debug(f"Reset request data: uid={uid}, token={token}, new_password={'***' if new_password else 'None'}")
+
+        if not uid or not token or not new_password:
+            logger.warning("Missing fields in password reset request")
+            return JsonResponse({"message": "Missing data."}, status=400)
+
         try:
-            data = json.loads(request.body)
-            uid = data.get("uid")
-            token = data.get("token")
-            new_password = data.get("new_password")
+            user_id = urlsafe_base64_decode(uid).decode()
+            user = User.objects.get(pk=user_id)
+            logger.info(f"Password reset requested for user: {user.email}")
+        except (User.DoesNotExist, ValueError, TypeError) as e:
+            logger.warning(f"Invalid UID or user does not exist: {e}")
+            return JsonResponse({"message": "Invalid user."}, status=400)
 
-            print(f"✅ Received: UID={uid}, Token={token}, New Password={new_password}")  
+        if not default_token_generator.check_token(user, token):
+            logger.warning(f"Invalid or expired token for user: {user.email}")
+            return JsonResponse({"message": "Invalid or expired token."}, status=400)
 
-            if not uid or not token or not new_password:
-                print("❌ Missing data in request")
-                return JsonResponse({"message": "Missing data."}, status=400)
+        user.set_password(new_password)
+        user.save()
+        logger.info(f"Password reset successful for user: {user.email}")
 
-            try:
-                user_id = urlsafe_base64_decode(uid).decode()
-                user = User.objects.get(pk=user_id)  
-                print(f"✅ Found user: {user.email}")
-            except (User.DoesNotExist, ValueError, TypeError) as e:
-                print(f"❌ User lookup error: {e}")
-                return JsonResponse({"message": "Invalid user."}, status=400)
+        return JsonResponse({"message": "Password reset successful."})
 
-            if not default_token_generator.check_token(user, token):
-                print("❌ Invalid or expired token")
-                return JsonResponse({"message": "Invalid or expired token."}, status=400)
+    except Exception as e:
+        logger.exception("Unexpected error during password reset confirmation")
+        return JsonResponse({"message": "An error occurred."}, status=500)
 
-            # Update the password
-            user.set_password(new_password)
-            user.save()
-            print("✅ Password reset successful")
 
-            return JsonResponse({"message": "Password reset successful."})
-
-        except Exception as e:
-            print(f"❌ Server error: {e}")  
-            traceback.print_exc()  
-            return JsonResponse({"message": "An error occurred."}, status=500)

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Journal.css";
-import axios from "axios";
-import {getCookie} from "../../utils/utils";
 import RecentEntries from "../../components/journals/RecentEntries";
+import api from "../../utils/axiosConfig";
 
 function JournalEntries() {
   const [loading, setLoading] = useState(false);
@@ -17,7 +16,6 @@ function JournalEntries() {
 
 
   const [showNewEntryForm, setShowNewEntryForm] = useState(false); //  past entries
-  const csrfToken = getCookie('csrftoken');
 
   const quotes = [
       "Be not afraid of growing slowly, be afraid only of standing still. — Chinese Proverb",
@@ -102,26 +100,25 @@ function JournalEntries() {
   setLoading(true); // show Loading component
 
   try {
-    console.log("CSRF token:", getCookie('csrftoken'));
-    const response = await axios.post(
-      'http://localhost:8000/journal/entries/',
-      {
-        title: title,
-        entry: newEntry,
-        tags,
-      },
-      {
-        withCredentials: true,
-       headers: {'X-CSRFToken': csrfToken,}
-      }
-    );
-    const createdEntry = response.data;
-    setEntries([createdEntry, ...entries]);
-    resetForm();
+  console.log("Sending journal entry...");
+  const response = await api.post("/journal/entries/", {
+    title,
+    entry: newEntry,
+     tags,
+  });
+
+  const createdEntry = response.data;
+
+  setEntries([createdEntry, ...entries]);
+  resetForm();
+  alert("Entry successfully submitted!");
   } catch (error) {
     console.error("Error sending entry:", error);
     alert("Something went wrong. Please try again.");
-  } finally { setLoading(false); }
+  } finally {
+    setLoading(false);
+  }
+
   };
 
 

@@ -1,8 +1,15 @@
 // components/RecentEntries.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Loading from "../../pages/Loading/Loading";
+import BASE_URL from "../../utils/config";
+
 import {getCookie} from "../../utils/utils";
-import Loading from "../../pages/Loading";
+// import Loading from "../../pages/Loading";
+
+
+
+
 
 const RecentEntries = () => {
   const [entries, setEntries] = useState([]);
@@ -39,13 +46,20 @@ const RecentEntries = () => {
   useEffect(() => {
     const fetchRecentEntries = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/journal/entries/recent/', {
-          withCredentials: true,
+        const token = localStorage.getItem("access");
+
+        const response = await axios.get(`${BASE_URL}/journal/entries/recent/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
         });
+
         setEntries(response.data);
       } catch (error) {
-        console.error('Failed to fetch recent entries:', error);
-      } finally {
+        console.error("Failed to fetch recent entries:", error);
+      }
+       finally {
         setLoading(false);
       }
     };

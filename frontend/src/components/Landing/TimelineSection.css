@@ -1,0 +1,110 @@
+.timeline-section {
+  background-color: #bee7e9;
+  min-height: 100vh;
+  padding: 80px 40px;
+  box-sizing: border-box;
+  text-align: center;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.timeline-scroll-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  padding-bottom: 20px;   /* Optional: makes scroll easier */
+}
+
+.timeline-title {
+  font-size: 48px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 60px;
+  position: sticky;
+  top: 20px;
+  background-color: #bee7e9;
+  z-index: 10;
+}
+
+.timeline-horizontal {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 60px;
+  padding: 80px 0 40px 0;
+  scroll-snap-type: x mandatory;
+
+  width: max-content;
+}
+
+.timeline-line-horizontal {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  height: 4px;
+  background-color: #4f7c7d;
+  z-index: 0;
+  min-width: 100%;
+
+  width: 100%;
+}
+
+.timeline-item-horizontal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 200px;
+  z-index: 1;
+  scroll-snap-align: center;
+}
+
+.circle-horizontal {
+  width: 16px;
+  height: 16px;
+  background-color: #0077b6;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  z-index: 2;
+}
+
+.timeline-card-horizontal {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-card-horizontal h3 {
+  font-size: 18px;
+  color: #0077b6;
+  margin-bottom: 8px;
+}
+
+.timeline-card-horizontal p {
+  font-size: 16px;
+  color: #333;
+}
+
+/* 📱 Mobile responsiveness */
+@media (max-width: 768px) {
+  .timeline-horizontal {
+    padding-left: 20px;
+    padding-right: 20px;
+    gap: 40px;
+    min-width: unset;
+  }
+
+  .timeline-item-horizontal {
+    width: 160px;
+  }
+
+  .timeline-card-horizontal {
+    padding: 16px;
+  }
+
+  .timeline-title {
+    font-size: 28px;
+  }
+}

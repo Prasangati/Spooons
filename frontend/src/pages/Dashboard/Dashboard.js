@@ -2,6 +2,8 @@ import React, { useState, useEffect} from "react";
 import "./Dashboard.css";
 import LogOut from "../../components/Auth/LogOut"; //logout Button
 import Journal from "./Journal"; // journal component
+import Resources from "./Resources";
+import {Link} from "react-router-dom"; // resources component
 
 function Dashboard() {
    const [activeTab, setActiveTab] = useState("Journal");
@@ -27,46 +29,78 @@ function Dashboard() {
       <div className="dashboard">
          {/* navbar */}
          <nav className="navbar">
-  <div className="navbar-left">
+             <div className="navbar-left">
 
-  <button className="sidebarIcon mobile" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-          ☰
-   </button>
+                 <button className="sidebarIcon mobile" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+                     ☰
+                 </button>
 
-    <img src="/logo.png" alt="spooons Logo" className="sp-logo" />
-    <ul className="nav-links desktop">
-    <li className={activeTab === "Journal" ? "active" : ""} onClick={() => setActiveTab("Journal")}>Journal</li>
-      <li className={activeTab === "Progress" ? "active" : ""} onClick={() => setActiveTab("Progress")}>Progress</li>
-      <li className={activeTab === "Resources" ? "active" : ""} onClick={() => setActiveTab("Resources")}>Resources</li>
-    </ul>
-  </div>
+                 <Link to="/" className="logo">
+                     <img src="/logo.png" alt="Logo"/>
+                 </Link>
+                 <div className="tab-switcher desktop">
+                     <button
+                         className={activeTab === "Journal" ? "tab-button active" : "tab-button"}
+                         onClick={() => setActiveTab("Journal")}
+                     >
+                         Journal
+                     </button>
+                     <button
+                         className={activeTab === "Stressors" ? "tab-button active" : "tab-button"}
+                         onClick={() => setActiveTab("Stressors")}
+                     >
+                         Stressors
+                     </button>
+                     <button
+                         className={activeTab === "Progress" ? "tab-button active" : "tab-button"}
+                         onClick={() => setActiveTab("Progress")}
+                     >
+                         Progress
+                     </button>
+                     <button
+                         className={activeTab === "Resources" ? "tab-button active" : "tab-button"}
+                         onClick={() => setActiveTab("Resources")}
+                     >
+                         Resources
+                     </button>
+                 </div>
+             </div>
 
 
-        <div className="logout-container desktop">
-          <LogOut />
-        </div>
-      </nav>
-      {isSidebarOpen && (
-        <div className="mobile-sidebar">
-          <ul className="nav-links">
-            <li className={activeTab === "Journal" ? "active" : ""} onClick={() => handleTabClick("Journal")}>Journal</li>
-            <li className={activeTab === "Progress" ? "active" : ""} onClick={() => handleTabClick("Progress")}>Progress</li>
-            <li className={activeTab === "Resources" ? "active" : ""} onClick={() => handleTabClick("Resources")}>Resources</li>
-          </ul>
-          <div className="logout-container">
-            <LogOut />
-          </div>
+             <div className="logout-container desktop">
+                 <LogOut/>
+             </div>
+         </nav>
+          {isSidebarOpen && (
+              <div className="mobile-sidebar">
+                  <ul className="nav-links">
+                      <li className={activeTab === "Journal" ? "active" : ""}
+                          onClick={() => handleTabClick("Journal")}>Journal
+                      </li>
+                      <li className={activeTab === "Stressors" ? "active" : ""}
+                          onClick={() => handleTabClick("Stressors")}>Stressors
+                      </li>
+                      <li className={activeTab === "Progress" ? "active" : ""}
+                          onClick={() => handleTabClick("Progress")}>Progress
+                </li>
+                <li className={activeTab === "Resources" ? "active" : ""}
+                    onClick={() => handleTabClick("Resources")}>Resources
+                </li>
+            </ul>
+            <div className="logout-container">
+                <LogOut/>
+            </div>
         </div>
       )}
 
 
-
-         {/* Main Content */}
+          {/* Main Content */}
          <main className="main-content">
             <section className="dashboard-content">
                {activeTab === "Journal" && <Journal />}
+                {activeTab === "Stressors" && <p>Stressors: To be updated</p>}
                {activeTab === "Progress" && <p>Track your progress here</p>}
-               {activeTab === "Resources" && <p>Personalized mental health resources</p>}
+               {activeTab === "Resources" && <Resources />}
             </section>
          </main>
       </div>

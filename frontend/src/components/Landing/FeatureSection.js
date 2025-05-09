@@ -23,7 +23,7 @@ function FeatureSection() {
                     </h2>
                 </div>
 
-                {/* Add your feature items here */}
+
             </motion.div>
 
             <div className="features-grid">

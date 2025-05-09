@@ -386,9 +386,9 @@
   white-space: pre-wrap;
   word-break: break-word;
 }
-
 .entry-card.expanded .entry-text {
   display: block;
+
 }
 
 .entry-icons {
