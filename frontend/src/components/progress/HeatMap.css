@@ -160,6 +160,16 @@
   transition: transform 0.15s ease-in-out;
 } /* very tiny cells helps to distinguish which are being clicked */
 
+.streak-reminder {
+  background-color: #fefcf3;
+  border: 2px dashed var(--green);
+  padding: 12px 16px;
+  margin: 16px 0;
+  border-radius: 12px;
+  color: var(--green-dark);
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(6, 99, 65, 0.06);
+}
 
 
 

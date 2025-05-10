@@ -40,45 +40,47 @@ const JournalHeatmap = ({ entries }) => {
 
   function getStreakStats(datesSet) {
       const format = (d) => d.toLocaleDateString("en-CA");
-  const today = new Date();
-  const todayStr = format(today);
+      const today = new Date();
+      const todayStr = format(today);
+      const hasTodayEntry = datesSet.has(todayStr);
 
-  let currentStreak = 0;
-  let maxStreak = 0;
-  let streak = 0;
-  let broken = false;
+      let currentStreak = 0;
+      let maxStreak = 0;
+      let streak = 0;
+      let broken = false;
 
-  // Start counting from yesterday if today hasn't been journaled yet
-  let date = datesSet.has(todayStr) ? new Date(today) : new Date(today.setDate(today.getDate() - 1));
+      let date = hasTodayEntry ? new Date(today) : new Date(today.setDate(today.getDate() - 1));
 
-  for (let i = 0; i < 550; i++) {
-    const dateStr = format(date);
+      for (let i = 0; i < 550; i++) {
+        const dateStr = format(date);
 
-    if (datesSet.has(dateStr)) {
-      streak++;
+        if (datesSet.has(dateStr)) {
+          streak++;
 
-      if (!broken) {
-        currentStreak++;
+          if (!broken) {
+            currentStreak++;
+          }
+        } else {
+          if (!broken) {
+            broken = true;
+          }
+
+          maxStreak = Math.max(maxStreak, streak);
+          streak = 0;
+        }
+
+        date.setDate(date.getDate() - 1);
       }
-    } else {
-      if (!broken) {
-        broken = true;
-      }
 
-      maxStreak = Math.max(maxStreak, streak);
-      streak = 0;
-    }
+    maxStreak = Math.max(maxStreak, streak);
 
-    date.setDate(date.getDate() - 1);
-  }
-
-  maxStreak = Math.max(maxStreak, streak);
-
-    return { currentStreak, maxStreak };
+    return { currentStreak, maxStreak, hasTodayEntry };
 }
 
 
-const { currentStreak, maxStreak } = getStreakStats(entryDates);
+const { currentStreak, maxStreak, hasTodayEntry } = getStreakStats(entryDates);
+const showStreakReminder = !hasTodayEntry && currentStreak > 0;
+
 
 // pull up a modal with archived entries when a cell is clicked
 
@@ -113,6 +115,11 @@ const { currentStreak, maxStreak } = getStreakStats(entryDates);
           🏆 Longest Streak: <strong>{maxStreak}</strong> day{maxStreak !== 1 ? "s" : ""}
         </p>
 
+     {showStreakReminder && (
+        <div className="streak-reminder">
+          🔔 Don't lose your streak!{" "}
+        </div>
+      )}
 
       <CalendarHeatmap
         startDate={startDate}
