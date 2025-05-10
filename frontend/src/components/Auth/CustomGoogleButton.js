@@ -1,6 +1,7 @@
 import { useGoogleLogin } from '@react-oauth/google';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import BASE_URL from '../../utils/config';
+import api from "../../utils/axiosConfig";
 
 const CustomGoogleButton = () => {
   const navigate = useNavigate();
@@ -8,17 +9,28 @@ const CustomGoogleButton = () => {
   // In your React component
 const handleGoogleSuccess = async (tokenResponse) => {
   try {
-    const res = await axios.post(
-      "http://localhost:8000/api/auth/google-signup/",
+    const res = await api.post(
+        `${BASE_URL}/api/auth/google-signup/`,
       {
         id_token: tokenResponse.id_token  // Send ID token instead of access_token
       },
       {
         withCredentials: true,
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json" },
       }
     );
-    navigate("/signup-success");
+
+    const { tokens, user } = res.data || {};
+    const { access, refresh } = tokens || {};
+
+    if (access && refresh) {
+      localStorage.setItem("access", access);
+      localStorage.setItem("refresh", refresh);
+      localStorage.setItem("user", JSON.stringify(user));
+    }
+
+    navigate("/", { replace: true });
   } catch (error) {
     console.error("Signup failed:", error.response?.data || error);
   }

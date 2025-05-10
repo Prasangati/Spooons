@@ -16,7 +16,7 @@ function Navbar() {
     useEffect(() => {
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
-    }, [handleScroll]); // ✅ Only re-runs when `handleScroll` changes
+    }, [handleScroll]); //  Only re-runs when `handleScroll` changes
 
     return (
         <nav className={`navbar ${isScrolled ? "scrolled" : ""}`}>

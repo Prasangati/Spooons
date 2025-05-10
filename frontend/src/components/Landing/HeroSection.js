@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import "./HeroSection.css";
+import { Link } from "react-router-dom";
 
 function HeroSection() {
     return (
@@ -31,13 +32,15 @@ function HeroSection() {
                     </p>
 
                     {/* CTA Button */}
-                    <motion.button
-                        className="cta-button"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        Get Started
-                    </motion.button>
+                    <Link to="/signup" style={{ textDecoration: 'none' }}>
+                        <motion.button
+                            className="cta-button"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            Get Started
+                        </motion.button>
+                    </Link>
                 </motion.div>
             </div>
         </section>

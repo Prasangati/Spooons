@@ -1,8 +1,15 @@
 // components/RecentEntries.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Loading from "../../pages/Loading/Loading";
+import BASE_URL from "../../utils/config";
+
 import {getCookie} from "../../utils/utils";
-import Loading from "../../pages/Loading";
+// import Loading from "../../pages/Loading";
+
+
+
+
 
 const RecentEntries = () => {
   const [entries, setEntries] = useState([]);
@@ -39,13 +46,20 @@ const RecentEntries = () => {
   useEffect(() => {
     const fetchRecentEntries = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/journal/entries/recent/', {
-          withCredentials: true,
+        const token = localStorage.getItem("access");
+
+        const response = await axios.get(`${BASE_URL}/journal/entries/recent/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
         });
+
         setEntries(response.data);
       } catch (error) {
-        console.error('Failed to fetch recent entries:', error);
-      } finally {
+        console.error("Failed to fetch recent entries:", error);
+      }
+       finally {
         setLoading(false);
       }
     };
@@ -80,6 +94,7 @@ const RecentEntries = () => {
     setEditedText(entry.entry);
     setEditModalOpen(true);   
   };
+  const MAX_ENTRY_LENGTH = 500;     
 
   const handleSaveEdit = async () => {
     if (!entryBeingEdited) return;
@@ -290,12 +305,22 @@ const RecentEntries = () => {
     </div>
 
       )}
-
+      <div className="entry-box-wrapper">   
             <textarea
               className="journal-input"
               value={editedText}
-              onChange={(e) => setEditedText(e.target.value)}
+              onChange={(e) => { 
+                const value = e.target.value;
+                if (value.length <= MAX_ENTRY_LENGTH) {
+                  setEditedText(value);
+                }
+              }}
             />
+
+          <div className="char-counter-inside">
+              {MAX_ENTRY_LENGTH - editedText.length}
+            </div>
+          </div>
             <div className="modal-buttons">
               <button className="cancel-btn" onClick={() => setEditModalOpen(false)}>
                 Cancel

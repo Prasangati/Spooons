@@ -1,32 +1,31 @@
-import axios from 'axios';
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import BASE_URL from '../../utils/config';
+import api from "../../utils/axiosConfig";
 
 const LogOut = () => {
   const navigate = useNavigate();
-  //const location = useLocation();
+
 
   const handleLogout = async () => {
-    try {
-      // Call the logout endpoint on your backend.
-      await axios.post(
-        "http://localhost:8000/api/auth/logout/",
-        {},
-        { withCredentials: true }
-      );
-      // After a successful logout, redirect to login for now
-      navigate("/login");
+      try {
+        const refresh = localStorage.getItem("refresh");
 
-      //if (location.pathname === "/") {
-        // If already at home, force a reload so that context updates.
+        await api.post(
+          `${BASE_URL}/api/auth/logout/`,
+          { refresh }, // send refresh token to blacklist
+          { headers: { "Content-Type": "application/json" } }
+        );
+      } catch (err) {
+        console.warn("Server logout failed or already logged out");
+      } finally {
+        // Always clear frontend tokens
+        localStorage.removeItem("access");
+        localStorage.removeItem("refresh");
+        localStorage.removeItem("user");
+        navigate("/login");
         window.location.reload();
-     // } else {
-        // Otherwise, navigate to home.
-       // navigate("/");
-     // }
-   } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  };
+  }
+    };
 
   return (
     <button onClick={handleLogout} className="custom-google-btn">
