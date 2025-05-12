@@ -4,6 +4,8 @@ import LogOut from "../../components/Auth/LogOut"; //logout Button
 import Journal from "./Journal"; // journal component
 import Resources from "./Resources";
 import {Link} from "react-router-dom"; // resources component
+import Stressors from "./Stressors";
+import FloatingIcon from "../../components/Stressors/FloatingIcon";
 
 function Dashboard() {
    const [activeTab, setActiveTab] = useState("Journal");
@@ -98,11 +100,13 @@ function Dashboard() {
          <main className="main-content">
             <section className="dashboard-content">
                {activeTab === "Journal" && <Journal />}
-                {activeTab === "Stressors" && <p>Stressors: To be updated</p>}
+                {activeTab === "Stressors" && <Stressors />}
                {activeTab === "Progress" && <p>Track your progress here</p>}
                {activeTab === "Resources" && <Resources />}
             </section>
          </main>
+
+          <FloatingIcon />
       </div>
    );
 }
