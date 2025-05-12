@@ -2,13 +2,11 @@ import React from 'react';
 import { Lightbulb } from 'lucide-react';
 import './FloatingIcon.css';
 
-const FloatingIcon = () => {
-  const hasNew = false; // force pulse on for testing
-
+const FloatingIcon = ({ hasNew = false, onClick }) => {
   return (
     <button
       className={`floating-icon ${hasNew ? 'pulse' : ''}`}
-      onClick={() => alert("Clicked!")}
+      onClick={onClick}
       title="View suggested stressors"
     >
       <Lightbulb color="#ffffff" size={60} />

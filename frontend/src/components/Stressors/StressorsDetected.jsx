@@ -15,8 +15,8 @@ const StressorsDetected = ({ visible, onClose }) => {
     <div className="modal-backdrop" onClick={handleBackdropClick}>
       <div className="modal-box">
         <button className="modal-close" onClick={onClose}>✖</button>
-        <h2>Stressors detected from recent journal entries</h2>
-        <p>No stressors detected.</p>
+        <h2>Detected Stressors</h2>
+        <p>No stressors detected from your recent journal entries.</p>
       </div>
     </div>
   );

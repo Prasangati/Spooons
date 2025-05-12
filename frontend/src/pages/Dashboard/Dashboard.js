@@ -6,10 +6,14 @@ import Resources from "./Resources";
 import {Link} from "react-router-dom"; // resources component
 import Stressors from "./Stressors";
 import FloatingIcon from "../../components/Stressors/FloatingIcon";
+import StressorsDetected from "../../components/Stressors/StressorsDetected";
+
 
 function Dashboard() {
    const [activeTab, setActiveTab] = useState("Journal");
    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+   const [showModal, setShowModal] = useState(false);
 
    useEffect(() => {
       const handleResize = () => {
@@ -106,7 +110,9 @@ function Dashboard() {
             </section>
          </main>
 
-          <FloatingIcon />
+          <FloatingIcon onClick={() => setShowModal(true)} />
+
+            <StressorsDetected visible={showModal} onClose={() => setShowModal(false)} />
       </div>
    );
 }
