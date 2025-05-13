@@ -3,6 +3,7 @@ import os
 import requests
 import json
 import re
+from journal_entries.models import DetectedStressor, Stressors
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
@@ -67,3 +68,87 @@ def get_gemini_response(prompt):
         print(f"Error parsing Gemini API response: {e}")
         print(f"Raw response was: {result}")
         return None
+
+
+
+def generate_ai_stressors(entry):
+    user = entry.user
+    existing_titles = set(
+        Stressors.objects.filter(user=user).values_list('title', flat=True)
+    ) | set(
+        DetectedStressor.objects.filter(user=user).values_list('title', flat=True)
+    )
+
+    prompt = f"""
+You are part of an AI journal entry application that helps users identify life stressors based on their writing.
+
+For example:
+- If someone writes about uncertainty in job searching, the stressor might be "Job search"
+- If someone writes about conflict with a romantic partner, it might be "Relationship issues"
+
+Your task:
+- Read the journal entry below
+- Return a list of **0 to 5** new stressors (avoid duplicates from user's existing stressors)
+- Try to be reasonable, if there isn't a clear stressor, dont put it.
+- For each stressor, give a **short description** (1–2 sentences) or a few words
+
+Journal entry:
+\"\"\"{entry.entry}\"\"\"
+
+### Stressors the user already has:
+{existing_text}
+
+
+Format your response strictly as:
+[
+  {{
+    "title": "...",
+    "description": "..."
+  }},
+  ...
+]
+    """
+
+    # Send request to Gemini API
+    headers = {"Content-Type": "application/json"}
+    params = {"key": GEMINI_API_KEY}
+    body = {
+        "contents": [
+            {
+                "role": "user",
+                "parts": [{"text": prompt}]
+            }
+        ]
+    }
+
+    response = requests.post(
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent",
+        headers=headers,
+        params=params,
+        json=body
+    )
+
+    if response.status_code == 200:
+        try:
+            data = response.json()
+            raw_json = data["candidates"][0]["content"]["parts"][0]["text"]
+            import json
+            suggestions = json.loads(raw_json)
+        except Exception as e:
+            print("Error parsing Gemini response:", e)
+            return
+    else:
+        print("Gemini API error:", response.text)
+        return
+
+    for item in suggestions:
+        title = item.get("title", "").strip()
+        desc = item.get("description", "").strip()
+
+        if title and title.lower() not in [t.lower() for t in existing_titles]:
+            DetectedStressor.objects.create(
+                user=user,
+                entry=entry,
+                title=title,
+                description=desc
+            )

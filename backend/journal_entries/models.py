@@ -60,6 +60,10 @@ class JournalEntry(models.Model):
                 ).select_for_update().order_by('-entry_number').first()
                 self.entry_number = last.entry_number + 1 if last else 1
         super().save(*args, **kwargs)
+        from backend.utils import generate_ai_stressors
+        generate_ai_stressors(self)
+
+
 
 
 class Stressors(models.Model):
