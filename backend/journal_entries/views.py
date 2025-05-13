@@ -1,6 +1,6 @@
 from rest_framework import viewsets, permissions
 from .models import JournalEntry, Stressors
-from .serializers import JournalEntrySerializer, StressorsSerializer
+from .serializers import JournalEntrySerializer, StressorsSerializer, DetectedStressorSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -61,3 +61,12 @@ class StressorsViewSet(viewsets.ModelViewSet):
         recent_entries = self.get_queryset().order_by('-created_at')[:5]
         serializer = self.get_serializer(recent_entries, many=True)
         return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def recent_detected_stressors(request):
+    user = request.user
+    stressors = DetectedStressor.objects.filter(user=user, added=False).order_by('-created_at')
+    serializer = DetectedStressorSerializer(stressors, many=True)
+    return Response(serializer.data)

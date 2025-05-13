@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from taggit.serializers import (TaggitSerializer, TagListSerializerField)
-from .models import JournalEntry, Stressors
+from .models import JournalEntry, Stressors, DetectedStressor
 
 
 class JournalEntrySerializer(TaggitSerializer, serializers.ModelSerializer):
@@ -16,3 +16,8 @@ class StressorsSerializer(serializers.ModelSerializer):
         model = Stressors
         fields = ['entry_number', 'title', 'description', 'created_at', 'tags']
         read_only_fields = ['entry_number', 'created_at']
+
+class DetectedStressorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DetectedStressor
+        fields = ['id', 'title', 'description', 'created_at', 'entry', 'added']
