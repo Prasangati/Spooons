@@ -64,8 +64,6 @@ class JournalEntry(models.Model):
         generate_ai_stressors(self)
 
 
-
-
 class Stressors(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
