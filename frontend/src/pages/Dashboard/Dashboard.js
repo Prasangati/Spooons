@@ -29,7 +29,7 @@ function Dashboard() {
             }
     };
 
-    fetchStressors(); // initial fetch
+    fetchStressors(); // for the initial fetch
     const interval = setInterval(fetchStressors, 15000); // poll every 15s
 
     return () => clearInterval(interval); // cleanup
