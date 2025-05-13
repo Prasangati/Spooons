@@ -10,6 +10,7 @@ from services.ai_response_service import process_ai_response  # <-- handle parsi
 class JournalEntryViewSet(viewsets.ModelViewSet):
     serializer_class = JournalEntrySerializer
     permission_classes = [permissions.IsAuthenticated]
+    lookup_field = 'entry_number'
 
     def get_queryset(self):
         # Return only the logged-in user's entries
