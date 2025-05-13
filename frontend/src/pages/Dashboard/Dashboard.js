@@ -5,10 +5,16 @@ import Journal from "./Journal"; // journal component
 import Progress from "./Progress"; // progress component
 import Resources from "./Resources";
 import {Link} from "react-router-dom"; // resources component
+import Stressors from "./Stressors";
+import FloatingIcon from "../../components/Stressors/FloatingIcon";
+import StressorsDetected from "../../components/Stressors/StressorsDetected";
+
 
 function Dashboard() {
    const [activeTab, setActiveTab] = useState("Journal");
    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+   const [showModal, setShowModal] = useState(false);
 
    useEffect(() => {
       const handleResize = () => {
@@ -99,11 +105,15 @@ function Dashboard() {
          <main className="main-content">
             <section className="dashboard-content">
                {activeTab === "Journal" && <Journal />}
+                {activeTab === "Stressors" && <Stressors />}
                {activeTab === "Progress" && <Progress />}
-                {activeTab === "Stressors" && <p>Stressors: To be updated</p>}
                {activeTab === "Resources" && <Resources />}
             </section>
          </main>
+
+          <FloatingIcon onClick={() => setShowModal(true)} />
+
+            <StressorsDetected visible={showModal} onClose={() => setShowModal(false)} />
       </div>
    );
 }
