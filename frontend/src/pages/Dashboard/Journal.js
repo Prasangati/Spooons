@@ -8,11 +8,17 @@ function JournalEntries() {
   const [title, setTitle] = useState(""); // state for entry title
   const [entries, setEntries] = useState([]); // storing journal entries
   const [newEntry, setNewEntry] = useState(""); // current input
+
+
+  const [tagInput, setTagInput] = useState("");    // #tag
+  const [tags, setTags]  = useState([]);    
+  const [showTagInput, setShowTagInput] = useState(false); 
+
+
   const [showNewEntryForm, setShowNewEntryForm] = useState(false); //  past entries
 
   const quotes = [
       "Be not afraid of growing slowly, be afraid only of standing still. — Chinese Proverb",
-      "The only person you are destined to become is the person you decide to be. — Ralph Waldo Emerson",
       "Do your best until you know better. Then when you know better, do better. — Maya Angelou",
       "Strive for progress, not perfection.  ― David Perlmutter",
       "Your future is hidden in your daily routine. — Mike Murdock", 
@@ -24,15 +30,38 @@ function JournalEntries() {
 
   useEffect(() => {
     const quoteInterval = setInterval(() => {
-      setCurrentQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
+      setCurrentQuoteIndex((i) => (i + 1) % quotes.length);
     }, 6000); 
     return () => clearInterval(quoteInterval); // cleanupon unmount
-  }, []);
-  useEffect(() => {
-    localStorage.setItem("journalEntries", JSON.stringify(entries));
-  }, [entries]);
+  }, [quotes.length]);
 
 
+  const resetForm = () => {
+    setTitle("");
+    setNewEntry("");
+    setTagInput("");             
+    setTags([]);                 
+    setShowTagInput(false);      
+    setShowNewEntryForm(false);
+  };
+
+  const handleAddTag = () => {
+    const raw = tagInput.trim().replace(/^#/, "");
+    if (raw && !tags.includes(raw)) {
+      setTags([raw, ...tags]);
+    }
+    setTagInput("");
+    setShowTagInput(false);
+  };
+
+
+  const handleTagKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAddTag();
+    }
+  };
+  const MAX_ENTRY_LENGTH = 500;// chr  limit
 
   //temp - will update this functionality  
   const prompts = [
@@ -62,38 +91,11 @@ function JournalEntries() {
     }
   }, []);
   
-  
-  //draft
-  const handleSaveDraft = () => {
-    if (title.trim() === "") {
-      alert("Title is required to save.");
-      return;
-    }
-    const draftEntry = {
-      id: entries.length + 1,
-      title,
-      text: newEntry,
-      date: new Date().toLocaleString(),
-      status: "Draft",
-    };
-    setEntries([draftEntry, ...entries]);
-    resetForm();
-  };
-//submit - confirmation
+// add new entry
 
   const handleSendEntry = async () => {
-  if (title.trim() === "") {
-    alert("Title is required to send.");
-    return;
-  }
-  if (newEntry.trim() === "") {
-    alert("Entry cannot be empty.");
-    return;
-  }
-
-  if (!window.confirm("Are you sure you're ready to send this journal entry?")) {
-    return;
-  }
+    if (!title.trim()) return alert("Title is required.");
+    if (!newEntry.trim()) return alert("Entry cannot be empty.");
 
   setLoading(true); // show Loading component
 
@@ -102,6 +104,7 @@ function JournalEntries() {
   const response = await api.post("/journal/entries/", {
     title,
     entry: newEntry,
+     tags,
   });
 
   const createdEntry = response.data;
@@ -115,19 +118,10 @@ function JournalEntries() {
   } finally {
     setLoading(false);
   }
+
   };
 
 
-
-
-  const handleInputChange = (e) => {
-    setNewEntry(e.target.value);
-  };
-  const resetForm = () => {
-    setTitle("");
-    setNewEntry("");
-    setShowNewEntryForm(false);
-  };
   return (
     <div className="journal-container">
       {!showNewEntryForm ? (
@@ -144,38 +138,87 @@ function JournalEntries() {
 
       {!showNewEntryForm ? (
 
-          <div>
-            <RecentEntries />
+          <>
+            <RecentEntries entries={entries}/>
             <button
                 className="add-entry-btn"
                 onClick={() => setShowNewEntryForm(true)}
             >
-              + Add New Entry
-            </button>
-          </div>
+ <i className="fa-solid fa-file-circle-plus"></i>
+</button>
+</>
 
       ) : (
-          <div className="new-entry-form">
-            <input
+          <div className="new-entry">
+          <div className={`title-with-tag ${showTagInput ? "adding" : ""}`}>
+          <input
                 type="text"
                 className="title-input"
                 placeholder="Title *"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
           />
+          <button
+              type="button"
+              className="add-tag-btn"       
+              onClick={() => setShowTagInput(true)}
+            > 
+              <i className="fa-solid fa-hashtag"></i>
+
+             </button>
+          
+          {showTagInput && (
+              <input
+                type="text"
+                className="tag-input-mini"  
+                placeholder="tag"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onKeyDown={handleTagKeyDown} 
+                onBlur={() => setShowTagInput(false)} 
+                autoFocus
+              />
+            )}
+          </div>
+
+ 
+          <div className="tag-list">
+            {tags.map((t) => (
+              <span key={t} className="tag-chip">
+                #{t}
+                <button
+                  type="button"
+                  className="remove-btn"
+                  aria-label={`Remove ${t}`}
+                  onClick={() => setTags(tags.filter((x) => x !== t))}
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+          <div className="entry-box-wrapper">
+
           <textarea
             className="journal-input"
             placeholder="A space for reflection . . ."
             value={newEntry}
-            onChange={(e) => setNewEntry(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value.length <= MAX_ENTRY_LENGTH) {
+              setNewEntry(value);
+            }
+          }}
           />
+            <div className="char-counter-inside">
+            {MAX_ENTRY_LENGTH - newEntry.length}
+          </div>
+          </div>
+
     <div className="button-group">
-            <button className="save-draft-btn" onClick={handleSaveDraft}>
-              Save as Draft
-            </button>
             <button className="send-btn" onClick={handleSendEntry}>
-              Send
+            {loading ? "Adding…" : "Add"}
             </button>
             <button
               className="cancel-btn"

@@ -2,6 +2,7 @@ import React, { useState, useEffect} from "react";
 import "./Dashboard.css";
 import LogOut from "../../components/Auth/LogOut"; //logout Button
 import Journal from "./Journal"; // journal component
+import Progress from "./Progress"; // progress component
 import Resources from "./Resources";
 import {Link} from "react-router-dom"; // resources component
 import Stressors from "./Stressors";
@@ -105,7 +106,7 @@ function Dashboard() {
             <section className="dashboard-content">
                {activeTab === "Journal" && <Journal />}
                 {activeTab === "Stressors" && <Stressors />}
-               {activeTab === "Progress" && <p>Track your progress here</p>}
+               {activeTab === "Progress" && <Progress />}
                {activeTab === "Resources" && <Resources />}
             </section>
          </main>

@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
     'social_django',
     'corsheaders',
+    'taggit',
+    # 'journal_entries'
     'rest_framework_simplejwt.token_blacklist'
 ]
 
