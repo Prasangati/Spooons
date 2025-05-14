@@ -5,8 +5,10 @@ import json
 import re
 from journal_entries.models import DetectedStressor, Stressors
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GEMINI_API_KEY = "AIzaSyAx9eVSF3jPHABVoY7CFD_6E9HQ4NYmrBA"
 GEMINI_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
+
+
 
 def build_prompt(entry_text):
     return f"""
@@ -66,19 +68,22 @@ def get_gemini_response(prompt):
 
     except (KeyError, IndexError, json.JSONDecodeError) as e:
         print(f"Error parsing Gemini API response: {e}")
-        print(f"Raw response was: {result}")
+        """print(f"Raw response was: {result}")"""
         return None
 
 
 
 def generate_ai_stressors(entry):
     user = entry.user
+
+    # Combine existing stressor titles (manual + detected) to avoid duplication
     existing_titles = set(
         Stressors.objects.filter(user=user).values_list('title', flat=True)
     ) | set(
         DetectedStressor.objects.filter(user=user).values_list('title', flat=True)
     )
 
+    # Construct prompt for Gemini
     prompt = f"""
 You are part of an AI journal entry application that helps users identify life stressors based on their writing.
 
@@ -89,29 +94,27 @@ For example:
 Your task:
 - Read the journal entry below
 - Return a list of **0 to 5** new stressors (avoid duplicates from user's existing stressors)
-- Try to be reasonable, if there isn't a clear stressor, dont put it.
-- For each stressor, give a **short description** (1–2 sentences) or a few words
+- Try to be reasonable — if there isn't a clear stressor, don't return one.
+- Focus on stressors that might be recurring
+- For each stressor, give a **short description** (1–2 sentences)
 
 Journal entry:
 \"\"\"{entry.entry}\"\"\"
 
 ### Stressors the user already has:
-{existing_text}
+{list(existing_titles)}
 
-
-Format your response strictly as:
+Respond with raw JSON only. Do **not** include triple backticks or markdown formatting. Just return the JSON array directly, like:
 [
   {{
     "title": "...",
     "description": "..."
-  }},
-  ...
+  }}
 ]
     """
 
-    # Send request to Gemini API
     headers = {"Content-Type": "application/json"}
-    params = {"key": GEMINI_API_KEY}
+    params = {"key": GEMINI_API_KEY}  #  safely pulled from settings.py
     body = {
         "contents": [
             {
@@ -121,25 +124,28 @@ Format your response strictly as:
         ]
     }
 
-    response = requests.post(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent",
-        headers=headers,
-        params=params,
-        json=body
-    )
-
-    if response.status_code == 200:
-        try:
-            data = response.json()
-            raw_json = data["candidates"][0]["content"]["parts"][0]["text"]
-            import json
-            suggestions = json.loads(raw_json)
-        except Exception as e:
-            print("Error parsing Gemini response:", e)
-            return
-    else:
-        print("Gemini API error:", response.text)
+    try:
+        response = requests.post(
+            GEMINI_API_URL,
+            headers=headers,
+            params=params,
+            json=body
+        )
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        print("Error contacting Gemini:", e)
         return
+
+    try:
+        data = response.json()
+        raw_json = data["candidates"][0]["content"]["parts"][0]["text"]
+        suggestions = json.loads(raw_json)
+    except Exception as e:
+        print("Error parsing Gemini response:", e)
+        print("Raw Gemini response:")
+        print(data)  # or `response.text`
+        return
+
 
     for item in suggestions:
         title = item.get("title", "").strip()

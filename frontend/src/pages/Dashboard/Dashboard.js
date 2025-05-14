@@ -8,7 +8,7 @@ import {Link} from "react-router-dom"; // resources component
 import Stressors from "./Stressors";
 import FloatingIcon from "../../components/Stressors/FloatingIcon";
 import StressorsDetected from "../../components/Stressors/StressorsDetected";
-
+import api from "../../utils/axiosConfig";
 
 function Dashboard() {
    const [activeTab, setActiveTab] = useState("Journal");
@@ -22,7 +22,7 @@ function Dashboard() {
 
     const fetchStressors = async () => {
         try {
-            const response = await api.get('/detected-stressors/recent/');
+            const response = await api.get('journal/detected-stressors/recent/');
             setDetectedStressors(response.data || []);
         } catch (err) {
             console.error('Polling error:', err);
@@ -133,7 +133,7 @@ function Dashboard() {
           <FloatingIcon onClick={() => setShowModal(true)} />
 
           <StressorsDetected visible={showModal} onClose={() => setShowModal(false)}
-            stressors={detectedStressors} />
+            newstressors={detectedStressors} />
       </div>
    );
 }

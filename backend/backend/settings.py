@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'social_django',
     'corsheaders',
     'taggit',
-    # 'journal_entries'
     'rest_framework_simplejwt.token_blacklist'
 ]
 

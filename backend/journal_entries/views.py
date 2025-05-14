@@ -1,9 +1,9 @@
 from rest_framework import viewsets, permissions
-from .models import JournalEntry, Stressors
+from .models import JournalEntry, Stressors, DetectedStressor
 from .serializers import JournalEntrySerializer, StressorsSerializer, DetectedStressorSerializer
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
-
+from rest_framework.permissions import IsAuthenticated
 from utils.gemini_helper import build_prompt, get_gemini_response  # <-- use build_prompt
 from services.ai_response_service import process_ai_response  # <-- handle parsing + saving
 

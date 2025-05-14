@@ -1,9 +1,7 @@
 import React from 'react';
 import './StressorsDetected.css';
-import api from "../../utils/axiosConfig";
-import {useEffect, useState} from "react";
-const StressorsDetected = ({ visible, onClose, stressors }) => {
-  const [stressors, setStressors] = useState([]);
+
+const StressorsDetected = ({ visible, onClose, newstressors }) => {
    if (!visible) return null;
 
     const handleBackdropClick = (e) => {
@@ -18,11 +16,11 @@ const StressorsDetected = ({ visible, onClose, stressors }) => {
         <button className="modal-close" onClick={onClose}>✖</button>
         <h2>AI Stressor Detection from Recent Journal Entries</h2>
 
-        {stressors.length === 0 ? (
-          <p>No stressors detected from your recent journal entries.</p>
+        {newstressors.length === 0 ? (
+          <p>No new stressors detected from your recent journal entries.</p>
         ) : (
           <div className="stressor-cards">
-            {stressors.map((s) => (
+            {newstressors.map((s) => (
               <div key={s.id} className="stressor-card">
                 <h4>{s.title}</h4>
                 <p>{s.description}</p>

@@ -60,7 +60,7 @@ class JournalEntry(models.Model):
                 ).select_for_update().order_by('-entry_number').first()
                 self.entry_number = last.entry_number + 1 if last else 1
         super().save(*args, **kwargs)
-        from backend.utils import generate_ai_stressors
+        from utils.gemini_helper import generate_ai_stressors
         generate_ai_stressors(self)
 
 
@@ -111,6 +111,7 @@ class DetectedStressor(models.Model):
         related_name='detected_stressors'
     )
     title = models.CharField(max_length=200)
+    description = models.TextField(default='')
     added = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now, db_index=True)
 

@@ -1,5 +1,6 @@
 # journal/urls.py
 from rest_framework.routers import DefaultRouter
+from django.urls import path
 from .views import JournalEntryViewSet, StressorsViewSet, recent_detected_stressors
 
 router = DefaultRouter()
