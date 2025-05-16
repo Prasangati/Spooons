@@ -5,7 +5,7 @@ import json
 import re
 from journal_entries.models import DetectedStressor, Stressors
 
-GEMINI_API_KEY = "AIzaSyAx9eVSF3jPHABVoY7CFD_6E9HQ4NYmrBA"
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 GEMINI_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
 
 
