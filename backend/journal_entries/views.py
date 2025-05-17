@@ -90,7 +90,7 @@ class DetectedStressorViewSet(viewsets.ModelViewSet):
             return Response({'detail': 'Already added.'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Create the confirmed stressor
-        Stressor.objects.create(
+        Stressors.objects.create(
             user=detected.user,
             title=detected.title,
             description=detected.description
@@ -101,3 +101,18 @@ class DetectedStressorViewSet(viewsets.ModelViewSet):
         detected.save()
 
         return Response({'status': 'Stressor added successfully'}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['post'], url_path='dismiss')
+    def dismiss(self, request, pk=None):
+        detected = get_object_or_404(self.get_queryset(), pk=pk)
+
+        # Prevent duplicates if already accepted
+        if detected.added:
+            return Response({'detail': 'Already added.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+        # Mark detected stressor as added
+        detected.added = True
+        detected.save()
+
+        return Response({'status': 'Stressor rejected successfully'}, status=status.HTTP_200_OK)

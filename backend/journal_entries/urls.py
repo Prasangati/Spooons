@@ -10,3 +10,4 @@ router.register(r'detected-stressors', DetectedStressorViewSet, basename='detect
 
 
 
+urlpatterns = router.urls

@@ -13,7 +13,7 @@ const StressorsDetected = ({ visible, onClose, newstressors,setNewStressors }) =
     }
   };
 
-    async function onDismiss(s) {
+    async function onAccept(s) {
     setLoading(true);
     try {
       await api.post(`journal/detected-stressors/${s.id}/accept/`);
@@ -26,10 +26,10 @@ const StressorsDetected = ({ visible, onClose, newstressors,setNewStressors }) =
     }
   }
 
-  async function onAccept(s) {
+  async function onDismiss(s) {
     setLoading(true);
     try {
-      await api.post(`journal/detected-stressors/${s.id}/accept/`);
+      await api.post(`journal/detected-stressors/${s.id}/dismiss/`);
       setNewStressors((prev) => prev.filter((item) => item.id !== s.id));
     } catch (error) {
       console.error("Error adding stressor:", error);
