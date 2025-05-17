@@ -18,6 +18,7 @@ class StressorsSerializer(serializers.ModelSerializer):
         fields = ['entry_number', 'title', 'description', 'created_at', 'tags']
         read_only_fields = ['entry_number', 'created_at']
 
+
 class DetectedStressorSerializer(serializers.ModelSerializer):
     tags = TagListSerializerField()
     class Meta:
