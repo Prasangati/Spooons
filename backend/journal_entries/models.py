@@ -121,3 +121,6 @@ class DetectedStressor(models.Model):
 
     def __str__(self):
         return f"[{'✔' if self.added else '✖'}] {self.title} (from Entry #{self.entry.entry_number})"
+
+
+

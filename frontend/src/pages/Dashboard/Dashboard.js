@@ -133,7 +133,8 @@ function Dashboard() {
           <FloatingIcon onClick={() => setShowModal(true)} />
 
           <StressorsDetected visible={showModal} onClose={() => setShowModal(false)}
-            newstressors={detectedStressors} />
+            newstressors={detectedStressors}
+            setNewStressors={setDetectedStressors}/>
       </div>
    );
 }
