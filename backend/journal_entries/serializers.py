@@ -12,12 +12,14 @@ class JournalEntrySerializer(TaggitSerializer, serializers.ModelSerializer):
         read_only_fields = ['entry_number', 'created_at']
 
 class StressorsSerializer(serializers.ModelSerializer):
+    tags = TagListSerializerField()
     class Meta:
         model = Stressors
         fields = ['entry_number', 'title', 'description', 'created_at', 'tags']
         read_only_fields = ['entry_number', 'created_at']
 
 class DetectedStressorSerializer(serializers.ModelSerializer):
+    tags = TagListSerializerField()
     class Meta:
         model = DetectedStressor
-        fields = ['id', 'title', 'description', 'created_at', 'entry', 'added']
+        fields = ['id', 'title', 'description', 'created_at', 'entry', 'added', 'tags']

@@ -29,3 +29,4 @@ gunicorn
 whitenoise
 djangorestframework-simplejwt
 django-taggit
+django-taggit-serializer

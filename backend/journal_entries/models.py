@@ -74,6 +74,7 @@ class Stressors(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     created_at = models.DateTimeField(default=timezone.now, db_index=True)
+    tags = TaggableManager()
 
     class Meta:
         ordering = ['-created_at']
@@ -111,6 +112,7 @@ class DetectedStressor(models.Model):
         related_name='detected_stressors'
     )
     title = models.CharField(max_length=200)
+    tags = TaggableManager()
     description = models.TextField(default='')
     added = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now, db_index=True)
