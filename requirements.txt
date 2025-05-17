@@ -28,3 +28,5 @@ django-taggit>=6.1.0
 gunicorn
 whitenoise
 djangorestframework-simplejwt
+django-taggit
+django-taggit-serializer

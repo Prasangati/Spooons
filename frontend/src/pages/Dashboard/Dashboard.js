@@ -8,13 +8,32 @@ import {Link} from "react-router-dom"; // resources component
 import Stressors from "./Stressors";
 import FloatingIcon from "../../components/Stressors/FloatingIcon";
 import StressorsDetected from "../../components/Stressors/StressorsDetected";
-
+import api from "../../utils/axiosConfig";
 
 function Dashboard() {
    const [activeTab, setActiveTab] = useState("Journal");
    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
    const [showModal, setShowModal] = useState(false);
+   const [detectedStressors, setDetectedStressors] = useState([]);
+
+   useEffect(() => {
+    if (showModal) return; //  stop polling when modal is open
+
+    const fetchStressors = async () => {
+        try {
+            const response = await api.get('journal/detected-stressors/recent/');
+            setDetectedStressors(response.data || []);
+        } catch (err) {
+            console.error('Polling error:', err);
+            }
+    };
+
+    fetchStressors(); // for the initial fetch
+    const interval = setInterval(fetchStressors, 15000); // poll every 15s
+
+    return () => clearInterval(interval); // cleanup
+    }, [showModal]); // 🔁 re-run effect when `showModal` changes
 
    useEffect(() => {
       const handleResize = () => {
@@ -113,7 +132,9 @@ function Dashboard() {
 
           <FloatingIcon onClick={() => setShowModal(true)} />
 
-            <StressorsDetected visible={showModal} onClose={() => setShowModal(false)} />
+          <StressorsDetected visible={showModal} onClose={() => setShowModal(false)}
+            newstressors={detectedStressors}
+            setNewStressors={setDetectedStressors}/>
       </div>
    );
 }

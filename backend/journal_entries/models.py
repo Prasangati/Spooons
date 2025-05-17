@@ -60,6 +60,8 @@ class JournalEntry(models.Model):
                 ).select_for_update().order_by('-entry_number').first()
                 self.entry_number = last.entry_number + 1 if last else 1
         super().save(*args, **kwargs)
+        from utils.gemini_helper import generate_ai_stressors
+        generate_ai_stressors(self)
 
 
 class Stressors(models.Model):
@@ -72,6 +74,7 @@ class Stressors(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     created_at = models.DateTimeField(default=timezone.now, db_index=True)
+    tags = TaggableManager()
 
     class Meta:
         ordering = ['-created_at']
@@ -109,6 +112,8 @@ class DetectedStressor(models.Model):
         related_name='detected_stressors'
     )
     title = models.CharField(max_length=200)
+    tags = TaggableManager()
+    description = models.TextField(default='')
     added = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now, db_index=True)
 
@@ -118,3 +123,6 @@ class DetectedStressor(models.Model):
 
     def __str__(self):
         return f"[{'✔' if self.added else '✖'}] {self.title} (from Entry #{self.entry.entry_number})"
+
+
+

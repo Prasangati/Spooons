@@ -40,3 +40,18 @@
   margin-bottom: 1rem;
   color: #222;
 }
+
+.stressor-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.stressor-card {
+  background: #fdfdfd;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}

@@ -1,11 +1,13 @@
 from rest_framework import viewsets, permissions
-from .models import JournalEntry, Stressors
-from .serializers import JournalEntrySerializer, StressorsSerializer
-from rest_framework.decorators import action
+from .models import JournalEntry, Stressors, DetectedStressor
+from .serializers import JournalEntrySerializer, StressorsSerializer, DetectedStressorSerializer
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
-
-from utils.gemini_helper import build_prompt, get_gemini_response  # <-- use build_prompt
-from services.ai_response_service import process_ai_response  # <-- handle parsing + saving
+from django.shortcuts import get_object_or_404
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from utils.gemini_helper import build_prompt, get_gemini_response
+from services.ai_response_service import process_ai_response
 
 class JournalEntryViewSet(viewsets.ModelViewSet):
     serializer_class = JournalEntrySerializer
@@ -61,3 +63,56 @@ class StressorsViewSet(viewsets.ModelViewSet):
         recent_entries = self.get_queryset().order_by('-created_at')[:5]
         serializer = self.get_serializer(recent_entries, many=True)
         return Response(serializer.data)
+
+
+class DetectedStressorViewSet(viewsets.ModelViewSet):
+    queryset = DetectedStressor.objects.all()
+    serializer_class = DetectedStressorSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Limit all actions to the authenticated user's stressors
+        return DetectedStressor.objects.filter(user=self.request.user)
+
+    @action(detail=False, methods=['get'], url_path='recent')
+    def recent(self, request):
+        # Only return unadded recent stressors
+        stressors = self.get_queryset().filter(added=False).order_by('-created_at')
+        serializer = self.get_serializer(stressors, many=True)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['post'], url_path='accept')
+    def accept(self, request, pk=None):
+        detected = get_object_or_404(self.get_queryset(), pk=pk)
+
+        # Prevent duplicates if already accepted
+        if detected.added:
+            return Response({'detail': 'Already added.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Create the confirmed stressor
+        Stressors.objects.create(
+            user=detected.user,
+            title=detected.title,
+            description=detected.description
+        )
+
+        # Mark detected stressor as added
+        detected.added = True
+        detected.save()
+
+        return Response({'status': 'Stressor added successfully'}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['post'], url_path='dismiss')
+    def dismiss(self, request, pk=None):
+        detected = get_object_or_404(self.get_queryset(), pk=pk)
+
+        # Prevent duplicates if already accepted
+        if detected.added:
+            return Response({'detail': 'Already added.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+        # Mark detected stressor as added
+        detected.added = True
+        detected.save()
+
+        return Response({'status': 'Stressor rejected successfully'}, status=status.HTTP_200_OK)
