@@ -2,9 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Loading from "../../pages/Loading/Loading";
-import BASE_URL from "../../utils/config";
+import api from "../../utils/axiosConfig";
 
-import {getCookie} from "../../utils/utils";
 // import Loading from "../../pages/Loading";
 
 
@@ -48,12 +47,7 @@ const RecentEntries = () => {
       try {
         const token = localStorage.getItem("access");
 
-        const response = await axios.get(`${BASE_URL}/journal/entries/recent/`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
-        });
+        const response = await   api.get(`/journal/entries/recent/`);
 
         setEntries(response.data);
       } catch (error) {
@@ -69,13 +63,8 @@ const RecentEntries = () => {
   const handleConfirmDelete = async (entry_number) => {
 
     try {
-      const csrfToken = getCookie("csrftoken");
-      await axios.delete(`http://localhost:8000/journal/entries/${entry_number}/`, {
-        withCredentials: true,
-        headers: {
-          "X-CSRFToken": csrfToken,
-        },
-      });
+
+      await axios.delete(`/journal/entries/${entry_number}/`);
 
       setEntries((prevEntries) => prevEntries.filter((entry) => entry.entry_number !== entry_number));
       setShowDeleteModal(false);
@@ -100,19 +89,9 @@ const RecentEntries = () => {
     setLoading(true);
 
     try {
-      const csrfToken = getCookie("csrftoken");
-      const response = await axios.put(
-          `http://localhost:8000/journal/entries/${entryBeingEdited.entry_number}/`,
-          {
-            title: editedTitle,
-            entry: editedText,
-            tags: entryBeingEdited.tags || [],
-          },
-          {
-            withCredentials: true,
-            headers: {"X-CSRFToken": csrfToken},
-          }
-      );
+
+      const response = await api.put(
+          `/journal/entries/${entryBeingEdited.entry_number}/`);
 
       setEntries((prev) =>
           prev.map((e) => (e.entry_number === entryBeingEdited.entry_number ? response.data : e))
