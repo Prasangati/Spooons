@@ -1,7 +1,7 @@
 // /pages/Dashboard/Progress.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import JournalHeatmap from "../../components/progress/HeatMap";
+import JournalHeatMap from "../../components/progress/HeatMap";
 import "./Progress.css";
 
 function Progress() {
@@ -11,7 +11,7 @@ function Progress() {
   useEffect(() => {
     const fetchEntries = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/journal/entries/", {
+        const response = await api.get("/journal/entries/", {
           withCredentials: true,
         });
 
@@ -38,7 +38,7 @@ function Progress() {
   return (
     <div className="progress-container">
       <p className="subtext">See your journaling patterns over time</p>
-      {loading ? <p>Loading heatmap...</p> : <JournalHeatmap entries={entries} />}
+      {loading ? <p>Loading heatmap...</p> : <JournalHeatMap entries={entries} />}
     </div>
   );
 }

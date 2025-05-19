@@ -4,7 +4,7 @@ import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
 import "./HeatMap.css"
 
-const JournalHeatmap = ({ entries }) => {
+const JournalHeatMap = ({ entries }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [entriesForDate, setEntriesForDate] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -196,6 +196,6 @@ const showStreakReminder = !hasTodayEntry && currentStreak > 0;
   );
 };
 
-export default JournalHeatmap;
+export default JournalHeatMap;
 
 
