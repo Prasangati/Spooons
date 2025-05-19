@@ -14,8 +14,13 @@ __pycache__/
 config/settings/local.py
 
 # Django migration files (optional)
-*/migrations/*.py
+**/__pycache__/
+**/*.pyc
+
+!*/migrations/*.py
 */migrations/*.pyc
+*/migrations/__pycache__/
+
 
 # Logs
 logs/
