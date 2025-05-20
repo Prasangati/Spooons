@@ -1,7 +1,5 @@
 /* Container styling */
-* {
-  outline: 1px solid red !important;
-}
+
 
 .heatmap-container {
   margin: 2rem auto;

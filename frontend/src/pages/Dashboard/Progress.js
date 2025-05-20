@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import api from "../../utils/axiosConfig";
 import CalendarHeatmap from "react-calendar-heatmap";
 import 'react-calendar-heatmap/dist/styles.css';
+import JournalHeatmap from "../../components/progress/HeatMap";
 import "./Progress.css";
 
 export default function Progress() {
@@ -70,17 +71,7 @@ export default function Progress() {
   return (
     <div className="progress-container">
       <h2>My Journal Heatmap</h2>
-      <CalendarHeatmap
-        startDate={start}
-        endDate={end}
-        values={values}
-        classForValue={classForValue}
-        tooltipDataAttrs={(value) => ({
-          "data-tip": value.date
-            ? `${value.date}: ${value.count} entr${value.count === 1 ? "y" : "ies"}`
-            : "No data",
-        })}
-      />
+      <JournalHeatmap entries={entries}/>
     </div>
   );
 }
