@@ -1,5 +1,5 @@
 // /components/progress/Heatmap.jsx
-/*
+
 import React, {useState} from "react";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
@@ -200,4 +200,3 @@ const showStreakReminder = !hasTodayEntry && currentStreak > 0;
 export default JournalHeatmap;
 
 
-*/
