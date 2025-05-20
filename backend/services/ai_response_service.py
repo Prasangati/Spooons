@@ -1,12 +1,16 @@
 import json
-from journal_entries.models import Resource
+from journal_entries.models import Resource, AIFeedback
 
 def process_ai_response(entry_obj, ai_raw_response):
     try:
         ai_data = ai_raw_response  
-        entry_obj.ai_feedback = ai_data.get("ai_feedback")
         entry_obj.stressors = ai_data.get("stressors", [])
         entry_obj.save()
+
+        AIFeedback.objects.create(
+            journal_entry=entry_obj,
+            feedback=ai_data.get("ai_feedback", "")
+        )
 
         for res in ai_data.get("resources", []):
             Resource.objects.create(

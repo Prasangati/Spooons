@@ -41,8 +41,8 @@ const ResourceFilter = ({ onFilter }) => {
       </div>
 
       <button className="apply-filter-btn" onClick={handleFilter}>
-  Apply Filters
-</button>
+        Apply Filters
+      </button>
     </div>
   );
 };
