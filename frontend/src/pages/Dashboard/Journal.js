@@ -17,6 +17,9 @@ function JournalEntries() {
 
   const [showNewEntryForm, setShowNewEntryForm] = useState(false); //  past entries
 
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+
   const quotes = [
       "Be not afraid of growing slowly, be afraid only of standing still. — Chinese Proverb",
       "Do your best until you know better. Then when you know better, do better. — Maya Angelou",
@@ -111,10 +114,10 @@ function JournalEntries() {
 
   setEntries([createdEntry, ...entries]);
   resetForm();
-  alert("Entry successfully submitted!");
-  } catch (error) {
+  setShowSuccessModal("success"); // open modal
+} catch (error) {
     console.error("Error sending entry:", error);
-    alert("Something went wrong. Please try again.");
+    setShowSuccessModal("error");
   } finally {
     setLoading(false);
   }
@@ -226,6 +229,26 @@ function JournalEntries() {
             >
               Cancel
             </button>
+          </div>
+        </div>
+      )}
+      {showSuccessModal && (
+        <div className="modal-overlay">
+          <div className="modal-box">
+            <h4>
+              {showSuccessModal === "success"
+                ? "Entry successfully submitted!"
+                : showSuccessModal === "title"
+                ? "Title is required."
+                : showSuccessModal === "entry"
+                ? "Entry cannot be empty."
+                : "Something went wrong."}
+            </h4>
+            <div className="modal-buttons">
+              <button className="close-btn" onClick={() => setShowSuccessModal(false)}>
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -130,3 +130,23 @@ class DetectedStressorViewSet(viewsets.ModelViewSet):
         detected.save()
 
         return Response({'status': 'Stressor rejected successfully'}, status=status.HTTP_200_OK)
+    
+from rest_framework import viewsets
+from .models import Resource
+from .serializers import ResourceSerializer
+
+class ResourceViewSet(viewsets.ReadOnlyModelViewSet):  # Only GET methods
+    queryset = Resource.objects.all().order_by('-id')[:10]
+    serializer_class = ResourceSerializer
+
+
+from .models import AIFeedback
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_feedback(request, entry_id):
+    try:
+        feedback = AIFeedback.objects.get(journal_entry__entry_number=entry_id, journal_entry__user=request.user)
+        return Response({"feedback": feedback.feedback})
+    except AIFeedback.DoesNotExist:
+        return Response({"feedback": "No feedback found."}, status=404)
