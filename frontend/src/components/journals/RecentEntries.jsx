@@ -20,6 +20,20 @@ const RecentEntries = () => {
   const [editedText, setEditedText] = useState("");
   const [expandedCardId, setExpandedCardId] = useState(null);
 
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [feedbackText, setFeedbackText] = useState("");
+  const handleShowFeedback = async (entryId) => {
+    try {
+      const response = await api.get(`/journal/feedback/${entryId}/`);
+      setFeedbackText(response.data.feedback);
+      setShowFeedbackModal(true);
+    } catch (error) {
+      console.error("Error fetching feedback:", error);
+      alert("Feedback not available for this entry.");
+    }
+  };
+  
+
   const [tagInput, setTagInput] = useState("");
   const [showTagInput, setShowTagInput] = useState(false);
   const [selectedTag, setSelectedTag] = useState(null);
@@ -184,6 +198,19 @@ const RecentEntries = () => {
                         </p>
 
                         <div className="entry-icons">
+                        <div className="icon-with-label">
+                          <button
+                            className="icon-btn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleShowFeedback(entry.entry_number);
+                            }}
+                          >
+                            <i className="fa-solid fa-brain"></i>
+                          </button>
+                          <span className="icon-label">See Feedback</span>
+                        </div>
+
                           <div className="icon-with-label">
                             <button
                                 className="icon-btn"
@@ -323,6 +350,20 @@ const RecentEntries = () => {
               </div>
             </div>
         )}
+        {showFeedbackModal && (
+          <div className="modal-overlay">
+            <div className="modal-box feedback-modal">
+              <h4>AI Feedback</h4>
+              <p className="feedback-text">{feedbackText}</p>
+              <div className="modal-buttons">
+                <button className="close-btn" onClick={() => setShowFeedbackModal(false)}>
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </div>
   );
 }

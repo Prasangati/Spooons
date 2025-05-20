@@ -485,3 +485,52 @@
   background-color: #066341;
   color: #ffffff;
 }
+
+.feedback-modal {
+  background: #f0fdfa;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  text-align: left;
+  max-width: 600px;
+  width: 90%;
+  font-family: var(--font-body);
+  color: #033c2f;
+}
+
+.feedback-modal h4 {
+  font-size: 20px;
+  color: var(--green-dark);
+  margin-bottom: 16px;
+}
+
+.feedback-text {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  white-space: pre-wrap;
+}
+
+.close-btn{
+
+  min-width: 80px;
+  height: 40px;
+  padding: 6px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: var(--shadow-light);
+}
+
+.close-btn {
+  background-color: #066341;
+  color: #ffffff;
+}
+
+.close-btn:hover {
+  background-color: #066341;
+  transform: translateY(-1px);
+}
