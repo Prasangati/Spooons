@@ -58,7 +58,7 @@ const Signup = () => {
 
   try {
     const response = await api.post(
-      `${BASE_URL}/api/auth/signup/`,
+      `/api/auth/signup/`,
       { name, email, password },
       {
         headers: { "Content-Type": "application/json" }
@@ -192,7 +192,7 @@ const Signup = () => {
 
         <p className="login-text">
           Already have an account?{" "}
-          <a href="/Login/Login" className="login-link">
+          <a href="/Login" className="login-link">
             Login
           </a>
         </p>

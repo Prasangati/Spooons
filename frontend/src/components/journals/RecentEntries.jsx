@@ -1,10 +1,8 @@
 // components/RecentEntries.jsx
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import Loading from "../../pages/Loading/Loading";
 import api from "../../utils/axiosConfig";
 
-// import Loading from "../../pages/Loading";
 
 
 
@@ -45,7 +43,7 @@ const RecentEntries = () => {
   useEffect(() => {
     const fetchRecentEntries = async () => {
       try {
-        const token = localStorage.getItem("access");
+
 
         const response = await   api.get(`/journal/entries/recent/`);
 
@@ -60,13 +58,18 @@ const RecentEntries = () => {
     fetchRecentEntries();
   }, []);
 
-  const handleConfirmDelete = async (entry_number) => {
+  const handleConfirmDelete = async (entryId) => {
+    console.log("entryId passed to delete:", entryId);
+    if (!entryId) return alert("No entry ID found!");
 
     try {
 
-      await axios.delete(`/journal/entries/${entry_number}/`);
+      await api.delete(`/journal/entries/by-entry-number/${entryId}/`);
 
-      setEntries((prevEntries) => prevEntries.filter((entry) => entry.entry_number !== entry_number));
+
+      setEntries((prevEntries) =>
+      prevEntries.filter((entry) => entry.entry_number !== entryId)
+      );
       setShowDeleteModal(false);
       setEntryToDelete(null);
     } catch (error) {
@@ -91,7 +94,7 @@ const RecentEntries = () => {
     try {
 
       const response = await api.put(
-          `/journal/entries/${entryBeingEdited.entry_number}/`);
+          `/journal/entries/${entryBeingEdited.id}/`);
 
       setEntries((prev) =>
           prev.map((e) => (e.entry_number === entryBeingEdited.entry_number ? response.data : e))
@@ -186,6 +189,7 @@ const RecentEntries = () => {
                             <button
                                 className="icon-btn delete"
                                 onClick={() => {
+                                  console.log("Setting entryToDelete to:", entry);
                                   setShowDeleteModal(true);
                                   setEntryToDelete(entry);
                                 }}

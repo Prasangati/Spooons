@@ -44,6 +44,16 @@ class JournalEntryViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(recent_entries, many=True)
         return Response(serializer.data)
 
+    @action(detail=False, methods=['delete'], url_path='by-entry-number/(?P<entry_number>[^/.]+)')
+    def delete_by_entry_number(self, request, entry_number=None):
+        entry = get_object_or_404(
+            self.get_queryset(),
+            entry_number=entry_number,
+            user=request.user
+        )
+        print(entry)
+        entry.delete()
+        return Response({'status': 'Deleted by entry_number'}, status=status.HTTP_204_NO_CONTENT)
 
 
 class StressorsViewSet(viewsets.ModelViewSet):
@@ -80,6 +90,8 @@ class DetectedStressorViewSet(viewsets.ModelViewSet):
         stressors = self.get_queryset().filter(added=False).order_by('-created_at')
         serializer = self.get_serializer(stressors, many=True)
         return Response(serializer.data)
+
+
 
     @action(detail=True, methods=['post'], url_path='accept')
     def accept(self, request, pk=None):

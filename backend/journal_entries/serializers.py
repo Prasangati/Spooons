@@ -8,14 +8,14 @@ class JournalEntrySerializer(TaggitSerializer, serializers.ModelSerializer):
     entry = serializers.CharField(max_length=500)  #  limit entry char
     class Meta:
         model = JournalEntry
-        fields = ['entry_number', 'title', 'entry', 'created_at', 'tags']
+        fields = ['id','entry_number', 'title', 'entry', 'created_at', 'tags']
         read_only_fields = ['entry_number', 'created_at']
 
 class StressorsSerializer(serializers.ModelSerializer):
     tags = TagListSerializerField()
     class Meta:
         model = Stressors
-        fields = ['entry_number', 'title', 'description', 'created_at', 'tags']
+        fields = ['id','entry_number', 'title', 'description', 'created_at', 'tags']
         read_only_fields = ['entry_number', 'created_at']
 
 
