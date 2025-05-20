@@ -101,9 +101,9 @@ const Signup = () => {
       <div className="signup-box">
         <Link to="/">
           <img
-            src="/logo.png"
-            alt="Welcome Logo"
-            className="welcome-image"
+              src="/logo.png"
+              alt="Welcome Logo"
+              className="welcome-image"
           />
         </Link>
 
@@ -112,13 +112,13 @@ const Signup = () => {
 
           <div className="input-container">
             <input
-              type="text"
-              placeholder=" "
-              className="input-field"
-              id="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
+                type="text"
+                placeholder=" "
+                className="input-field"
+                id="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
             />
             <label htmlFor="name"> Name </label>
           </div>
@@ -126,13 +126,13 @@ const Signup = () => {
           {/* email input box */}
           <div className="input-container">
             <input
-              type="email"
-              placeholder=" "
-              className="input-field"
-              id="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
+                type="email"
+                placeholder=" "
+                className="input-field"
+                id="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
             />
             <label htmlFor="email">Email</label>
           </div>
@@ -140,13 +140,13 @@ const Signup = () => {
           {/* pw input box */}
           <div className="input-container">
             <input
-              type="password"
-              placeholder=" "
-              className="input-field"
-              id="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
+                type="password"
+                placeholder=" "
+                className="input-field"
+                id="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
             />
             <label htmlFor="password">Password</label>
           </div>
@@ -154,13 +154,13 @@ const Signup = () => {
           {/* confirm pw */}
           <div className="input-container">
             <input
-              type="password"
-              placeholder=" "
-              className="input-field"
-              id="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
+                type="password"
+                placeholder=" "
+                className="input-field"
+                id="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
             />
             <label htmlFor="confirmPassword">Confirm Password</label>
           </div>
@@ -174,31 +174,32 @@ const Signup = () => {
           <span>OR</span>
         </div>
 
-        {/* Google Login */}
-        <div
-          style={{
-            width: "100%",
-            maxWidth: "400px",
-            height: "100%",
-            borderRadius: "4px",
-            overflow: "hidden",
-          }}
-        >
-          <GoogleLogin
-            onSuccess={handleGoogleSuccess}
-            onError={() => console.log("Google Signup Failed")}
-          />
+        <div style={{display: "flex", justifyContent: "center", width: "100%"}}>
+          <div
+              style={{
+                width: "100%",
+                maxWidth: "400px",
+                height: "100%",
+                borderRadius: "4px",
+                overflow: "hidden",
+              }}
+          >
+            <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => console.log("Google Signup Failed")}
+            />
+          </div>
+          </div>
+
+          <p className="login-text">
+            Already have an account?{" "}
+            <a href="/Login" className="login-link">
+              Login
+            </a>
+          </p>
         </div>
-
-        <p className="login-text">
-          Already have an account?{" "}
-          <a href="/Login" className="login-link">
-            Login
-          </a>
-        </p>
       </div>
-    </div>
-  );
-};
+      );
+      };
 
-export default Signup;
+      export default Signup;

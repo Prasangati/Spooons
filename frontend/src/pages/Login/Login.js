@@ -153,99 +153,101 @@ function Login() {
 
   return (
     <div id="home-container">
-      <div className="login-box">
+        <div className="login-box">
 
-        <Link to="/">
-          <img
-            src="/logo.png"
-            alt="Welcome Logo"
-            className="welcome-image"
-          />
-        </Link>
+            <Link to="/">
+                <img
+                    src="/logo.png"
+                    alt="Welcome Logo"
+                    className="welcome-image"
+                />
+            </Link>
 
-        {/* Error Message */}
-        {error && <p className="error-message">{error}</p>}
+            {/* Error Message */}
+            {error && <p className="error-message">{error}</p>}
 
-        {/* Email/Password Login Form */}
-        <form onSubmit={handleLoginSubmit} className="login-form">
-          <div className="input-container">
-            <input
-              type="email"
-              id="email"
-              className="input-field"
-              placeholder=" "
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <label htmlFor="email">Email address</label>
-          </div>
+            {/* Email/Password Login Form */}
+            <form onSubmit={handleLoginSubmit} className="login-form">
+                <div className="input-container">
+                    <input
+                        type="email"
+                        id="email"
+                        className="input-field"
+                        placeholder=" "
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                    <label htmlFor="email">Email address</label>
+                </div>
 
-          <div className="input-container">
-            <input
-              type="password"
-              id="password"
-              className="input-field"
-              placeholder=" "
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <label htmlFor="password">Password</label>
-          </div>
+                <div className="input-container">
+                    <input
+                        type="password"
+                        id="password"
+                        className="input-field"
+                        placeholder=" "
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                    <label htmlFor="password">Password</label>
+                </div>
 
-          <p className="forgot-password" onClick={handleForgotPassword}>
-            Forgot Password?
-          </p>
+                <p className="forgot-password" onClick={handleForgotPassword}>
+                    Forgot Password?
+                </p>
 
-          <button type="submit" className="login-btn" disabled={loadingLocal}>
-            {loadingLocal ? "Logging in..." : "Login"}
-          </button>
-        </form>
+                <button type="submit" className="login-btn" disabled={loadingLocal}>
+                    {loadingLocal ? "Logging in..." : "Login"}
+                </button>
+            </form>
 
-        {/* Divider */}
-        <div className="divider">
-          <span>OR</span>
+            {/* Divider */}
+            <div className="divider">
+                <span>OR</span>
+            </div>
+
+            {/* Google Login */}
+            <div style={{display: "flex", justifyContent: "center", width: "100%"}}>
+                <div
+                    style={{
+                        width: "100%",
+                        maxWidth: "400px",
+                        height: "100%",
+                        borderRadius: "4px",
+                        overflow: "hidden",
+                    }}
+                >
+                    <GoogleLogin
+                        onSuccess={handleGoogleSuccess}
+                        onError={() => console.log("Google Signup Failed")}
+                    />
+                </div>
+            </div>
+
+            {/* Sign Up Link */}
+            <p className="signup-text" id="movemessage">
+                Don't have an account? <a href="/signup" className="signup-link">Sign Up</a>
+            </p>
         </div>
 
-        {/* Google Login */}
-        <div
-          style={{
-            width: "100%",
-            maxWidth: "400px",
-            height: "100%",
-            borderRadius: "4px",
-            overflow: "hidden",
-          }}
-        >
-          <GoogleLogin
-            onSuccess={handleGoogleSuccess}
-            onError={() => console.log("Google Signup Failed")}
-          />
-        </div>
+        {isModalOpen && (
+            <div className="modal">
+                <div className="modal-content">
+                    <button className="close" onClick={() => setIsModalOpen(false)}>
+                        &times;
+                    </button>
 
-        {/* Sign Up Link */}
-        <p className="signup-text" id="movemessage">
-          Don't have an account? <a href="/signup" className="signup-link">Sign Up</a>
-        </p>
-      </div>
+                    <h2>Forgot Password?</h2>
+                    <p>Enter your email below and we'll send you a link to reset your password.</p>
 
-      {isModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-          <button className="close" onClick={() => setIsModalOpen(false)}>
-  &times;
-</button>
-
-            <h2>Forgot Password?</h2>
-            <p>Enter your email below and we'll send you a link to reset your password.</p>
-
-            <div className="input-container">
-              <input
-                type="email"
-                id="reset-email"
-                className="input-field"
-                placeholder=" "
+                    <div className="input-container">
+                        <input
+                            type="email"
+                            id="reset-email"
+                            className="input-field"
+                            placeholder=" "
                 value={resetEmail}
                 onChange={(e) => setResetEmail(e.target.value)}
                 required
