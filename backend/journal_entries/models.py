@@ -12,7 +12,6 @@ class JournalEntry(models.Model):
     entry_number = models.PositiveIntegerField(null=True, editable=False)
     title = models.CharField(max_length=200)
     entry = models.TextField()
-    date = models.DateField(default=timezone.now) 
     created_at = models.DateTimeField(default=timezone.now, db_index=True)
 
 

@@ -18,5 +18,5 @@ class ResourceSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'description', 'link', 'journal_entry_date']
 
     def get_journal_entry_date(self, obj):
-        return obj.journal_entry.date  # or obj.journal_entry.created_at if you prefer
+        return obj.journal_entry.created_at  # or obj.journal_entry.created_at if you prefer
 
