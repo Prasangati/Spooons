@@ -1,9 +1,8 @@
 // pages/Dashboard/Progress.js
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../../utils/axiosConfig";
 import CalendarHeatmap from "react-calendar-heatmap";
 import 'react-calendar-heatmap/dist/styles.css';
-import BASE_URL from "../../utils/config";
 import "./Progress.css";
 
 export default function Progress() {
@@ -13,13 +12,8 @@ export default function Progress() {
   useEffect(() => {
     const fetchEntries = async () => {
       try {
-        const token = localStorage.getItem("access");
-        const res = await axios.get(`${BASE_URL}/journal/entries/`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const res = await api.get(`/journal/entries/`, );
+        console.error("Fetches:", res.data);
         setEntries(res.data);
       } catch (err) {
         console.error("Failed to fetch journal entries:", err);
