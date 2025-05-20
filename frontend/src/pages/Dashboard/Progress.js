@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import CalendarHeatmap from "react-calendar-heatmap";
-import "react-calendar-heatmap/dist/styles.css";
+import 'react-calendar-heatmap/dist/styles.css';
 import BASE_URL from "../../utils/config";
 import "./Progress.css";
 
