@@ -79,7 +79,7 @@ function Dashboard() {
                      </button>
                      <button
                          className={activeTab === "Progress" ? "tab-button active" : "tab-button"}
-                         onClick={() => <p>"Track progress</p>}
+                         onClick={() => setActiveTab("Progress")}
                      >
                          Progress
                      </button>
