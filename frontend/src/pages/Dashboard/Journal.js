@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Journal.css";
 import RecentEntries from "../../components/journals/RecentEntries";
 import api from "../../utils/axiosConfig";
-
+import JournalGuideModal from "../../components/journals/JournalGuideModal";
 function JournalEntries() {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState(""); // state for entry title
@@ -11,8 +11,8 @@ function JournalEntries() {
 
 
   const [tagInput, setTagInput] = useState("");    // #tag
-  const [tags, setTags]  = useState([]);    
-  const [showTagInput, setShowTagInput] = useState(false); 
+  const [tags, setTags]  = useState([]);
+  const [showTagInput, setShowTagInput] = useState(false);
 
 
   const [showNewEntryForm, setShowNewEntryForm] = useState(false); //  past entries
@@ -24,7 +24,7 @@ function JournalEntries() {
       "Be not afraid of growing slowly, be afraid only of standing still. — Chinese Proverb",
       "Do your best until you know better. Then when you know better, do better. — Maya Angelou",
       "Strive for progress, not perfection.  ― David Perlmutter",
-      "Your future is hidden in your daily routine. — Mike Murdock", 
+      "Your future is hidden in your daily routine. — Mike Murdock",
       "The difference between who you are and who you want to be is what you do.",
       "We are what we repeatedly do. Excellence, then, is not an act, but a habit. — Will Durant"
    ];
@@ -34,7 +34,7 @@ function JournalEntries() {
   useEffect(() => {
     const quoteInterval = setInterval(() => {
       setCurrentQuoteIndex((i) => (i + 1) % quotes.length);
-    }, 6000); 
+    }, 6000);
     return () => clearInterval(quoteInterval); // cleanupon unmount
   }, [quotes.length]);
 
@@ -42,9 +42,9 @@ function JournalEntries() {
   const resetForm = () => {
     setTitle("");
     setNewEntry("");
-    setTagInput("");             
-    setTags([]);                 
-    setShowTagInput(false);      
+    setTagInput("");
+    setTags([]);
+    setShowTagInput(false);
     setShowNewEntryForm(false);
   };
 
@@ -66,7 +66,7 @@ function JournalEntries() {
   };
   const MAX_ENTRY_LENGTH = 500;// chr  limit
 
-  //temp - will update this functionality  
+  //temp - will update this functionality
   const prompts = [
     "What are you grateful for today?",
     "What’s something that challenged you recently, and how did you handle it?",
@@ -82,7 +82,7 @@ function JournalEntries() {
     const stored = localStorage.getItem("journalPrompt");
     const lastUpdate = localStorage.getItem("promptTimestamp");
     const now = Date.now();
-  
+
     // 12 hours = 43,200,000 milliseconds
     if (!stored || !lastUpdate || now - lastUpdate > 43200000) {
       const newPrompt = prompts[Math.floor(Math.random() * prompts.length)];
@@ -93,7 +93,7 @@ function JournalEntries() {
       setCurrentPrompt(stored);
     }
   }, []);
-  
+
 // add new entry
 
   const handleSendEntry = async () => {
@@ -126,134 +126,141 @@ function JournalEntries() {
 
 
   return (
-    <div className="journal-container">
-      {!showNewEntryForm ? (
-        <div className="quote-container floating-quote">
-          <p className="quote-text">{quotes[currentQuoteIndex]}</p>
-        </div>
-      ) : (
+  <div className="journal-container">
+    {!showNewEntryForm ? (
+      <div className="quote-container floating-quote">
+        <p className="quote-text">{quotes[currentQuoteIndex]}</p>
+      </div>
+    ) : (
       <div className="prompt-container floating-quote">
         <p className="quote-text">{currentPrompt}</p>
       </div>
-       )}
+    )}
 
-
-
-      {!showNewEntryForm ? (
-
-          <>
-            <RecentEntries entries={entries}/>
-            <button
-                className="add-entry-btn"
-                onClick={() => setShowNewEntryForm(true)}
-            >
- <i className="fa-solid fa-file-circle-plus"></i>
-</button>
-</>
-
-      ) : (
-          <div className="new-entry">
+    {!showNewEntryForm ? (
+      <>
+        <RecentEntries entries={entries} />
+        <button
+          className="add-entry-btn"
+          onClick={() => setShowNewEntryForm(true)}
+        >
+          <i className="fa-solid fa-file-circle-plus"></i>
+        </button>
+      </>
+    ) : (
+        <div className="new-entry">
           <div className={`title-with-tag ${showTagInput ? "adding" : ""}`}>
-          <input
+            <input
                 type="text"
                 className="title-input"
                 placeholder="Title *"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
-          />
-          <button
-              type="button"
-              className="add-tag-btn"       
-              onClick={() => setShowTagInput(true)}
-            > 
+            />
+            <button
+                type="button"
+                className="add-tag-btn"
+                onClick={() => setShowTagInput(true)}
+            >
               <i className="fa-solid fa-hashtag"></i>
-
-             </button>
-          
-          {showTagInput && (
-              <input
-                type="text"
-                className="tag-input-mini"  
-                placeholder="tag"
-                value={tagInput}
-                onChange={(e) => setTagInput(e.target.value)}
-                onKeyDown={handleTagKeyDown} 
-                onBlur={() => setShowTagInput(false)} 
-                autoFocus
-              />
+            </button>
+            {showTagInput && (
+                <input
+                    type="text"
+                    className="tag-input-mini"
+                    placeholder="tag"
+                    value={tagInput}
+                    onChange={(e) => setTagInput(e.target.value)}
+                    onKeyDown={handleTagKeyDown}
+                    onBlur={() => setShowTagInput(false)}
+                    autoFocus
+                />
             )}
           </div>
 
- 
           <div className="tag-list">
             {tags.map((t) => (
-              <span key={t} className="tag-chip">
-                #{t}
-                <button
-                  type="button"
-                  className="remove-btn"
-                  aria-label={`Remove ${t}`}
-                  onClick={() => setTags(tags.filter((x) => x !== t))}
-                >
-                  ×
-                </button>
-              </span>
+                <span key={t} className="tag-chip">
+              #{t}
+                  <button
+                      type="button"
+                      className="remove-btn"
+                      aria-label={`Remove ${t}`}
+                      onClick={() => setTags(tags.filter((x) => x !== t))}
+                  >
+                ×
+              </button>
+            </span>
             ))}
           </div>
-          <div className="entry-box-wrapper">
 
+          <div className="entry-box-wrapper">
           <textarea
-            className="journal-input"
-            placeholder="A space for reflection . . ."
-            value={newEntry}
-            onChange={(e) => {
-              const value = e.target.value;
-              if (value.length <= MAX_ENTRY_LENGTH) {
-              setNewEntry(value);
-            }
-          }}
+              className="journal-input"
+              placeholder="A space for reflection . . ."
+              value={newEntry}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value.length <= MAX_ENTRY_LENGTH) {
+                  setNewEntry(value);
+                }
+              }}
           />
             <div className="char-counter-inside">
-            {MAX_ENTRY_LENGTH - newEntry.length}
-          </div>
+              {MAX_ENTRY_LENGTH - newEntry.length}
+            </div>
           </div>
 
-    <div className="button-group">
-            <button className="send-btn" onClick={handleSendEntry}>
-            {loading ? "Adding…" : "Add"}
-            </button>
+          <div className="button-group flex items-center gap-3">
+            <div className="relative inline-block">
+              {/* ℹ️ Icon will appear just to the left of Add */}
+              <div className="absolute -left-10 top-1/2 -translate-y-1/2">
+                <JournalGuideModal/>
+              </div>
+
+              <button className="send-btn" onClick={handleSendEntry}>
+                {loading ? "Adding…" : "Add"}
+              </button>
+            </div>
+
             <button
-              className="cancel-btn"
-              onClick={() => setShowNewEntryForm(false)}
+                className="cancel-btn"
+                onClick={() => setShowNewEntryForm(false)}
             >
               Cancel
             </button>
           </div>
+
         </div>
-      )}
-      {showSuccessModal && (
+    )}
+
+    {showSuccessModal && (
         <div className="modal-overlay">
           <div className="modal-box">
             <h4>
               {showSuccessModal === "success"
-                ? "Entry successfully submitted!"
-                : showSuccessModal === "title"
-                ? "Title is required."
-                : showSuccessModal === "entry"
-                ? "Entry cannot be empty."
-                : "Something went wrong."}
+                  ? "Entry successfully submitted!"
+                  : showSuccessModal === "title"
+                      ? "Title is required."
+                      : showSuccessModal === "entry"
+                          ? "Entry cannot be empty."
+                          : "Something went wrong."}
             </h4>
             <div className="modal-buttons">
-              <button className="close-btn" onClick={() => setShowSuccessModal(false)}>
-                Close
-              </button>
-            </div>
+              <button
+              className="close-btn"
+              onClick={() => setShowSuccessModal(false)}
+            >
+              Close
+            </button>
           </div>
         </div>
-      )}
-    </div>
-  );
+      </div>
+    )}
+  </div>
+);
+
 }
 
 export default JournalEntries;

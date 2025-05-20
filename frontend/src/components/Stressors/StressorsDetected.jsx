@@ -66,8 +66,7 @@ return (
           </h2>
           <p className="text-gray-600 text-base mb-6 max-w-xl mx-auto">
             This feature highlights potential stressors detected by our AI
-            from your recent journal entries. Review them to gain a deeper
-            understanding of your emotional well-being.
+            from your recent journal entries. Add the ones that you believe accurately describes your stressor.
           </p>
           <button
             onClick={() => setStep(2)}
@@ -80,7 +79,7 @@ return (
         // Slide 2: Actual stressors
         <>
           <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 font-[Playfair]">
-            🧠 Potential Stressors
+            Potential Stressors
           </h2>
 
           {newstressors.length === 0 ? (
