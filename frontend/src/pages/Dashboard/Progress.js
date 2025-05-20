@@ -1,44 +1,36 @@
 // /pages/Dashboard/Progress.js
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import JournalHeatmap from "../../components/progress/HeatMap";
+import React from "react";
+import CalendarHeatmap from "react-calendar-heatmap";
+import "react-calendar-heatmap/dist/styles.css";
 import "./Progress.css";
 
 function Progress() {
-  const [entries, setEntries] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const today = new Date();
+  const lastYear = new Date();
+  lastYear.setFullYear(today.getFullYear() - 1);
 
-  useEffect(() => {
-    const fetchEntries = async () => {
-      try {
-        const response = await axios.get("http://localhost:8000/journal/entries/", {
-          withCredentials: true,
-        });
-
-        const data = response.data;
-        if (Array.isArray(data)) {
-          setEntries(data);
-        } else if (data.entries && Array.isArray(data.entries)) {
-          setEntries(data.entries);
-        } else {
-          console.error("Unexpected API response shape:", data);
-          setEntries([]);
-        }
-      } catch (error) {
-        console.error("Failed to fetch entries for progress tracker:", error);
-        setEntries([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEntries();
-  }, []);
+  // hard coded data for deployment purposes
+  const heatmapData = [
+    { date: "2025-05-07", count: 5 },
+    { date: "2025-05-08", count: 1 },
+    { date: "2025-05-09", count: 2 },
+  ]
 
   return (
     <div className="progress-container">
-      <p className="subtext">See your journaling patterns over time</p>
-      {loading ? <p>Loading heatmap...</p> : <JournalHeatmap entries={entries} />}
+      <p className="subtext">See your journaling patterns over time...</p>
+      <CalendarHeatmap
+        startDate={lastYear}
+        endDate={today}
+        values={heatmapData}
+        classForValue={(value) => {
+          if (!value) return "color-empty";
+          if (value.count >= 3) return "color-scale-3";
+          if (value.count === 2) return "color-scale-2";
+          return "color-scale-1";
+        }}
+        showWeekdayLabels
+      />
     </div>
   );
 }
