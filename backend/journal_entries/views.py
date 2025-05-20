@@ -56,6 +56,8 @@ class JournalEntryViewSet(viewsets.ModelViewSet):
         return Response({'status': 'Deleted by entry_number'}, status=status.HTTP_204_NO_CONTENT)
 
 
+
+
 class StressorsViewSet(viewsets.ModelViewSet):
     serializer_class = StressorsSerializer
     permission_classes = [permissions.IsAuthenticated]

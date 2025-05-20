@@ -88,29 +88,38 @@ const RecentEntries = () => {
   const MAX_ENTRY_LENGTH = 500;
 
   const handleSaveEdit = async () => {
-    if (!entryBeingEdited) return;
-    setLoading(true);
+  if (!entryBeingEdited) return;
+  setLoading(true);
 
-    try {
+  const num = entryBeingEdited.entry_number;
+  console.log("This is the entry", num);
 
-      const response = await api.put(
-          `/journal/entries/${entryBeingEdited.id}/`);
+  try {
+    const response = await api.put(
+      `/journal/entries/${num}/`,
+      {
+        title: editedTitle,
+        entry: editedText,
+        tags: entryBeingEdited.tags || [],  // include tags if you're editing them
+      }
+    );
 
-      setEntries((prev) =>
-          prev.map((e) => (e.entry_number === entryBeingEdited.entry_number ? response.data : e))
-      );
-      setEditModalOpen(false);
-      setEntryBeingEdited(null);
-      setEditedTitle("");
-      setEditedText("");
+    setEntries((prev) =>
+      prev.map((e) => (e.entry_number === entryBeingEdited.entry_number ? response.data : e))
+    );
+    setEditModalOpen(false);
+    setEntryBeingEdited(null);
+    setEditedTitle("");
+    setEditedText("");
 
-    } catch (error) {
-      console.error("Error saving edited entry:", error);
-      alert("Could not update entry.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  } catch (error) {
+    console.error("Error saving edited entry:", error);
+    alert("Could not update entry.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const filteredEntries = selectedTag
       ? entries.filter((entry) => entry.tags?.includes(selectedTag))
