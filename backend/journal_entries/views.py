@@ -130,3 +130,11 @@ class DetectedStressorViewSet(viewsets.ModelViewSet):
         detected.save()
 
         return Response({'status': 'Stressor rejected successfully'}, status=status.HTTP_200_OK)
+    
+from rest_framework import viewsets
+from .models import Resource
+from .serializers import ResourceSerializer
+
+class ResourceViewSet(viewsets.ReadOnlyModelViewSet):  # Only GET methods
+    queryset = Resource.objects.all().order_by('-id')[:10]
+    serializer_class = ResourceSerializer

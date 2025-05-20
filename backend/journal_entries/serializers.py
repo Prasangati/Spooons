@@ -24,3 +24,17 @@ class DetectedStressorSerializer(serializers.ModelSerializer):
     class Meta:
         model = DetectedStressor
         fields = ['id', 'title', 'description', 'created_at', 'entry', 'added', 'tags']
+
+
+from rest_framework import serializers
+from .models import Resource
+
+class ResourceSerializer(serializers.ModelSerializer):
+    journal_entry_date = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Resource
+        fields = ['id', 'name', 'description', 'link', 'journal_entry_date']
+
+    def get_journal_entry_date(self, obj):
+        return obj.journal_entry.created_at

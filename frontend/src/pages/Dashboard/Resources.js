@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./Resources.css";
-
-const dummyData = [
-  { id: 1, title: "Coping with Anxiety", date: "2025-04-10" },
-  { id: 2, title: "Mindful Breathing", date: "2025-04-12" },
-  { id: 3, title: "Healthy Sleep Habits", date: "2025-04-14" },
-  { id: 4, title: "Creating a Calming Night Routine", date: "2025-04-19" },
-  { id: 5, title: "Grounding Techniques for Panic", date: "2025-04-21" },
-];
+import RecentResources from "../../components/resources/RecentResources";
+import axios from "axios";
+import BASE_URL from "../../utils/config";
 
 const ResourceFilter = ({ onFilter }) => {
   const [keyword, setKeyword] = useState("");
@@ -16,13 +11,6 @@ const ResourceFilter = ({ onFilter }) => {
 
   const handleFilter = () => {
     onFilter({ keyword, startDate, endDate });
-  };
-
-  const handleClear = () => {
-    setKeyword("");
-    setStartDate("");
-    setEndDate("");
-    onFilter({ keyword: "", startDate: "", endDate: "" });
   };
 
   return (
@@ -52,8 +40,9 @@ const ResourceFilter = ({ onFilter }) => {
         />
       </div>
 
-      <button className="apply-btn" onClick={handleFilter}>Apply Filters</button>
-      <button className="clear-btn" onClick={handleClear}>Clear Filters</button>
+      <button className="apply-filter-btn" onClick={handleFilter}>
+  Apply Filters
+</button>
     </div>
   );
 };
@@ -61,142 +50,67 @@ const ResourceFilter = ({ onFilter }) => {
 function Resources() {
   const [resources, setResources] = useState([]);
   const [filteredResources, setFilteredResources] = useState([]);
-  const [favoriteIds, setFavoriteIds] = useState(() => {
-    const stored = localStorage.getItem("favoriteResources");
-    return stored ? JSON.parse(stored) : [];
-  });
-  const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
-  const [sortOrder, setSortOrder] = useState("newest");
-  const [visibleCount, setVisibleCount] = useState(5);
-  const itemsPerLoad = 3;
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchResources = async () => {
-      setResources(dummyData);
-      setFilteredResources(dummyData);
-    };
-    fetchResources();
-  }, []);
+      try {
+        const token = localStorage.getItem("access");
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const fullHeight = document.body.scrollHeight;
+        const response = await axios.get(`${BASE_URL}/journal/resources/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        });
 
-      if (scrollTop + windowHeight >= fullHeight - 100) {
-        loadMoreResources();
+        setResources(response.data);
+        setFilteredResources(response.data);
+      } catch (error) {
+        console.error("Failed to fetch resources:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [filteredResources, visibleCount]);
-
-  const loadMoreResources = () => {
-    if (visibleCount < filteredResources.length) {
-      setVisibleCount(prev => prev + itemsPerLoad);
-    }
-  };
+    fetchResources();
+  }, []);
 
   const handleFilter = ({ keyword, startDate, endDate }) => {
     let filtered = resources;
 
     if (keyword) {
       filtered = filtered.filter((res) =>
-        res.title.toLowerCase().includes(keyword.toLowerCase())
+        res.name.toLowerCase().includes(keyword.toLowerCase()) ||
+        res.description.toLowerCase().includes(keyword.toLowerCase())
       );
     }
 
     if (startDate) {
-      filtered = filtered.filter((res) => res.date >= startDate);
+      filtered = filtered.filter((res) => {
+        const entryDate = new Date(res.journal_entry_date).toISOString().split("T")[0];
+        return entryDate >= startDate;
+      });
     }
-
+    
     if (endDate) {
-      filtered = filtered.filter((res) => res.date <= endDate);
+      filtered = filtered.filter((res) => {
+        const entryDate = new Date(res.journal_entry_date).toISOString().split("T")[0];
+        return entryDate <= endDate;
+      });
     }
+    
 
     setFilteredResources(filtered);
-    setVisibleCount(5); // reset scroll on new filter
   };
-
-  const toggleFavorite = (id) => {
-    const button = document.getElementById(`heart-${id}`);
-    if (button) {
-      button.classList.add("clicked");
-      setTimeout(() => button.classList.remove("clicked"), 400);
-    }
-
-    const updated = favoriteIds.includes(id)
-      ? favoriteIds.filter(favId => favId !== id)
-      : [...favoriteIds, id];
-
-    setFavoriteIds(updated);
-    localStorage.setItem("favoriteResources", JSON.stringify(updated));
-  };
-
-  const sortedResources = [...filteredResources].sort((a, b) => {
-    return sortOrder === "newest"
-      ? new Date(b.date) - new Date(a.date)
-      : new Date(a.date) - new Date(b.date);
-  });
-
-  const baseResources = showOnlyFavorites
-    ? sortedResources.filter(r => favoriteIds.includes(r.id))
-    : sortedResources;
-
-  const displayedResources = baseResources.slice(0, visibleCount);
 
   return (
     <div className="resources-container">
-      <div className="clip"></div>
+      <h2>Resources Page</h2>
       <ResourceFilter onFilter={handleFilter} />
-      <div style={{
-        textAlign: "right",
-        marginBottom: "10px",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        flexWrap: "wrap",
-        gap: "10px"
-      }}>
-        <button
-          className="sort-btn"
-          onClick={() => setSortOrder(sortOrder === "newest" ? "oldest" : "newest")}
-        >
-          Sort: {sortOrder === "newest" ? "Newest → Oldest" : "Oldest → Newest"}
-        </button>
-        <label style={{ fontSize: "14px", color: "#066341" }}>
-          <input
-            type="checkbox"
-            checked={showOnlyFavorites}
-            onChange={() => setShowOnlyFavorites(!showOnlyFavorites)}
-          />
-          {" "}Show only favorites
-        </label>
-      </div>
-      <div className="resources-list">
-        {displayedResources.length > 0 ? (
-          displayedResources.map((resource) => (
-            <div key={resource.id} className="resource-item">
-              <h3>{resource.title}</h3>
-              <button
-                id={`heart-${resource.id}`}
-                className="heart-btn"
-                onClick={() => toggleFavorite(resource.id)}
-                title={favoriteIds.includes(resource.id) ? "Unsave" : "Save"}>
-                {favoriteIds.includes(resource.id) ? "❤️" : "🤍"}
-              </button>
-              <p>Date: {resource.date}</p>
-            </div>
-          ))
-        ) : (
-          <p>No resources found.</p>
-        )}
-      </div>
+      <RecentResources resources={filteredResources} loading={loading} />
     </div>
   );
 }
 
 export default Resources;
-
