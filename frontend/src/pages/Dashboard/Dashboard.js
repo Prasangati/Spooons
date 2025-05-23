@@ -24,8 +24,10 @@ function Dashboard() {
         try {
             const response = await api.get('journal/detected-stressors/recent/');
             setDetectedStressors(response.data || []);
+
         } catch (err) {
             console.error('Polling error:', err);
+
             }
     };
 
@@ -130,7 +132,7 @@ function Dashboard() {
             </section>
          </main>
 
-          <FloatingIcon onClick={() => setShowModal(true)} />
+          <FloatingIcon hasNew={detectedStressors.length > 0} onClick={() => setShowModal(true)} />
 
           <StressorsDetected visible={showModal} onClose={() => setShowModal(false)}
             newstressors={detectedStressors}

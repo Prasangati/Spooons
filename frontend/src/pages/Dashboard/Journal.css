@@ -162,7 +162,7 @@
   width: 56px;
   height: 56px;
   font-size: 22px;
-  background: var(--green);
+  background: green;
   color: #ffffff;
   border: none;
   border-radius: 50%;
@@ -175,7 +175,7 @@
 }
 
 .add-entry-btn:hover {
-  background: var(--green-dark);
+  background: green;
   transform: scale(1.05);
 }
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Lightbulb } from 'lucide-react';
 import './FloatingIcon.css';
 
-const FloatingIcon = ({ hasNew = false, onClick }) => {
+const FloatingIcon = ({ hasNew , onClick }) => {
   return (
     <button
       className={`floating-icon ${hasNew ? 'pulse' : ''}`}
