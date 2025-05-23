@@ -1,7 +1,6 @@
 // pages/Dashboard/Progress.js
 import React, { useState, useEffect } from "react";
 import api from "../../utils/axiosConfig";
-import CalendarHeatmap from "react-calendar-heatmap";
 import 'react-calendar-heatmap/dist/styles.css';
 import JournalHeatmap from "../../components/progress/HeatMap";
 import "./Progress.css";
