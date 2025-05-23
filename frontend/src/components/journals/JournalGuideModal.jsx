@@ -3,21 +3,22 @@ import React, { useState } from "react";
 const JournalGuideModal = () => {
   const [isOpen, setIsOpen] = useState(false);
 
+
   return (
       <>
-          {/* Help icon/button */}
           <button
               onClick={() => setIsOpen(true)}
-              className="absolute -left-10 top-1/2 -translate-y-1/2 bg-white text-indigo-700 border border-indigo-300 w-8 h-8 rounded-full flex items-center justify-center shadow hover:bg-indigo-50 transition"
+              className="px-3 py-1 bg-white text-indigo-700 border border-indigo-300 rounded-md shadow hover:bg-indigo-50 transition text-sm"
               title="How to write your journal entry"
           >
-              ℹ️
+              Tips
           </button>
 
-          {/* Modal */}
           {isOpen && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center px-4"
-                   onClick={() => setIsOpen(false)}>
+              <div
+                  className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center px-4"
+                  onClick={() => setIsOpen(false)}
+              >
                   <div
                       className="bg-white rounded-2xl shadow-xl max-w-2xl w-full p-6 overflow-y-auto max-h-[80vh] relative"
                       onClick={(e) => e.stopPropagation()}
@@ -28,8 +29,9 @@ const JournalGuideModal = () => {
                       >
                           ✖
                       </button>
-                      <h2 className="text-2xl font-bold text-center mb-4 font-[Playfair]">📝 How to Write Your Journal
-                          Entry</h2>
+                      <h2 className="text-2xl font-bold text-center mb-4 font-[Playfair]">
+                          📝 How to Write Your Journal Entry
+                      </h2>
                       <p className="text-gray-700 mb-4">
                           We encourage you to write freely — let your thoughts flow. But a little structure can help you
                           reflect more deeply and make the most of this experience.

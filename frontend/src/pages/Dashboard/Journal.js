@@ -212,25 +212,26 @@ function JournalEntries() {
             </div>
           </div>
 
-          <div className="button-group flex items-center gap-3">
-            <div className="relative inline-block">
-              {/* ℹ️ Icon will appear just to the left of Add */}
-              <div className="absolute -left-10 top-1/2 -translate-y-1/2">
-                <JournalGuideModal/>
-              </div>
+          <div className="w-full flex justify-between items-center">
+            {/* Left-aligned Tips button */}
+            <div>
+              <JournalGuideModal/>
+            </div>
 
+            {/* Right-aligned Add & Cancel buttons */}
+            <div className="flex items-center gap-3">
               <button className="send-btn" onClick={handleSendEntry}>
                 {loading ? "Adding…" : "Add"}
               </button>
+              <button
+                  className="cancel-btn"
+                  onClick={() => setShowNewEntryForm(false)}
+              >
+                Cancel
+              </button>
             </div>
-
-            <button
-                className="cancel-btn"
-                onClick={() => setShowNewEntryForm(false)}
-            >
-              Cancel
-            </button>
           </div>
+
 
         </div>
     )}
