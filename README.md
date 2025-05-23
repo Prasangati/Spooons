@@ -1,8 +1,63 @@
 # CSCI 499-01  
 
+# 🥄 Spooons - Mental Health Journaling App
+
+## 🧠 Project Overview
+
+**Spooons** is a mental health-focused journaling web application designed to help users track their emotional well-being over time. The app allows users to submit journal entries and uses AI to provide meaningful feedback. By analyzing entries through the **Gemini API**, the app identifies emotional stressors and offers tailored resources to support mental wellness.
+
+This project was created as part of a senior group capstone project, with a focus on leveraging modern technology to promote mental health awareness and provide accessible, data-informed emotional support.
+
+---
+
+## 🛠 Technologies Used
+
+- **Frontend:** React.js, HTML, CSS  
+- **Backend:** Django (Python), Django REST Framework  
+- **Database:** PostgreSQL  
+- **AI Integration:** Gemini API  
+- **Authentication:** JWT-based user authentication  
+- **Other Tools:** Git, GitHub, Axios  
+
+---
+
+## 🚀 Live Application
+
+[🔗 Click here to view the live app](https://spooons.vercel.app/)  
+
+---
+
+## 👥 Team Members
+
+- **Prasanga Tiwari** 
+- **Malak S.**
+- **Raitah Jinnat** 
+- **Ryan Montoyo**    
+
+---
+
+## 📝 Development Notes
+
+### What We Learned
+
+- How to build a full-stack application using Django and React from the ground up  
+- API authentication and secure data flow between frontend and backend  
+- Leveraging AI APIs to perform real-time text analysis  
+- Working with natural language outputs to classify emotional data and return meaningful results  
+
+### AI Tools Used
+
+- **ChatGPT:** Assisted with debugging and code planning  
+- **Gemini API:** Used to analyze journal entries, detect stressors, and return resource suggestions  
+
+---
+
+## 💬 Final Thoughts
+
+Spoons was created with the mission of making mental health support more accessible. By blending journaling, a proven therapeutic technique—with AI insights, we hope this app empowers users to better understand their emotions and take action toward self-care.
 
 
-Hey guys, I am going to give a basic guideline on how to set up the project. It is important we do it properly so we don't run into issues later. Hopefully, everyone has already cloned the project and thus, is using git to track and update any new developments. 
+## 💻 Local Setup Instructions
 
 ## Backend with Django
 The first thing you need to do is set up a virtual enivorment. The commands should be run in the root directory. Also, note that I use python3/pip3 for the commands, but if they don't work, use python/pip. Here are the commands:
