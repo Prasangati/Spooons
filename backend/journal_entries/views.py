@@ -140,6 +140,7 @@ class ResourceViewSet(viewsets.ReadOnlyModelViewSet):  # Only GET methods
     serializer_class = ResourceSerializer
 
 
+
 from .models import AIFeedback
 
 @api_view(['GET'])
