@@ -12,8 +12,8 @@ function LandingPage() {
             <Navbar />
             <HeroSection />
             <FeatureSection />
-            <TimelineSection />
-            <DeveloperSection />
+            //<TimelineSection />
+            //<DeveloperSection />
         </div>
     );
 }
